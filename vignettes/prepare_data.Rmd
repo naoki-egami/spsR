@@ -1,0 +1,13 @@
+---
+title: "Prepare Site-Level Variables"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+# Prepare Site-Level Variabels
+Diana, please add your instruction of creating the data here. 
+
+This page only focuses on creating the original data. 
+
+You don't need to talk about how to specify the target population of sites. 

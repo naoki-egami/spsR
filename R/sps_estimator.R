@@ -1,3 +1,4 @@
+#' @export
 sps_estimator <- function(out, estimate, se, W = NULL){
 
   if(is.null(W) == TRUE){

@@ -115,9 +115,7 @@ sps <- function(X, N_s,
   # Objective Function
   # obj <- Minimize( sum_squares(Z)/(L*(N-s)))
 
-  obj <- Minimize( lambda[1]*sum_squares(Z)/(L*(N-N_s)) +
-                     lambda[2]*(sum_entries(Q*Xs)/(N-N_s)) +
-                     lambda[3]*sum_squares(Q)/(N-N_s) )
+  obj <- Minimize( lambda[1]*sum_squares(Z)/(L*(N-N_s)) +lambda[2]*(sum_entries(Q*Xs)/(N-N_s)) + lambda[3]*sum_squares(Q)/(N-N_s) )
 
   p <- Problem(obj, constraints)
 

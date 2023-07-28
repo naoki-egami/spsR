@@ -1,3 +1,4 @@
+#' @export
 sps_plot <- function(out, columns = NULL, title = NULL, size = 2){
 
   N <- length(out$ss)

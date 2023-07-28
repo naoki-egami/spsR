@@ -1,0 +1,18 @@
+url: http://naokiegami.com/spsR/
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:  [start, articles, tutorials, news, reference]
+  components:
+   start:
+    text: Get Started
+    href: articles/intro.html
+
+   articles:
+    text: Practical Guide
+    menu:
+    - text: 1. Prepare Data
+      href: articles/prepare_data.html
+

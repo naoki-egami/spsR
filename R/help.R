@@ -53,3 +53,25 @@ between_var_sps <- function(estimate, se, X_selected, site_name = NULL){
 
   return(bet_var)
 }
+
+## Stratify
+
+#' @export
+stratify <- function(X, columns = NULL, type = "geq", value = 1){
+
+  if(is.null(columns)){
+    columns <- seq(1:ncol(X))
+  }
+  C_mat <- matrix(NA, nrow = length(columns), ncol = nrow(X))
+  for(i in 1:length(columns)){
+    if(type == "geq"){
+      C_mat[i,1:ncol(C_mat)] <- as.numeric(X[, columns[i]] >= value)
+    }else if(type == "leq"){
+      C_mat[i,1:ncol(C_mat)] <- as.numeric(X[, columns[i]] <= value)
+    }else if(type == "between"){
+      C_mat[i, 1:ncol(C_mat)] <- as.numeric(X[, columns[i]] >= value[1])*as.numeric(X[, columns[i]] <= value[2])
+    }
+  }
+  return(C_mat)
+}
+

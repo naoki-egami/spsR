@@ -1,3 +1,4 @@
+#' @export
 sps_cv <- function(estimate, se, X_selected, site_name = NULL,
                    K = 2, max_iter = 100, seed){
 
