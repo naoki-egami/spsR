@@ -1,6 +1,18 @@
 #' @export
-sps_cv <- function(estimate, se, X_selected, site_name = NULL,
-                   K = 2, max_iter = 100, seed){
+sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100, seed = 1234){
+
+
+  if(all(rownames(estimates_selected) %in% out$selected_sites) == FALSE){
+    stop(" `rownames(estimates_selected)` should match to names of the selected sites (`out$selected`) ")
+  }
+
+  # reordering
+  estimates_selected <- estimates_selected[match(out$selected_sites, rownames(estimates_selected)),]
+
+  estimate <- estimates_selected[, 1]
+  se <- estimates_selected[, 2]
+
+  X_selected <- out$X[out$ss == 1, , drop = FALSE]
 
   s <- nrow(X_selected)
   ind <- seq(1:s)

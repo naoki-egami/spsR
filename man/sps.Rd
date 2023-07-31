@@ -7,11 +7,10 @@
 sps(
   X,
   N_s,
-  C = NULL,
-  c0 = NULL,
+  stratify = NULL,
+  lambda = c(1, 1, 0.05),
   site_selected = NULL,
   site_unavailable = NULL,
-  lambda = c(1, 1, 0.1),
   seed = 1234
 )
 }
@@ -20,15 +19,13 @@ sps(
 
 \item{N_s}{Number of study sites to be selected}
 
-\item{C}{Linear constraints (left-hand side)}
+\item{stratify}{Stratify}
 
-\item{c0}{Linear constraints (right-hand side)}
+\item{lambda}{A}
 
 \item{site_selected}{A}
 
 \item{site_unavailable}{A}
-
-\item{lambda}{A}
 
 \item{seed}{Numeric. `seed` used internally. Default = 1234.}
 }

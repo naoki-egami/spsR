@@ -1,0 +1,8 @@
+---
+title: "Full Example: Naumann et al (2018)"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+### Overview 

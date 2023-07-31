@@ -1,0 +1,52 @@
+---
+title: "Get Started"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+### SPS: Site Selection for External Validity
+
+```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+library(spsR)
+data(X_example)
+```
+
+#### Step 1: Select Site-level Variables
+
+(Naoki will make the following functions simpler)
+
+```{r}
+covariates_use <- c("Edu", "Age", "Gen", "Eth", "GDP", "Polity", "Pop")
+X_use <- X_example[X_example[,"reg_Eu"] == 0, covariates_use]
+for(i in 1:7){
+    X_use[,i] <- scale(X_use[,i])
+}
+X_example <- X_use
+save(X_example, file = "../data/X_example.rdata")
+```
+
+#### Step 2: Stratify 
+```{r}
+s_g  <- stratify_sps(X_use, columns = covariates_use,
+                     condition = c("larger than or equal to", 1), 
+                     num_site = c("larger than or equal to", 1))
+s_l  <- stratify_sps(X_use, columns = covariates_use,
+                     condition = c("smaller than or equal to", -1), 
+                     num_site = c("larger than or equal to", 1))
+st <- list(s_g, s_l)
+```
+
+
+#### Step 3: Running SPS
+```{r}
+out <- sps(X = X_use, N_s = 5)
+```
+
+#### Step 4: Check Site Selection
+```{r}
+# selected countries
+rownames(X_use)[out$ss == 1]
+
+sps_plot(out)
+```

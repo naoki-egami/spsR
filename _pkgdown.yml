@@ -4,14 +4,36 @@ template:
 
 navbar:
   structure:
-    left:  [start, articles, tutorials, news, reference]
+    left:  [start, tutorials, example, more, faq, reference]
   components:
    start:
     text: Get Started
     href: articles/intro.html
 
-   articles:
-    text: More Information
+   tutorials:
+    text: Tutorials
     menu:
-    - text: 1. Frequently Asked Questions
+    - text: 1. Practical Guides
+      href: articles/practical_guides.html
+    - text: 2. Methodological Guides
+      href: articles/methods_guides.html
+
+   example:
+    text: Full Example
+    href: articles/full_example.html
+
+   more:
+    text: More
+    menu:
+    - text: 1. Prepare Site-level Variables
       href: articles/prepare_data.html
+    - text: 2. Handle Missing Data
+      href: articles/missing_data.html
+    - text: 3. Stratified SPS
+      href: articles/stratify_sps.html
+    - text: 4. SPS Estimator
+      href: articles/sps_estimator.html
+
+   faq:
+    text: FAQ
+    href: articles/faq.html

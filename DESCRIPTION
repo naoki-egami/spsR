@@ -16,6 +16,7 @@ Imports:
     CVXR,
     ggplot2,
     GGally,
-    metafor
+    metafor,
+    dplyr
 RoxygenNote: 7.2.3
 URL: http://naokiegami.com/spsR/

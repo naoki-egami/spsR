@@ -1,8 +1,7 @@
 #' Synthetic Purposive Sampling: Site Selection for External Validity
 #' @param X Site-level covariates for the target population of sites
 #' @param N_s Number of study sites to be selected
-#' @param C Linear constraints (left-hand side)
-#' @param c0  Linear constraints (right-hand side)
+#' @param stratify Stratify
 #' @param site_selected A
 #' @param site_unavailable A
 #' @param lambda A
@@ -14,6 +13,7 @@
 #' @importFrom grDevices adjustcolor
 #' @importFrom stats pnorm
 #' @importFrom utils combn
+#' @importFrom dplyr case_when
 #' @return \code{sps} returns an object of \code{sps} class.
 #'  \itemize{
 #'    \item \code{ss}: Estimated external robustness.
@@ -30,15 +30,33 @@
 #'
 
 sps <- function(X, N_s,
-                C = NULL, c0 = NULL,
+                stratify = NULL,
+                lambda = c(1, 1, 0.05),
                 site_selected = NULL,
                 site_unavailable = NULL,
-                lambda = c(1, 1, 0.1),
                 seed = 1234){
 
   # Housekeeping
   X <- as.matrix(X)
   class(X) <- "matrix"
+
+  if(is.null(stratify) == TRUE){
+    C   <- NULL
+    c0  <- NULL
+  }else{
+    if("st_direct" %in% class(stratify)){
+      C  <- stratify$C
+      c0 <- stratify$c0
+    }else{
+      C_l <- list()
+      c0 <- c()
+      for(z in 1:length(stratify)){
+        C_l[[z]] <- stratify[[z]]$C
+        c0 <- c(c0, stratify[[z]]$c0)
+      }
+      C  <- do.call("rbind", C_l)
+    }
+  }
 
   if(ncol(X) == 1){
     X_orig <- X
@@ -131,7 +149,13 @@ sps <- function(X, N_s,
   obj_3  <- sum(Q_out^2)/(N-N_s)
   ss_out   <- round(ss0)
 
-  out <- list("ss" = ss_out,
+  if(any(is.null(rownames(X_orig)) == TRUE)){
+    rownames(X_orig) <- seq(1:nrow(X_orig))
+  }
+  selected_sites <- rownames(X_orig)[ss_out == 1]
+
+  out <- list("selected_sites" = selected_sites,
+              "ss" = ss_out,
               "W" = W_out,
               "obj" = c(obj_1, obj_2, obj_3),
               "X" = X_orig,

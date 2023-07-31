@@ -1,0 +1,54 @@
+---
+title: "Introduction to sps"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+If necessary, users can refine site selection using *stratification*. For example, we might want to make sure that, for each site-level variable, we have at least one site above $1$ standard deviation and one site below $-1$ standard deviation. This will make sure to select countries that have large and small values of each site-level variable. 
+
+It is easy to incorporate such stratification in `sps` using function `stratify_sps()`. 
+
+The following function makes sure that, we select `at least` `1` sites (specified by `num_site`) that satisfy `condition` (i.e., variable `Female` is `larger than or equal to` `1`). 
+
+```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+library(spsR)
+data("X_Imm")
+dim(X_Imm)
+```
+
+
+```{r}
+st_female_g  <- stratify_sps(X = X_Imm, num_site = c("at least", 1), condition = c("Female", "larger than or equal to", 1))
+```
+
+The following function makes sure that, we select `at least` `1` sites (specified by `num_site`) that satisfy `condition` (i.e., variable `Female` is `smaller than or equal to` `-1`). 
+
+```{r}
+st_female_l  <- stratify_sps(X = X_Imm, num_site = c("at least", 1), condition = c("Female", "smaller than or equal to", -1))
+```
+
+Users can add this stratification for each variable. 
+```{r}
+st_l  <- stratify_sps(X = X_Imm, num_site = c("at least", 1), condition = c("Female", "smaller than or equal to", -1))
+```
+
+Using the stratification, we can run the *stratified* SPS algorithm. 
+
+```{r}
+out_stratify <- sps(X = X_Imm, N_s = 6, stratify = list(st_g, st_l))
+```
+
+In this example, the stratified `sps` selected the following 6 sites.
+
+```{r}
+out_stratify$selected_sites
+```
+
+Users can again investigate the selected sites visually. Red triangles represent selected sites and black circles represent non-selected sites. In the last row and the diagonal plots, users can see the marginal distribution of each variable. All the remaining figures in the middle show bivariate relationships between two variables. 
+
+We can see that selected sites successfully cover a wide range of values in each site-level variable. 
+
+```{r, fig.dim = c(7, 7), fig.align = 'center'}
+sps_plot(out_stratify)
+```
