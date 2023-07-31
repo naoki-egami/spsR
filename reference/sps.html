@@ -22,10 +22,26 @@
   <a class="nav-link" href="../articles/intro.html">Get Started</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more-information">More Information</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-more-information">
-    <a class="dropdown-item" href="../articles/prepare_data.html">1. Frequently Asked Questions</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-tutorials">Tutorials</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-tutorials">
+    <a class="dropdown-item" href="../articles/practical_guides.html">1. Practical Guides</a>
+    <a class="dropdown-item" href="../articles/methods_guides.html">2. Methodological Guides</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/full_example.html">Full Example</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-more">
+    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Site-level Variables</a>
+    <a class="dropdown-item" href="../articles/missing_data.html">2. Handle Missing Data</a>
+    <a class="dropdown-item" href="../articles/stratify_sps.html">3. Stratified SPS</a>
+    <a class="dropdown-item" href="../articles/sps_estimator.html">4. SPS Estimator</a>
+  </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/faq.html">FAQ</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -54,11 +70,10 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sps</span><span class="op">(</span></span>
 <span>  <span class="va">X</span>,</span>
 <span>  <span class="va">N_s</span>,</span>
-<span>  C <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  c0 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stratify <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0.05</span><span class="op">)</span>,</span>
 <span>  site_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  site_unavailable <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lambda <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1234</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -73,12 +88,12 @@
 <dd><p>Number of study sites to be selected</p></dd>
 
 
-<dt>C</dt>
-<dd><p>Linear constraints (left-hand side)</p></dd>
+<dt>stratify</dt>
+<dd><p>Stratify</p></dd>
 
 
-<dt>c0</dt>
-<dd><p>Linear constraints (right-hand side)</p></dd>
+<dt>lambda</dt>
+<dd><p>A</p></dd>
 
 
 <dt>site_selected</dt>
@@ -86,10 +101,6 @@
 
 
 <dt>site_unavailable</dt>
-<dd><p>A</p></dd>
-
-
-<dt>lambda</dt>
 <dd><p>A</p></dd>
 
 

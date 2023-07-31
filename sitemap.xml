@@ -4,13 +4,34 @@
     <loc>http://naokiegami.com/spsR/404.html</loc>
   </url>
   <url>
+    <loc>http://naokiegami.com/spsR/articles/faq.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/articles/full_example.html</loc>
+  </url>
+  <url>
     <loc>http://naokiegami.com/spsR/articles/index.html</loc>
   </url>
   <url>
     <loc>http://naokiegami.com/spsR/articles/intro.html</loc>
   </url>
   <url>
+    <loc>http://naokiegami.com/spsR/articles/methods_guides.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/articles/missing_data.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/articles/practical_guides.html</loc>
+  </url>
+  <url>
     <loc>http://naokiegami.com/spsR/articles/prepare_data.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/articles/sps_estimator.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/articles/stratify_sps.html</loc>
   </url>
   <url>
     <loc>http://naokiegami.com/spsR/authors.html</loc>
@@ -19,12 +40,21 @@
     <loc>http://naokiegami.com/spsR/index.html</loc>
   </url>
   <url>
-    <loc>http://naokiegami.com/spsR/reference/X_example.html</loc>
+    <loc>http://naokiegami.com/spsR/reference/X_Imm.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/reference/exp_estimate_Imm.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/reference/exp_estimate_Imm_selected.html</loc>
   </url>
   <url>
     <loc>http://naokiegami.com/spsR/reference/index.html</loc>
   </url>
   <url>
     <loc>http://naokiegami.com/spsR/reference/sps.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/reference/summary.sps_estimator.html</loc>
   </url>
 </urlset>
