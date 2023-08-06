@@ -5,15 +5,159 @@ output:
     variant: markdown_github
 ---
 
-# Prepare Site-Level Variabels
-Diana, please add your instruction of creating the data here. 
+# Prepare Site-Level Variables
 
 This page only focuses on creating the original data. 
 
-You don't need to talk about how to specify the target population of sites. 
-
-
 ```{r}
+rm(list = ls())
+options(digits = 2)
+library(knitr)
+library(kableExtra)
 library(spsRdata)
+library(spsR)
+opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, 
+               tidy.opts = list(width.cutoff = 80), tidy = TRUE, fig.align='center',
+               knitr.kable.NA = '')
 ```
 
+### SPS Baseline Dataset
+
+We provide a dataset (`sps_data`) comprised of 21 country-level variables for 179 countries between 2015 and 2022. It contains covariates representing political, economic, and social characteristics of countries in the dataset, collected from three sources: V-DEM, World Bank Indicators, and Resource Watch: 
+
+* [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset): collects democracy ratings for all countries in the world.
+
+* [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation): include economic (e.g., GDP, GNI, unemployment), demographic (e.g., population, education, migration), geographic (e.g., urban population, land area), and political (e.g., government spending/revenue, ODA) indicators for all countries in the world. 
+
+* [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1): World langauges dataset created using CIA World Factbook.
+
+```{r, echo = F}
+data(sps_data)
+data(codebook)
+kbl(codebook,
+      label = "tab:codebook",
+      caption = "List of Selected Variables") %>%
+  kable_classic_2(full_width = T) %>%
+  kable_styling(font_size = 11, bootstrap_options = c('hover', 'condensed')) %>%
+  column_spec(1, italic = T) %>%
+  pack_rows('Key Identifiers', 1, 3) %>%
+  pack_rows('Geographic Indicators', 4, 5) %>%
+  pack_rows('Democracy Indicators', 6, 8) %>%
+  pack_rows('Political Indicators', 9, 14) %>%
+  pack_rows('Economic Indicators', 15, 16) %>%
+  pack_rows('Sociodemographic Indicators', 17, 19) %>%
+  pack_rows('Social Indicators', 20, 21)
+```
+
+### Search for New Variables
+
+You can also search for other variables in the V-Dem dataset and World Bank using keywords via the function ``search_var``. For example:
+
+```{r}
+search_result <- search_var(keyword = 'international migrant') %>% mutate_if(is.character, ~gsub('\\$', ' dollar', .x))
+```
+```{r, echo = F}
+kbl(search_result %>% mutate_all(~gsub('\\\\|\t|\n', '', .x)),
+      label = "tab:search_var",
+      caption = "Keyword Search Returns") %>%
+  kable_classic_2(full_width = T) %>%
+  kable_styling(font_size = 11, bootstrap_options = c('hover', 'condensed')) %>%
+  column_spec(1, italic = T)
+```
+
+Based on the search return, you can decide to add the variable(s) to the baseline dataset using the function ``add_var``. For example:
+
+```{r}
+sps_data1 <- add_var(data = sps_data, vars = c('SM.POP.TOTL.ZS'))
+names(sps_data1)
+```
+
+### Merge Your Own Dataset
+
+You can also merge your own dataset using the function ``merge_data``, as long as it has a country variable. If your dataset does not have an year variable, ignore the `yearvar` argument and we'll merge the dataset to all years. For a country variable, if you provide an ISO3 code, we will merge your dataset using the ISO3 code via an exact match. If you provide a country name instead, we will first merge via an exact match and do a fuzzymatch for the remaining unmatched countries (using `fastLink` R package). For example:
+
+```{r, echo = F}
+naumann <- as.data.frame(X_Imm) %>% rownames_to_column() %>% select(-GDP, -Unemp., -Immigration, -rowname) %>% rename_all(tolower) 
+naumann$cntry <- c("Netherlands","Sweden","Norway","France","Germany","Bellgium","Denmark","Finland","Ireland","Slovenia","Spain","Switzerland","Austria","Czech","United Kingdom")
+naumann$yr    <- 2015
+naumann %<>% select(cntry, yr, everything())
+kbl(naumann) %>% kable_styling()
+```
+
+```{r}
+sps_data2 <- merge_data(basedata = sps_data1, newdata = naumann, yearvar = 'yr', countryvar = 'cntry', iso = FALSE)
+```
+```{r, echo = F}
+sps_data2 %>%
+  drop_na(match) %>%
+  select(matches('country|year|iso|cname|match')) %>%
+  filter(cname_used %in% naumann$cntry) %>%
+  arrange(cname_used) %>%
+  kbl() %>%
+  kable_styling() %>%
+  row_spec(c(2, 3), bold = T)
+```
+
+Two additional columns are merged to the dataset:
+
+* `cname_used`: the values of country names in the merging dataset (i.e., same as `countryvar`)
+* `match`: results of the match for each row. `exact` and `fastLink` 
+
+### Descriptive Summary
+
+``desc_stat`` function returns simple descriptive statistics, number of missing countries in each year, and correlation matrix. Highly correlated variables mean that they are capturing similar cross-country contexts, so you might want to drop one of them in the SPS. Character and factor variables are automatically binarized to obtain descriptive statistics.
+
+```{r}
+desc <- desc_stat(data = sps_data2)
+```
+```{r, echo = F}
+# Descriptive Statistics
+desc$desc %>%
+  mutate_if(is.numeric, ~ round(.x, 2)) %>%
+  kbl(caption = 'Descriptive Statistics of Selected Covariates') %>%
+  kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
+                position = 'center')
+
+# Number of missing observations per year
+desc$miss %>%
+  mutate_if(is.numeric, ~ round(.x, 2)) %>%
+  kbl(caption = 'Number of Missing Observations for Selected Covariates per Year') %>%
+  kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
+                position = 'center')
+
+# Correlation Matrix
+corr <- as.data.frame(desc$corr) %>%
+  mutate_all(~round(.x, 3))
+for (i in names(corr)){
+  corr[[i]] <- cell_spec(corr[[i]], color = ifelse(is.na(corr[[i]]), 'gray',
+                                                   ifelse(abs(corr[[i]]) > 0.9, '#2D0729',
+                                                          ifelse(abs(corr[[i]]) > 0.8, '#900C3F',
+                                                                 ifelse(abs(corr[[i]]) > 0.7, '#C70039',
+                                                                        ifelse(abs(corr[[i]]) > 0.6, '#FF5733', '#FFC300'))))))
+}
+kable(corr, escape = F, caption = 'Correlation Matrix') %>%
+kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
+              position = 'center')
+```
+
+### Creating a Map
+
+For your selected countries, you can also use the function ``create_map`` to create a world plot to show heterogeneity in selected covariates. For example,
+
+```{r, fig.fullwidth = TRUE, fig.width = 9, fig.height = 5}
+map <- create_map(data = sps_data1, 
+                  region = c('Europe & Central Asia', 'Latin America & Caribbean', 'North America'),
+                  countryvar = 'iso3', 
+                  countrysps = c('MEX', 'PRY', 'BOL', 'USA', 'FRA', 'NOR', 'HUN'))
+map
+```
+
+# References
+
+Enamorado, Ted, Ben Fifield, and Kosuke Imai. 2017. fastLink: Fast Probabilistic Record Linkage with Missing Data. Version 0.6. https://github.com/kosukeimai/fastLink.
+
+Enamorado, Ted, Benjamin Fifield, and Kosuke Imai. 2019. “Using a Probabilistic Model to Assist Merging of Large-Scale Administrative Records.” American Political Science Review 113 (2): 353–71.
+
+Michael Coppedge et al. 2023. “V-Dem Dataset V13.” Varieties of Democracy (V-Dem) Project. https://doi.org/10.23696/VDEMDS23.
+
+University of Groningen. 2016. “World Languages.” University of Groningen Open Data. www.resourcewatch.org.
