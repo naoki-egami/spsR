@@ -3,6 +3,7 @@ title: "Prepare Site-Level Variables"
 output: 
   md_document:
     variant: markdown_github
+always_allow_html: yes
 ---
 
 # Prepare Site-Level Variables
@@ -76,7 +77,7 @@ sps_data1 <- add_var(data = sps_data, vars = c('SM.POP.TOTL.ZS'))
 
 ### Merge Your Own Dataset
 
-You can also merge your own dataset using the function ``merge_data``. If your own dataset has an ISO3 code, it merges your dataset using the ISO3 code via an exact match. If your dataset has a country name variable instead, it first merges via an exact match based on the country name, followed by a fuzzy-match. For example, 
+You can also merge your own dataset using the function ``merge_data``. If your own dataset has an ISO3 code, it merges your dataset using the ISO3 code via an exact match. If your dataset has a country name variable instead, it first merges via an exact match based on the country name, followed by a [fuzzy-match](https://github.com/dgrtwo/fuzzyjoin). For example, 
 
 ```{r, echo = F}
 naumann <- as.data.frame(X_Imm) %>% rownames_to_column() %>% select(-GDP, -Unemp., -Immigration, -rowname) %>% rename_all(tolower) 
@@ -107,7 +108,7 @@ Two additional columns are merged to the dataset:
 
 ### Descriptive Summary
 
-``desc_stat`` function returns simple descriptive statistics, number of missing countries in each year, and correlation matrix. Highly correlated variables mean that they are capturing similar cross-country contexts, so you might want to drop one of them in the SPS. Character and factor variables are automatically binarized to obtain descriptive statistics.
+The function ``desc_stat`` returns simple descriptive statistics, number of missing countries in each year, and correlation matrix. Highly correlated variables mean that they are capturing similar cross-country contexts, so you might want to considder dropping one of them in the SPS. Character and factor variables are automatically binarized to obtain descriptive statistics.
 
 ```{r}
 desc <- desc_stat(data = sps_data2)
@@ -155,10 +156,6 @@ map
 ```
 
 # References
-
-Enamorado, Ted, Ben Fifield, and Kosuke Imai. 2017. fastLink: Fast Probabilistic Record Linkage with Missing Data. Version 0.6. https://github.com/kosukeimai/fastLink.
-
-Enamorado, Ted, Benjamin Fifield, and Kosuke Imai. 2019. “Using a Probabilistic Model to Assist Merging of Large-Scale Administrative Records.” American Political Science Review 113 (2): 353–71.
 
 Michael Coppedge et al. 2023. “V-Dem Dataset V13.” Varieties of Democracy (V-Dem) Project. https://doi.org/10.23696/VDEMDS23.
 
