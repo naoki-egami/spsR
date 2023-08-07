@@ -3,11 +3,20 @@ title: "Handle Missing Data"
 output: 
   md_document:
     variant: markdown_github
+always_allow_html: yes
 ---
 
-# Prepare Site-Level Variabels
-Diana, please add your instruction of creating the data here. 
+# Handling Missing Data
 
-This page only focuses on creating the original data. 
-
-You don't need to talk about how to specify the target population of sites. 
+```{r}
+rm(list = ls())
+options(digits = 2)
+library(knitr)
+library(kableExtra)
+library(tidyverse)
+library(spsRdata)
+library(spsR)
+opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, 
+               tidy.opts = list(width.cutoff = 80), tidy = TRUE, fig.align='center',
+               knitr.kable.NA = '')
+```
