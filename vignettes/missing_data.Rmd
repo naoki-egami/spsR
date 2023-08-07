@@ -20,3 +20,16 @@ opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE,
                tidy.opts = list(width.cutoff = 80), tidy = TRUE, fig.align='center',
                knitr.kable.NA = '')
 ```
+
+```{r}
+data(sps_data)
+sps_data[sps_data$country=='Mexico', c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')]
+
+imputed <- impute_var(data = sps_data, 
+                      countryvar = 'country', 
+                      yearvar = 'year', 
+                      imputevars = c('e_p_polity', 'AG.LND.TOTL.K2'),
+                      method = 'miceranger')
+
+imputed[imputed$country=='Mexico', c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')]
+```
