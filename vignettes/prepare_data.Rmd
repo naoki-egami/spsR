@@ -8,8 +8,6 @@ always_allow_html: yes
 
 # Prepare Site-Level Variables
 
-This page only focuses on creating the original data. 
-
 ```{r}
 rm(list = ls())
 options(digits = 2)
@@ -22,8 +20,6 @@ opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE,
                tidy.opts = list(width.cutoff = 80), tidy = TRUE, fig.align='center',
                knitr.kable.NA = '')
 ```
-
-### SPS Baseline Dataset
 
 We provide a dataset (`sps_data`) comprised of 21 country-level variables for 179 countries between 2015 and 2022. It contains covariates representing political, economic, and social characteristics of countries in the dataset, collected from three sources: V-DEM, World Bank Indicators, and Resource Watch: 
 
