@@ -19,5 +19,7 @@ Imports:
     metafor,
     dplyr,
     spsRdata
+Remotes: 
+    naoki-egami/spsRdata
 RoxygenNote: 7.2.3
 URL: http://naokiegami.com/spsR/
