@@ -9,11 +9,6 @@ always_allow_html: yes
 # Prepare Site-Level Variables
 
 ```{r}
-rm(list = ls())
-options(digits = 2)
-library(knitr)
-library(kableExtra)
-library(tidyverse)
 library(spsRdata)
 library(spsR)
 opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, 
@@ -29,9 +24,21 @@ We provide a dataset (`sps_data`) comprised of 21 country-level variables for 17
 
 * [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1): World langauges dataset created using CIA World Factbook.
 
-```{r, echo = F}
+ <!-- Add text describing data and codebook -->
+
+```{r}
 data(sps_data)
+head(sps_data)
+
 data(codebook)
+head(codebook)
+```
+<!-- need to check if tidyverse is needed elsewher -->
+
+```{r, echo = F}
+library(kableExtra)
+library(knitr)
+library(tidyverse)
 kbl(codebook,
       label = "tab:codebook",
       caption = "List of Selected Variables") %>%
@@ -53,16 +60,7 @@ You can also search for other variables in the V-Dem dataset and World Bank usin
 
 ```{r}
 search_result <- search_var(keyword = 'international migrant')
-```
-```{r, echo = F}
-kbl(search_result %>% 
-      mutate_if(is.character, ~gsub('\\$', ' dollar', .x)) %>%
-      mutate_all(~gsub('\\\\|\t|\n', '', .x)),
-      label = "tab:search_var",
-      caption = "Keyword Search Returns") %>%
-  kable_classic_2(full_width = T) %>%
-  kable_styling(font_size = 12, bootstrap_options = c('hover', 'condensed')) %>%
-  column_spec(1, italic = T)
+head(search_result)
 ```
 
 Based on the search return, you can decide to add the variable(s) to the baseline dataset using the function ``add_var``. For example:
@@ -75,28 +73,21 @@ sps_data1 <- add_var(data = sps_data, vars = c('SM.POP.TOTL.ZS'))
 
 You can also merge your own dataset using the function ``merge_data``. If your own dataset has an ISO3 code, it merges your dataset using the ISO3 code via an exact match. If your dataset has a country name variable instead, it first merges via an exact match based on the country name, followed by a [fuzzy-match](https://github.com/dgrtwo/fuzzyjoin). For example, 
 
+<!-- Re-create with ESS dataset with country and year already created -->
+
 ```{r, echo = F}
 naumann <- as.data.frame(X_Imm) %>% rownames_to_column() %>% select(-GDP, -Unemp., -Immigration, -rowname) %>% rename_all(tolower) 
 naumann$cntry <- c("The Netherlands","Sweden","Norway","France","Germany","Bellgium","Denmark","Finland","Ireland","Slovenia","Spain","Switzerland","Austria","Czech","United Kingdom")
 naumann$yr    <- 2015
 naumann <- select(naumann, cntry, yr, everything())
-kbl(naumann) %>% kable_styling()
+head(naumann)
 ```
 
+<!-- Simplify the code in presenting the merged result -->
 ```{r}
 sps_data2 <- merge_data(basedata = sps_data1, newdata = naumann, yearvar = 'yr', countryvar = 'cntry', iso = FALSE)
-```
 
-
-```{r, echo = F}
-sps_data2 %>%
-  drop_na(match) %>%
-  select(matches('country|year|iso|cname|match')) %>%
-  filter(cname_used %in% naumann$cntry) %>%
-  arrange(cname_used) %>%
-  kbl() %>%
-  kable_styling() %>%
-  row_spec(c(2, 3), bold = T)
+head(sps_data2[sps_data2$match == 'fuzzy', ], n = 3)
 ```
 
 Two additional columns are merged to the dataset:
@@ -109,50 +100,34 @@ Two additional columns are merged to the dataset:
 The function ``desc_stat`` returns simple descriptive statistics, number of missing countries in each year, and correlation matrix. Highly correlated variables mean that they are capturing similar cross-country contexts, so you might want to considder dropping one of them in the SPS. Character and factor variables are automatically binarized to obtain descriptive statistics.
 
 ```{r}
-desc <- desc_stat(data = sps_data2)
+desc <- desc_stat(data = sps_data)
 ```
+
+<!-- Update the presentation, remove knitrExtra, try to use base R-->
 
 ```{r, echo = F}
 # Descriptive Statistics
-desc$desc %>%
-  mutate_if(is.numeric, ~ round(.x, 2)) %>%
-  kbl(caption = 'Descriptive Statistics of Selected Covariates') %>%
-  kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
-                position = 'center')
+head(round(desc$desc, 3), n = 3)
 
 # Number of missing observations per year
-desc$miss %>%
-  mutate_if(is.numeric, ~ round(.x, 2)) %>%
-  kbl(caption = 'Number of Missing Observations for Selected Covariates per Year') %>%
-  kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
-                position = 'center')
+head(desc$miss, n = 3)
 
 # Correlation Matrix
-corr <- as.data.frame(desc$corr) %>% mutate_all(~round(.x, 3))
-for (i in names(corr)){
-  corr[[i]] <- cell_spec(corr[[i]], color = ifelse(is.na(corr[[i]]), 'gray',
-                                                   ifelse(abs(corr[[i]]) > 0.9, '#2D0729',
-                                                          ifelse(abs(corr[[i]]) > 0.8, '#900C3F',
-                                                                 ifelse(abs(corr[[i]]) > 0.7, '#C70039',
-                                                                        ifelse(abs(corr[[i]]) > 0.6, '#FF5733', '#FFC300'))))))
-}
-kable(corr, escape = F, caption = 'Correlation Matrix') %>%
-kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
-              position = 'center')
+round(desc$corr[1:3, 1:3], 3)
 ```
 
-### Creating a Map
+<!-- ### Creating a Map PASS ON TO SPSR --> 
 
-For your selected countries, you can also use the function ``sps_map`` to create a world plot to show heterogeneity in selected covariates. For example,
+<!-- For your selected countries, you can also use the function ``sps_map`` to create a world plot to show heterogeneity in selected covariates. For example, -->
 
-```{r, fig.fullwidth = TRUE, fig.width = 9, fig.height = 5}
-sps_data2$target <- as.numeric(sps_data2$region %in% c('Europe & Central Asia', 'Latin America & Caribbean', 'North America'))
-map <- sps_map(data = sps_data2, 
-               targetvar = 'target',
-               countryvar = 'iso3', 
-               countrysps = c('MEX', 'PRY', 'BOL', 'USA', 'FRA', 'NOR', 'HUN'))
-map
-```
+<!-- ```{r, fig.fullwidth = TRUE, fig.width = 9, fig.height = 5} -->
+<!-- sps_data2$target <- as.numeric(sps_data2$region %in% c('Europe & Central Asia', 'Latin America & Caribbean', 'North America')) -->
+<!-- map <- sps_map(data = sps_data2,  -->
+<!--                targetvar = 'target', -->
+<!--                countryvar = 'iso3',  -->
+<!--                countrysps = c('MEX', 'PRY', 'BOL', 'USA', 'FRA', 'NOR', 'HUN')) -->
+<!-- map -->
+<!-- ``` -->
 
 # References
 
