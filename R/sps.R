@@ -1,30 +1,25 @@
 #' Synthetic Purposive Sampling: Site Selection for External Validity
-#' @param X Site-level covariates for the target population of sites
-#' @param N_s Number of study sites to be selected
-#' @param stratify Stratify
-#' @param site_selected A
-#' @param site_unavailable A
-#' @param lambda A
-#' @param seed Numeric. `seed` used internally. Default = 1234.
+#' @param X Site-level variables for the target population of sites. Row names should be names of sites.
+#' @param N_s Number of study sites to be selected.
+#' @param stratify (Optional. Default = \code{NULL}) Output from function \code{stratify_sps()}. This argument helps users incorporate practical and logistical constraints. See examples on \url{http://naokiegami.com/spsR/articles/stratify_sps.html}
+#' @param site_selected (Optional. Default = \code{NULL}) Names of sites users always want to select (or have already selected).
+#' @param site_unavailable (Optional. Default = \code{NULL}) Names of sites users cannot select.
+#' @param lambda Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0.1)}. Users who want to fine-tune the tuning parameters, please see examples on \url{http://naokiegami.com/spsR/articles/methods_guides.html}.
+#' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
 #' @import CVXR
 #' @import ggplot2
 #' @import GGally
-#' @import spsRdata
 #' @importFrom metafor rma
 #' @importFrom grDevices adjustcolor
-#' @importFrom stats pnorm
+#' @importFrom stats pnorm qnorm
 #' @importFrom utils combn
 #' @importFrom dplyr case_when
 #' @return \code{sps} returns an object of \code{sps} class.
 #'  \itemize{
-#'    \item \code{ss}: Estimated external robustness.
-#'    \item \code{W}: Estimates of the pAMCE for all factors in each bootstrap sample.
-#'    \item \code{obj}: Estimated values of the objective function
-#'    \item \code{X}: X
-#'    \item \code{Q}: Q
-#'    \item \code{N}: N
-#'    \item \code{N_s}: N_s
-#'    \item \code{...}: Values for internal use.
+#'    \item \code{selected_sites}: Names of sites the SPS algorithm selected.
+#'    \item \code{W}: Estimated weights to approximate non-selected sites using selected sites. \code{W} will be used in the subsequent estimation of the average-site ATE.
+#'    \item \code{obj}: Estimated values of the objective function, separately for three parts.
+#'    \item \code{internal}: Objects useful for internal use of the function.
 #'  }
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
@@ -32,20 +27,37 @@
 
 sps <- function(X, N_s,
                 stratify = NULL,
-                lambda = c(1, 1, 0.05),
                 site_selected = NULL,
                 site_unavailable = NULL,
+                lambda = c(1, 1, 0.05),
                 seed = 1234){
 
   # Housekeeping
+
+  ## X
+  ### Need to add Missing data
   X <- as.matrix(X)
   class(X) <- "matrix"
+  if(ncol(X) == 1){
+    X_orig <- X
+    X <- cbind(1, X)
+  }else{
+    X_orig <- X
+  }
 
+  ## N_s
+  if(N_s <= length(site_selected)){
+    stop(" N_s should be larger than length(site_selected) ")
+    # N_s <- N_s + length(site_selected)
+    # N_s is defined including site_selected
+  }
+
+  ## stratify
   if(is.null(stratify) == TRUE){
     C   <- NULL
     c0  <- NULL
   }else{
-    if("st_direct" %in% class(stratify)){
+    if("stratify_sps" %in% class(stratify)){
       C  <- stratify$C
       c0 <- stratify$c0
     }else{
@@ -58,15 +70,28 @@ sps <- function(X, N_s,
       C  <- do.call("rbind", C_l)
     }
   }
-
-  if(ncol(X) == 1){
-    X_orig <- X
-    X <- cbind(1, X)
+  # site_selected
+  if(all(is.null(site_selected)) == FALSE){
+    if(all(site_selected %in% rownames(X)) == FALSE){
+      stop(" site_selected should be a subset of rownames(X) ")
+    }else{
+      site_selected_ind <- which(site_selected %in% rownames(X))
+    }
   }else{
-    X_orig <- X
+    site_selected_ind <- NULL
   }
 
-  N_s <- N_s + length(site_selected)
+  # site_unavailable
+  if(all(is.null(site_unavailable)) == FALSE){
+    if(all(site_unavailable %in% rownames(X)) == FALSE){
+      stop(" site_unavailable should be a subset of rownames(X) ")
+    }else{
+      site_unavailable_ind <- which(site_unavailable %in% rownames(X))
+    }
+  }else{
+    site_unavailable_ind <- NULL
+  }
+
 
   N <- nrow(X)
   L <- ncol(X)
@@ -100,13 +125,13 @@ sps <- function(X, N_s,
   for(l in 1:L){
     co_11[[l]] <- Z[,l] == (1-S)*X[,l] - t(Q) %*% X[,l]
   }
-  if(is.null(site_selected) == FALSE){
-    co_12 <- S[site_selected] == 1
+  if(all(is.null(site_selected_ind)) == FALSE){
+    co_12 <- S[site_selected_ind] == 1
   }else{
     co_12 <- NULL
   }
-  if(is.null(site_unavailable) == FALSE){
-    co_13 <- S[site_unavailable] == 0
+  if(all(is.null(site_unavailable_ind)) == FALSE){
+    co_13 <- S[site_unavailable_ind] == 0
   }else{
     co_13 <- NULL
   }
@@ -155,14 +180,16 @@ sps <- function(X, N_s,
   }
   selected_sites <- rownames(X_orig)[ss_out == 1]
 
+  internal_use <- list("ss" = ss_out,
+                       "X" = X_orig,
+                       "Q" = Q_out,
+                       "N_s" = N_s,
+                       "N" = N)
+
   out <- list("selected_sites" = selected_sites,
-              "ss" = ss_out,
               "W" = W_out,
               "obj" = c(obj_1, obj_2, obj_3),
-              "X" = X_orig,
-              "Q" = Q_out,
-              "N_s" = N_s,
-              "N" = N)
+              "internal" = internal_use)
   class(out) <- c(class(out), "sps")
   return(out)
 }

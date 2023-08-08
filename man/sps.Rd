@@ -8,38 +8,34 @@ sps(
   X,
   N_s,
   stratify = NULL,
-  lambda = c(1, 1, 0.05),
   site_selected = NULL,
   site_unavailable = NULL,
+  lambda = c(1, 1, 0.05),
   seed = 1234
 )
 }
 \arguments{
-\item{X}{Site-level covariates for the target population of sites}
+\item{X}{Site-level variables for the target population of sites. Row names should be names of sites.}
 
-\item{N_s}{Number of study sites to be selected}
+\item{N_s}{Number of study sites to be selected.}
 
-\item{stratify}{Stratify}
+\item{stratify}{(Optional. Default = \code{NULL}) Output from function \code{stratify_sps()}. This argument helps users incorporate practical and logistical constraints. See examples on \url{http://naokiegami.com/spsR/articles/stratify_sps.html}}
 
-\item{lambda}{A}
+\item{site_selected}{(Optional. Default = \code{NULL}) Names of sites users always want to select (or have already selected).}
 
-\item{site_selected}{A}
+\item{site_unavailable}{(Optional. Default = \code{NULL}) Names of sites users cannot select.}
 
-\item{site_unavailable}{A}
+\item{lambda}{Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0.1)}. Users who want to fine-tune the tuning parameters, please see examples on \url{http://naokiegami.com/spsR/articles/methods_guides.html}.}
 
-\item{seed}{Numeric. `seed` used internally. Default = 1234.}
+\item{seed}{Numeric. \code{seed} used internally. Default = \code{1234}.}
 }
 \value{
 \code{sps} returns an object of \code{sps} class.
  \itemize{
-   \item \code{ss}: Estimated external robustness.
-   \item \code{W}: Estimates of the pAMCE for all factors in each bootstrap sample.
-   \item \code{obj}: Estimated values of the objective function
-   \item \code{X}: X
-   \item \code{Q}: Q
-   \item \code{N}: N
-   \item \code{N_s}: N_s
-   \item \code{...}: Values for internal use.
+   \item \code{selected_sites}: Names of sites the SPS algorithm selected.
+   \item \code{W}: Estimated weights to approximate non-selected sites using selected sites. \code{W} will be used in the subsequent estimation of the average-site ATE.
+   \item \code{obj}: Estimated values of the objective function, separately for three parts.
+   \item \code{internal}: Objects useful for internal use of the function.
  }
 }
 \description{

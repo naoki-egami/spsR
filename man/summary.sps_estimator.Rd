@@ -7,9 +7,9 @@
 \method{summary}{sps_estimator}(object, ci = 0.95, ...)
 }
 \arguments{
-\item{object}{the output from sps_estimator()}
+\item{object}{Output from \code{sps_estimator()}.}
 
-\item{ci}{digits used for a table of covariate profiles. Default = 2.}
+\item{ci}{(Default = \code{0.95}.) Coverage of the estimated confidence intervals.}
 
 \item{...}{Other arguments.}
 }

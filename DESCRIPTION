@@ -17,7 +17,6 @@ Imports:
     ggplot2,
     GGally,
     metafor,
-    dplyr,
-    spsRdata
+    dplyr
 RoxygenNote: 7.2.3
 URL: http://naokiegami.com/spsR/

@@ -1,12 +1,12 @@
 #' Summary function
-#' @param object the output from sps_estimator()
-#' @param ci digits used for a table of covariate profiles. Default = 2.
+#' @param object Output from \code{sps_estimator()}.
+#' @param ci (Default = \code{0.95}.) Coverage of the estimated confidence intervals.
 #' @param ... Other arguments.
 #' @export
 
 summary.sps_estimator <- function(object, ci = 0.95, ...){
 
-  out_main <- object$overall
+  out_main <- object$average_site_ATE
   alpha_h <- 1 - (1 - ci)/2
   ci_low  <- out_main[1] - qnorm(alpha_h)*out_main[2]
   ci_high <- out_main[1] + qnorm(alpha_h)*out_main[2]

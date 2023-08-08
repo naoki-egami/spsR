@@ -1,33 +1,58 @@
 ---
-title: "Introduction to sps"
+title: "Introduction to SPS"
 output: 
   md_document:
     variant: markdown_github
 ---
 
-### Overview 
+On this page, we provide the introduction to `sps` package (10 minute read). 
 
-On this page, we provide the introduction to `sps` package (5 minute read). 
+\vspace{20pt}
 
-Specifically, we explain the two main functions. 
+#### Table of Contents 
 
-1. `sps`: Synthetic Purposive Sampling to select study sites for multi-site causal studies. 
+1. [Introduction] 
 
-2. `sps_estimator`: Synthetic Purposive Sampling Estimator to estimate the average-site average treatment effect (ATEs) from multi-site causal studies. 
+2. [Example: Multi-Country Survey Experiment]
+
+3. [`sps`: Site Selection]
+
+4. [`sps_estimator`: Estimate the Average-Site ATE]
 
 <br>
 
+### Introduction
 
-### `sps`: Site Selection
+External validity of causal findings is a focus of long-standing debates. Whether and how can researchers generalize causal findings across different contexts and settings? To address this question, an increasing number of researchers use **a multi-site/multi-context design** where researchers conduct causal studies in multiple sites to compare and aggregate findings across contexts. 
 
-We use a multi-country survey experiment on attitudes toward immigrants (Naumann et al, 2018) as an example here. 
+When designing multi-site experiments (or observational studies), the fundamental research design question is **how should we select study sites for external validity?** 
 
-In this example, we define 15 European countries as the population of sites. As site-level variables, we consider 7 variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of females, the mean age, and the mean income. 
+The R package `spsR` aims to help researchers **select sites for external validity with statistical foundation, while accommodating practical and logistical constraints**. In particular, `spsR` implements Synthetic Purposive Sampling (SPS) by [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf), which improves upon conventional purposive sampling by combining ideas from the synthetic control method---it selects diverse sites such that non-selected sites are well approximated by the weighted average of the selected sites. By doing so, even without random sampling, we can make the weighted average of selected sites representative of all the sites, including non-selected sites. Please see [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf) for the methodological details. 
+
+Using `spsR`, researchers can 
+
+* Select diverse sites based on the SPS framework 
+* Estimate the average causal effect for the population of sites 
+
+On this page, we introduce the basic functionalities that is likely to be sufficient for most users, most of the time. For users who need more advanced functionalities, we offer AAA. 
+
+<br>
+
+### Example: Multi-Country Survey Experiment
+
+We use a multi-country survey experiment on attitudes toward immigrants (Naumann et al., 2018) as an example here. This study aims to answer a long-standing question in the immigration literature---whether and how much do natives prefer highly skilled migrants to low skilled migrants? To do so, in each site, they conduct a survey experiment where they randomly changed the skill level of hypothetical immigrant groups, i.e., “professionals” or “unskilled labors” (treatment variable), and asked respondents to show the support level for this immigrant group (outcome variable). 
 
 ```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 library(spsR)
 data("X_Imm")
-dim(X_Imm)
+```
+
+In this example, we try to select 6 countries from 15 European countries as study sites for the multi-site survey experiment. 
+
+When selecting study sites for multi-site experiments, we choose site-level variables that we want to diversify. For example, to understand whether causal findings vary across different contexts, researchers might include diverse countries with different GDP, size of migrant population, unemployment rates, and so on. More formally, researchers should choose site-level variables that predict across-site heterogeneity of causal effects. In this illustration, we consider 7 variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of females, the mean age, and the mean education. 
+
+```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+colnames(X_Imm)
 ```
 
 In practice, it is recommended to standardize each variable to make the scale of site-level variables comparable. That is, each variable has the mean zero and the standard deviation one.  
@@ -42,37 +67,103 @@ Users can use `sps_plot()` to visualize the distribution of site-level variables
 ```{r, fig.dim = c(7, 7), fig.align = 'center'}
 sps_plot(X = X_Imm, before_selection = TRUE)
 ```
+<br>
 
-We can then use `sps` to select diverse sites from the population of sites. We will select 6 sites from 15 European countries in this example.^[*Note*: Given that the underlying optimization problem is a mixed-integer problem, the function usually takes less than 30 secs to complete in typical problems in political science and related social science fields (e.g., select 5 ~ 10 sites out of 15 ~ 30 sites). If users want to select a larger number of sites from a larger population of sites, it might take more time.] We start with the basic version of `sps` and illustrate refinements on different pages (e.g., the stratified SPS). 
+### `sps`: Site Selection {#sps}
+
+We can use `sps()` to select 6 sites from 15 European countries (the population of sites). We start with the basic version of `sps` and illustrate refinements next. 
 
 ```{r}
 out <- sps(X = X_Imm, N_s = 6)
 ```
 
-In this example, `sps` selected the following 6 sites.
+**Arguments**
+
+* `X`: Site-level variables for the population of sites. Row names should be names of sites.
+* `N_s`: Number of study sites to be selected.
+
+In this example, `sps` selected the following 6 sites. 
 
 ```{r}
 out$selected_sites
 ```
 
-Users can investigate the selected sites visually. Red triangles represent selected sites and black circles represent non-selected sites. In the last row and the diagonal plots, users can see the marginal distribution of each variable. All the remaining figures in the middle show bivariate relationships between two variables. 
-
-We can see that selected sites successfully cover a wide range of values in each site-level variable. 
+Users can investigate the selected sites visually using `sps_plot()`. 
 
 ```{r, fig.dim = c(7, 7), fig.align = 'center'}
 sps_plot(out)
 ```
 
-If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. Please see AAA. 
+Red triangles represent selected sites and black circles represent non-selected sites. In the last row and the diagonal plots, users can see the marginal distribution of each variable. All the remaining figures in the middle show bivariate relationships between two variables. 
+
+We can see that selected sites successfully cover a wide range of values in each site-level variable. 
+
+#### Stratify SPS 
+
+If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. 
+
+For example, we might want to select at least one site that have `Age` larger than `1`. We can incorporate this information as follows. 
+
+```{r}
+st_age <- stratify_sps(X = X_Imm, 
+                       num_site = c("at least", 1), 
+                       condition = c("Age", "larger than or equal to", 1))
+```
+
+We might also want to select at most two sites that have `Education` between `c(-0.5, 0.5)`. We can incorporate this information as follows. 
+
+```{r}
+st_edu <- stratify_sps(X = X_Imm, 
+                       num_site = c("at most", 2), 
+                       condition = c("Education", "between", -0.5, 0.5))
+```
+
+**Arguments**
+
+* `num_site`: A vector of two elements, e.g., `c("at least", 1)`. This argument specifies the number of sites that should satisfy `condition` specified below. The first element should be either `at least` or `at most`. The second element is integer. For example, `c("at least", 1)` means that we stratify SPS such that we select **at least 1** site that satisfies `condition` (specified below).
+
+* `condition`: A vector of three or four elements, e.g., `c("Age", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is numeric. When the second element is `between`, the third and fourth elements specify values. For example, `c("Age", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have **Age larger than or equal to 1**.
+
+In practice, it is often recommended to add simple stratification to every variable: for each variable, we make sure to select at least 1 site above 0.5 standard deviation and at least 1 site below −0.5 standard deviation. This will make sure that SPS will select diverse sites that cover both large and small values in each site-level variable. 
+
+```{r}
+st_large <- st_small <- list()
+for(v in 1:7){
+  st_large[[v]] <- stratify_sps(X = X_Imm, num_site = c("at least", 1), condition = c(colnames(X_Imm)[v], "larger than or equal to", 0.5))
+  st_small[[v]] <- stratify_sps(X = X_Imm, num_site = c("at least", 1), condition = c(colnames(X_Imm)[v], "smaller than or equal to", -0.5))
+}
+```
+
+After specifying these statification, researchers can supply them to `sps()`. 
+
+```{r}
+out_st <- sps(X = X_Imm, N_s = 6, stratify = c(st_large, st_small))
+```
+
+**Arguments**
+
+* `stratify`: A `list` where each element is an output from function `stratify_sps()`.
+
+After stratification, SPS selected the following 6 sites. 
+```{r}
+out_st$selected_sites
+```
+
+
+We can also visualize it. 
+
+```{r, fig.dim = c(7, 7), fig.align = 'center'}
+sps_plot(out_st)
+```
 
 <br>
 
 
-### `sps_estimator`: Estimate the Average-Site ATE
+### `sps_estimator`: Estimate the Average-Site ATE {#sps_estimator}
 
-We focus on a multi-site causal study where where researchers have (experimental or observational) identification strategies for internal validity within each site and researchers compare results across sites for external validity. `sps_estimator` will aggregate site-specific ATE estimates to estimate the average-site ATE. 
+We focus on a multi-site causal study where where researchers have (experimental or observational) identification strategies for internal validity within each site and researchers compare results across sites for external validity. `sps_estimator()` will aggregate site-specific ATE estimates to estimate the average-site ATE. 
 
-Here, we use experimental estimates in selected 6 sites from Naumann et al (2018). Users only need to obtain point estimates and standard errors of the average treatment effects (ATEs) in each site. 
+Here, we use experimental estimates in selected 6 sites from Naumann et al (2018). Users only need to obtain point estimates and standard errors of the average treatment effects (ATEs) in each site. As an example, we use selected sites from `out`. 
 
 ```{r}
 data("exp_estimate_Imm_selected")
@@ -82,8 +173,17 @@ exp_estimate_Imm_selected
 We then aggregate these site-specific ATEs in selected sites to estimate the average-site ATE. 
 
 ```{r}
-sps_est <- sps_estimator(out = out, estimates_selected = exp_estimate_Imm_selected)
+sps_est <- sps_estimator(out = out, 
+                         estimates_selected = exp_estimate_Imm_selected)
+```
 
+**Arguments** 
+
+* `out`: Output from function `sps()`
+* `estimates_selected`: `data.frame` with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and `rownames(estimates_selected)` should be names of the selected sites.
+
+We can check the results using `summary` function.
+```{r}
 summary(sps_est)
 ```
 

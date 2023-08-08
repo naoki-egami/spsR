@@ -1,15 +1,22 @@
+#' Plot function for \code{sps}
+#' @param out Output from function \code{sps()}
+#' @param title Title of the plot
+#' @param columns (Optional. Default = \code{NULL}) Names of columns users want to visualize. When \code{NULL}, the function plots every column.
+#' @param size (Default = \code{2}) Size of texts on the summary panel.
+#' @param before_selection Logical (\code{TRUE} or \code{FALSE}. Default = \code{FALSE}). When \code{FALSE}, the function will compare selected and non-selected sites. When \code{TRUE}, the function simply visualizes the distribution of site-level variables in the target population of sites.
+#' @param X (Optional. Use this only when \code{before_selection = TRUE}.) Site-level variables for the target population of sites.
+#' @return \code{sps_plot} visualizes the distribution of site-level variables.
+#' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
-sps_plot <- function(out, X = NULL, columns = NULL, title = NULL, size = 2, before_selection = FALSE){
+sps_plot <- function(out, title = NULL, columns = NULL, size = 2, before_selection = FALSE, X = NULL){
 
   if(before_selection == TRUE){
     p <- sps_plot_base(X = X, title = title)
     p
 
   }else{
-
-
-    N <- length(out$ss)
-    Xp <- as.data.frame(out$X)
+    N <- length(out$internal$ss)
+    Xp <- as.data.frame(out$internal$X)
 
     if(is.null(columns) == TRUE){
       columns <- colnames(Xp)
@@ -19,9 +26,9 @@ sps_plot <- function(out, X = NULL, columns = NULL, title = NULL, size = 2, befo
 
     col_use <- rep("Not", N)
 
-    col_use[out$ss == 1] <- "Selected"
+    col_use[out$internal$ss == 1] <- "Selected"
     Xp$summary_var <- col_use
-    N_s <- sum(out$ss)
+    N_s <- sum(out$internal$ss)
     N_r <- N - N_s
     colname_use <- colnames(Xp)
     colname_use[colname_use == "summary_var"] <- "Summary"

@@ -5,3 +5,6 @@
 ^pkgdown$
 ^vignettes$
 ^\.github$
+index.Rmd
+index.md
+vignettes_OLD

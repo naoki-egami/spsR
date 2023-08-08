@@ -1,3 +1,15 @@
+#' Site-level Cross-Validation for Synthetic Purposive Sampling
+#' @param out Output from function \code{sps()}
+#' @param estimates_selected data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be names of the selected sites.
+#' @param K (Default = \code{2}) Fold of the cross-validation.
+#' @param max_iter (Default = \code{100}) How many times the function repeats K-fold cross-validation.
+#' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
+#' @return \code{sps_cv} returns two objects.
+#'  \itemize{
+#'    \item \code{p_value}: P-value for the null hypothesis that the the average-site ATE among non-selected sites is equal to the weighted average estimator of the average-site ATE based on site-specific ATE estimates in selected sites.
+#'    \item \code{internal}: Objects useful for internal use of the function.
+#'  }
+#' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100, seed = 1234){
 
@@ -12,7 +24,7 @@ sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100,
   estimate <- estimates_selected[, 1]
   se <- estimates_selected[, 2]
 
-  X_selected <- out$X[out$ss == 1, , drop = FALSE]
+  X_selected <- out$internal$X[out$internal$ss == 1, , drop = FALSE]
 
   s <- nrow(X_selected)
   ind <- seq(1:s)
@@ -42,7 +54,7 @@ sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100,
     # truth
     # estimate_cv <- mean(estimate[s_use])
     est_cv <- rma(yi = estimate[use_non_selected_index],
-                           vi = se[use_non_selected_index]^2, method = "REML")
+                  vi = se[use_non_selected_index]^2, method = "REML")
 
     cv_tab[i, 1:5] <- c(est_cv$beta, est_cv$se,
                         out_cv_i$non_selected[1], out_cv_i$non_selected[2],
@@ -62,7 +74,7 @@ sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100,
   holm_p_value <- (m + 1 - seq(from = 1, to = m))*sorted_p_value
   final_p_value <- min(holm_p_value)
 
-  out <- list("p_value" = final_p_value, "table" = cv_tab)
+  out <- list("p_value" = final_p_value, "internal" = cv_tab)
 
   return(out)
 }
