@@ -86,6 +86,8 @@ kbl(naumann) %>% kable_styling()
 ```{r}
 sps_data2 <- merge_data(basedata = sps_data1, newdata = naumann, yearvar = 'yr', countryvar = 'cntry', iso = FALSE)
 ```
+
+
 ```{r, echo = F}
 sps_data2 %>%
   drop_na(match) %>%
@@ -109,6 +111,7 @@ The function ``desc_stat`` returns simple descriptive statistics, number of miss
 ```{r}
 desc <- desc_stat(data = sps_data2)
 ```
+
 ```{r, echo = F}
 # Descriptive Statistics
 desc$desc %>%

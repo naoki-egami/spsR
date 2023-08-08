@@ -9,6 +9,7 @@
 #' @import CVXR
 #' @import ggplot2
 #' @import GGally
+#' @import spsRdata
 #' @importFrom metafor rma
 #' @importFrom grDevices adjustcolor
 #' @importFrom stats pnorm qnorm
