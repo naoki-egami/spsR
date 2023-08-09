@@ -69,22 +69,6 @@ head(sps_data1, n = 3)
 
 ### Merge Your Own Dataset {.tabset .tabset-dropdown}
 
-<details>
-<summary>*Stratified SPS*</summary>
-This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!
-```{r}
-# This is a test and I hope it works!
-```
-</details>
-
-<details>
-<summary><font size="1"> **Stratified SPS** </font></summary>
-This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!
-```{r}
-# This is a test and I hope it works!
-```
-</details>
-
 You can also merge your own dataset using the function ``merge_data``. If your own dataset has an ISO3 code, it merges your dataset using the ISO3 code via an exact match. If your dataset has a country name variable instead, it first merges via an exact match based on the country name, followed by a [fuzzy-match](https://github.com/dgrtwo/fuzzyjoin). For example, 
 
 <!-- Re-create with ESS dataset with country and year already created -->
