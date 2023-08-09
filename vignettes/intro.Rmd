@@ -71,14 +71,6 @@ sps_plot(X = X_Imm, before_selection = TRUE)
 
 ### `sps`: Site Selection {#sps}
 
-<details>
-<summary><font size="12"> **`sps`: Site Selection {#sps}** </font></summary>
-This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!
-```{r}
-# This is a test and I hope it works!
-```
-</details>
-
 We can use `sps()` to select 6 sites from 15 European countries (the population of sites). We start with the basic version of `sps` and illustrate refinements next. 
 
 ```{r}
@@ -107,6 +99,14 @@ Red triangles represent selected sites and black circles represent non-selected 
 We can see that selected sites successfully cover a wide range of values in each site-level variable. 
 
 #### Stratify SPS 
+
+<details>
+<summary><font size="5"> Stratify SPS </font></summary>
+This is a test.
+```{r}
+# This is a test.
+```
+</details>
 
 If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. 
 
