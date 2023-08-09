@@ -11,9 +11,6 @@ always_allow_html: yes
 ```{r}
 library(spsRdata)
 library(spsR)
-opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, 
-               tidy.opts = list(width.cutoff = 80), tidy = TRUE, fig.align='center',
-               knitr.kable.NA = '')
 ```
 
 We provide a dataset (`sps_data`) comprised of 21 country-level variables for 179 countries between 2015 and 2022. It contains covariates representing political, economic, and social characteristics of countries in the dataset, collected from three sources: V-DEM, World Bank Indicators, and Resource Watch: 
@@ -60,16 +57,19 @@ You can also search for other variables in the V-Dem dataset and World Bank usin
 
 ```{r}
 search_result <- search_var(keyword = 'international migrant')
-head(search_result)
+head(search_result, n = 3)
 ```
 
 Based on the search return, you can decide to add the variable(s) to the baseline dataset using the function ``add_var``. For example:
 
 ```{r}
 sps_data1 <- add_var(data = sps_data, vars = c('SM.POP.TOTL.ZS'))
+head(sps_data1, n = 3)
 ```
 
-### Merge Your Own Dataset
+### Merge Your Own Dataset {.tabset .tabset-dropdown}
+
+#### Dropdown 1
 
 You can also merge your own dataset using the function ``merge_data``. If your own dataset has an ISO3 code, it merges your dataset using the ISO3 code via an exact match. If your dataset has a country name variable instead, it first merges via an exact match based on the country name, followed by a [fuzzy-match](https://github.com/dgrtwo/fuzzyjoin). For example, 
 
@@ -87,7 +87,7 @@ head(naumann)
 ```{r}
 sps_data2 <- merge_data(basedata = sps_data1, newdata = naumann, yearvar = 'yr', countryvar = 'cntry', iso = FALSE)
 
-head(sps_data2[sps_data2$match == 'fuzzy', ], n = 3)
+sps_data2[which(sps_data2$match == 'fuzzy'), c('country', 'cname_used', 'match')]
 ```
 
 Two additional columns are merged to the dataset:
@@ -107,7 +107,7 @@ desc <- desc_stat(data = sps_data)
 
 ```{r, echo = F}
 # Descriptive Statistics
-head(round(desc$desc, 3), n = 3)
+head(desc$desc, n = 3)
 
 # Number of missing observations per year
 head(desc$miss, n = 3)
