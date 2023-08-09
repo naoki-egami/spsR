@@ -5,4 +5,44 @@ output:
     variant: markdown_github
 ---
 
-### Overview 
+On this page, we answer the frequently asked questions about SPS and `spsR` package. 
+
+\vspace{20pt}
+
+#### Table of Contents 
+
+1. [Introduction] 
+
+2. [Example: Multi-Country Survey Experiment]
+
+3. [`sps`: Site Selection]
+
+4. [`sps_estimator`: Estimate the Average-Site ATE]
+
+<br>
+
+### Most Common Questions
+
+#### How should I choose the target population of sites?
+
+#### How should I choose site-level variables to diversify? 
+
+#### I am worried about unmeasured variables. What should I do? 
+
+#### `sps` did not diversify all variables well. What should I do? 
+
+#### I have missing data. What should I do? 
+
+
+### More Questions
+
+#### Isn't Random Sampling Better? 
+
+#### I am not interested in the average-site ATE. Is `sps` useful? 
+
+#### I am interested in meta-regression. Is `sps` useful?
+
+#### How can I incorporate additional domain knowledge into site selection? 
+
+
+
