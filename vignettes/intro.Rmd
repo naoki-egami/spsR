@@ -101,12 +101,16 @@ We can see that selected sites successfully cover a wide range of values in each
 #### Stratify SPS 
 
 <details>
-<summary><font size="5"> Stratify SPS </font></summary>
+<summary><font style="font-family: helvetica, arial, freesans, clean, sans-serif; font-size:1.3em; font-weight:bold"> Stratify SPS </font></summary>
 This is a test.
 ```{r}
 # This is a test.
 ```
 </details>
+
+
+
+
 
 If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. 
 
