@@ -17,7 +17,7 @@ We provide a dataset (`sps_data`) comprised of 21 country-level variables for 17
 
 * [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset): collects democracy ratings for all countries in the world.
 
-* [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation): include economic (e.g., GDP, GNI, unemployment), demographic (e.g., population, education, migration), geographic (e.g., urban population, land area), and political (e.g., government spending/revenue, ODA) indicators for all countries in the world. 
+* [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation): include economic (e.g., GDP, unemployment), demographic (e.g., population, education, migration), geographic (e.g., land area), and political (e.g., government spending) indicators for all countries in the world. 
 
 * [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1): World langauges dataset created using CIA World Factbook.
 
@@ -35,7 +35,6 @@ head(codebook)
 ```{r, echo = F}
 library(kableExtra)
 library(knitr)
-library(tidyverse)
 kbl(codebook,
       label = "tab:codebook",
       caption = "List of Selected Variables") %>%
@@ -76,10 +75,10 @@ You can also merge your own dataset using the function ``merge_data``. If your o
 <!-- Re-create with ESS dataset with country and year already created -->
 
 ```{r, echo = F}
-naumann <- as.data.frame(X_Imm) %>% rownames_to_column() %>% select(-GDP, -Unemp., -Immigration, -rowname) %>% rename_all(tolower) 
+naumann <- as.data.frame(X_Imm) %>% tibble::rownames_to_column() %>% dplyr::select(-GDP, -Unemp., -Immigration, -rowname) %>% dplyr::rename_all(tolower) 
 naumann$cntry <- c("The Netherlands","Sweden","Norway","France","Germany","Bellgium","Denmark","Finland","Ireland","Slovenia","Spain","Switzerland","Austria","Czech","United Kingdom")
 naumann$yr    <- 2015
-naumann <- select(naumann, cntry, yr, everything())
+naumann <- dplyr::select(naumann, cntry, yr, everything())
 head(naumann)
 ```
 
