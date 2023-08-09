@@ -71,6 +71,14 @@ sps_plot(X = X_Imm, before_selection = TRUE)
 
 ### `sps`: Site Selection {#sps}
 
+<details>
+<summary><font size="12"> **`sps`: Site Selection {#sps}** </font></summary>
+This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!This is a test and I hope it works!
+```{r}
+# This is a test and I hope it works!
+```
+</details>
+
 We can use `sps()` to select 6 sites from 15 European countries (the population of sites). We start with the basic version of `sps` and illustrate refinements next. 
 
 ```{r}
