@@ -18,7 +18,9 @@ Imports:
     GGally,
     metafor,
     dplyr,
-    spsRdata
+    spsRdata,
+    fuzzyjoin,
+    countrycode
 Remotes: 
     naoki-egami/spsRdata
 RoxygenNote: 7.2.3
