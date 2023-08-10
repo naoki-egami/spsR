@@ -101,8 +101,8 @@ head(ess_data, n = 3)
 Users can use the function ``merge_data`` to merge their dataset:
 
 ```{r}
-sps_country_data3 <- merge_data(basedata = sps_country_data2, newdata = ess_data, id_site = 'nation')
-head(sps_country_data3[sps_country_data3$country == 'Czech Republic',], n = 3)
+sps_country_data3 <- merge_data(basedata = sps_country_data2, newdata = ess_data, id_site = 'country')
+head(sps_country_data3[sps_country_data3$country == 'Czechia',], n = 3)
 ```
 **Arguments**
 
@@ -115,10 +115,10 @@ head(sps_country_data3[sps_country_data3$country == 'Czech Republic',], n = 3)
 We discover that the two countries---Czech Republic and UK---are being matched incorrectly from the fuzzy-match. So we re-code these values and re-merge the dataset:
 
 ```{r}
-ess_data$nation[ess_data$nation == 'Czech Republic'] <- 'Czechia'
-ess_data$nation[ess_data$nation == 'UK'] <- 'United Kingdom'
-sps_country_data3 <- merge_data(basedata = sps_country_data2, newdata = ess_data, id_country = 'nation')
-head(sps_country_data3[sps_country_data3$country == 'Czech Republic',], n = 3)
+ess_data$country[ess_data$country == 'Czech Republic'] <- 'Czechia'
+ess_data$country[ess_data$country == 'UK'] <- 'United Kingdom'
+sps_country_data3 <- merge_data(basedata = sps_country_data2, newdata = ess_data, id_site = 'country')
+head(sps_country_data3[sps_country_data3$country == 'Czechia',], n = 3)
 ```
 
 <!-- Two additional columns are merged to the dataset: -->
