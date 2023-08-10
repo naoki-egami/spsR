@@ -101,7 +101,7 @@ head(ess_data, n = 3)
 Users can use the function ``merge_data`` to merge their dataset:
 
 ```{r}
-sps_country_data3 <- merge_data(basedata = sps_country_data2, newdata = ess_data, id_country = 'nation')
+sps_country_data3 <- merge_data(basedata = sps_country_data2, newdata = ess_data, id_site = 'nation')
 head(sps_country_data3[sps_country_data3$country == 'Czech Republic',], n = 3)
 ```
 **Arguments**
