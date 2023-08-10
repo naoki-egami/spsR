@@ -26,9 +26,6 @@ We provide a country-level site selection dataset (`sps_country_data`) comprised
 ```{r}
 data(sps_country_data)
 head(sps_country_data, n = 3)
-
-data(codebook)
-head(codebook, n = 3)
 ```
 
 ```{r, echo = F}
@@ -93,7 +90,7 @@ head(sps_country_data2, n = 3)
 
 Users can also merge their own dataset. In our example, 4 variables---general support for immigration, the proportion of female, the mean age, and the mean education---come from European Social Survey called `ess_data`:
 
-```{r, echo = F}
+```{r}
 data(ess_data)
 head(ess_data, n = 3)
 ```
@@ -139,13 +136,17 @@ desc <- desc_stat(data = sps_country_data3)
 head(desc$desc, n = 3)
 head(desc$miss, n = 3)
 ```
-A list object `desc` returns descriptive summary of each variable in the dataset, whereas `miss` returns total counts of missing values (i.e., number of missing countries) in each year in the dataset. If the years in which a user is interested in using contains a lot of missing values (e.g., `NY.GDP.MKTP.CD` is missing for 15 countries in 2022), we suggest imputing missing values using the `impute_var` function, described in detail in **2. Handling Missing Data**.
+A list object `desc` returns descriptive summary of each variable in the dataset, whereas `miss` returns total counts of missing values (i.e., number of missing countries) in each year in the dataset. If the years in which a user is interested in using contains a lot of missing values (e.g., `NY.GDP.MKTP.CD` is missing for 15 countries in 2022), we suggest imputing missing values using the `impute_var` function, described in **2. Handling Missing Data**.
 
 ```{r}
 round(desc$corr[1:3, 1:3], 3)
 ```
 
-A list object `corr` returns correlation matrix for all pairs of variables in the dataset. Highly correlated variables mean that they are capturing similar cross-country contexts, so you might want to consider dropping one of them prior to implementing SPS. 
+A list object `corr` returns correlation matrix for all pairs of variables in the dataset. Highly correlated variables mean that they are capturing similar cross-country contexts, so users might want to consider dropping one of them prior to implementing SPS. 
+
+<br>
+
+
 
 # References
 
