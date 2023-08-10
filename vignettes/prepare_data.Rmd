@@ -1,36 +1,33 @@
 ---
-title: "Prepare Site-Level Variables"
+title: "Prepare Site-Level Variables with `spsRdata`"
 output: 
   md_document:
     variant: markdown_github
 always_allow_html: yes
 ---
 
-# Prepare Site-Level Variables
+The purpose of the R package `spsRdata` is to facilitate the selection of site-level variables for SPS. Users interested in a multi-country study can use the dataset `sps_country_data` provided in the package to select variables relevant for their research objective, after which they can implement SPS via `spsR` to select study sites. `spsRdata` also includes several functions that allows users to explore additional site-level variables and run simple descriptive analyses.
 
-```{r}
+### Country-Level Dataset: `sps_country_data`
+
+We provide a country-level site selection dataset (`sps_country_data`) comprised of 21 variables for 179 countries between 2015 and 2022. It contains variables representing political, economic, and social characteristics of countries collected from the following sources: 
+
+* [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset)
+* [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation)
+* [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1)
+
+`sps_country_data` includes the following variables: 
+
+```{r, messages = F}
 library(spsRdata)
 library(spsR)
-```
 
-We provide a dataset (`sps_data`) comprised of 21 country-level variables for 179 countries between 2015 and 2022. It contains covariates representing political, economic, and social characteristics of countries in the dataset, collected from three sources: V-DEM, World Bank Indicators, and Resource Watch: 
-
-* [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset): collects democracy ratings for all countries in the world.
-
-* [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation): include economic (e.g., GDP, unemployment), demographic (e.g., population, education, migration), geographic (e.g., land area), and political (e.g., government spending) indicators for all countries in the world. 
-
-* [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1): World langauges dataset created using CIA World Factbook.
-
- <!-- Add text describing data and codebook -->
-
-```{r}
-data(sps_data)
-head(sps_data)
+data(sps_country_data)
+head(sps_country_data, n = 3)
 
 data(codebook)
-head(codebook)
+head(codebook, n = 3)
 ```
-<!-- need to check if tidyverse is needed elsewher -->
 
 ```{r, echo = F}
 library(kableExtra)
@@ -50,26 +47,37 @@ kbl(codebook,
   pack_rows('Social Indicators', 20, 21)
 ```
 
+### Example: Site-Selection Procedure 
 
-### Search for and Add New Variables
+We use a multi-country survey experiment by Naumann et al. (2018) to demonstrate how to use `sps_country_data` and various functions in `spsRdata`.
 
-You can also search for other variables in the V-Dem dataset and World Bank using keywords via the function ``search_var``. For example:
+#### Select from `sps_country_data`
+
+As mentioned in the introduction, we consider 7 site-level variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of female, the mean age, and the mean education. Two out of the 7 variables already exist in `sps_country_data`: GDP and unemployment rate. So we subset the dataset to include only those variables we're interested in diversifying:
+
+```{r}
+sps_country_data1 <- sps_country_data[, c('country', 'iso3', 'year', 'NY.GDP.MKTP.CD', 'SL.UEM.TOTL.ZS')]
+```
+
+#### Search for New Site-Level Variables
+
+Users can also search for other site-level variables in V-Dem and World Bank using keywords via the function ``search_var``, which allows for a regex notation. Here, we look for data on size of migrant population:
 
 ```{r}
 search_result <- search_var(keyword = 'international migrant')
 head(search_result, n = 3)
 ```
 
-Based on the search return, you can decide to add the variable(s) to the baseline dataset using the function ``add_var``. For example:
+Based on the search return, users can add variable(s) to the baseline dataset using ``add_var``. In our example, we're interested in adding `SM.POP.TOTL.ZS` that captures the proportion of migrant population:
 
 ```{r}
-sps_data1 <- add_var(data = sps_data, vars = c('SM.POP.TOTL.ZS'))
-head(sps_data1, n = 3)
+sps_country_data2 <- add_var(data = sps_country_data1, vars = c('SM.POP.TOTL.ZS'))
+head(sps_country_data2, n = 3)
 ```
 
-### Merge Your Own Dataset {.tabset .tabset-dropdown}
+#### Merge External Dataset
 
-You can also merge your own dataset using the function ``merge_data``. If your own dataset has an ISO3 code, it merges your dataset using the ISO3 code via an exact match. If your dataset has a country name variable instead, it first merges via an exact match based on the country name, followed by a [fuzzy-match](https://github.com/dgrtwo/fuzzyjoin). For example, 
+Users can also merge their own dataset using ``merge_data``. In our example, general support for immigration, the proportion of female, the mean age, and the mean education come from European Social Survey:
 
 <!-- Re-create with ESS dataset with country and year already created -->
 
@@ -83,10 +91,13 @@ head(naumann)
 
 <!-- Simplify the code in presenting the merged result -->
 ```{r}
-sps_data2 <- merge_data(basedata = sps_data1, newdata = naumann, yearvar = 'yr', countryvar = 'cntry', iso = FALSE)
+sps_country_data2 <- merge_data(basedata = sps_country_data1, newdata = naumann, yearvar = 'yr', countryvar = 'cntry', iso = FALSE)
 
-sps_data2[which(sps_data2$match == 'fuzzy'), c('country', 'cname_used', 'match')]
+sps_country_data2[which(sps_country_data2$match == 'fuzzy'), c('country', 'cname_used', 'match')]
 ```
+
+
+If the user's dataset has an ISO3 country code, it merges the dataset to the `sps_country_data` using the ISO3 code only. If your dataset has a country name variable instead, it first merges via an exact match based on the country name, followed by a [fuzzy-match](https://github.com/dgrtwo/fuzzyjoin). For example, 
 
 Two additional columns are merged to the dataset:
 
@@ -98,12 +109,8 @@ Two additional columns are merged to the dataset:
 The function ``desc_stat`` returns simple descriptive statistics, number of missing countries in each year, and correlation matrix. Highly correlated variables mean that they are capturing similar cross-country contexts, so you might want to considder dropping one of them in the SPS. Character and factor variables are automatically binarized to obtain descriptive statistics.
 
 ```{r}
-desc <- desc_stat(data = sps_data)
-```
+desc <- desc_stat(data = sps_country_data)
 
-<!-- Update the presentation, remove knitrExtra, try to use base R-->
-
-```{r, echo = F}
 # Descriptive Statistics
 head(desc$desc, n = 3)
 
@@ -113,19 +120,6 @@ head(desc$miss, n = 3)
 # Correlation Matrix
 round(desc$corr[1:3, 1:3], 3)
 ```
-
-<!-- ### Creating a Map PASS ON TO SPSR --> 
-
-<!-- For your selected countries, you can also use the function ``sps_map`` to create a world plot to show heterogeneity in selected covariates. For example, -->
-
-<!-- ```{r, fig.fullwidth = TRUE, fig.width = 9, fig.height = 5} -->
-<!-- sps_data2$target <- as.numeric(sps_data2$region %in% c('Europe & Central Asia', 'Latin America & Caribbean', 'North America')) -->
-<!-- map <- sps_map(data = sps_data2,  -->
-<!--                targetvar = 'target', -->
-<!--                countryvar = 'iso3',  -->
-<!--                countrysps = c('MEX', 'PRY', 'BOL', 'USA', 'FRA', 'NOR', 'HUN')) -->
-<!-- map -->
-<!-- ``` -->
 
 # References
 
