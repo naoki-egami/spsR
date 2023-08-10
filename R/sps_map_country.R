@@ -41,7 +41,7 @@ sps_map_country <- function(out, ...){
     fuzzy <- dplyr::group_by_at(fuzzy, c('region.y'))
     fuzzy <- dplyr::slice_min(fuzzy, order_by = .data[['distance']], n = 1, with_ties = FALSE)
     if (max(fuzzy$distance)>0){
-      warning(paste('Following countries were matched using fuzzy-match:\n',
+      warning(paste('\nFollowing countries were matched using fuzzy-match:\n',
                     paste(paste(fuzzy$region.y[fuzzy$distance>0], '=>', fuzzy$region.x[fuzzy$distance>0]), collapse = '\n '),
                     '\nPlease review and if necessary, recode the country names in your dataset or supply the ISO3 code instead.'))
     }
