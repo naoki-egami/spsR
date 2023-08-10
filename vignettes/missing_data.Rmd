@@ -6,13 +6,29 @@ output:
 always_allow_html: yes
 ---
 
-On this page, we describe how to use the `impute_var` function in `spsRdata` to impute missing values in a dataset. While we demonstrate its utility using the country-level dataset `sps_country_data`, `impute_var` can handle any type of dataset.
+On this page, we describe how to use the `impute_var` function in `spsRdata` to impute missing values in a dataset. Users may use this function to impute missing values on the site-level variables that they want to diversify prior to subsetting the data to the target population. 
 
 ```{r}
 library(spsRdata)
 library(spsR)
 ```
 
+<br>
+
+
+### Imputing Missing Values with `impute_var`
+
+`impute_var` imputes missing values in both numeric and character variables. Character variables are converted into dummies for each unique values prior to imputation. The dataset can be either cross-sectional or time-series cross-sectional. Here, we demonstrate the utility of `impute_var` using the country-level dataset `sps_country_data`, but `impute_var` can handle any type of dataset.
+
+```{r}
+data(sps_country_data)
+head(sps_country_data[, c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')], n = 7)
+imputed_data <- impute_var(data = sps_country_data, 
+                           id_site = 'country', 
+                           id_year = 'year', 
+                           id_impute = c('e_p_polity', 'AG.LND.TOTL.K2'))
+head(imputed_data[, c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')], n = 7)
+```
 
 **Arguments**
 
@@ -20,20 +36,52 @@ library(spsR)
 * `id_site`: A site-level variable name in `data`.
 * `id_year`: A year variable name in `data`. If `NULL`, values will be merged onto all years in `basedata`. If unspecified, it assumes `data` is cross-sectional.
 * `id_impute`: A vector with one or more variable names for which imputation is performed. If unspecified, it imputes all variables in `data` except for the `id_site` and `id_year` variables.
-* `method`: Imputation method. Choose from "carryforward", "amelia", and "miceranger" (default). 
-* `n_impute`: Used only when "amelia" or "miceranger" is selected in `method`. The number of imputed datasets to produce (equivalent of argument `m` in `amelia()` and `miceRanger()`).
+* `method`: Imputation method. Choose from "carryforward", "amelia", and "miceranger". Default is "miceranger". 
+* `n_impute`: Used only when "amelia" or "miceranger" is selected in `method`. The number of imputed datasets to produce (equivalent of argument `m` in `amelia()` and `miceRanger()`). Default is 5.
 * `carryforward_yrs`: Used only when "carryforward" is selected in `method`. Maximum number of years allowed to be carried forward. If unspecified, it imputes values from the most recent years available.
 * `...`: Arguments passed onto `Amelia::amelia()` or `miceRanger::miceRanger()`.
 
-```{r}
-data(sps_country_data)
-sps_country_data[sps_country_data$country=='Mexico', c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')]
 
-imputed_data <- impute_var(data = sps_country_data, 
-                           countryvar = 'country', 
-                      yearvar = 'year', 
-                      imputevars = c('e_p_polity', 'AG.LND.TOTL.K2'),
-                      method = 'miceranger')
+<br>
 
-imputed[imputed$country=='Mexico', c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')]
-```
+
+### Imputation Methods
+
+We provide three different imputation methods.
+
+#### Carry-Forward
+
+This is the simplest method, which carries forward the most recent non-missing values from prior years (set by `carryforward_yrs`). This method is only available for time-series cross-sectional dataset. 
+
+
+#### Multiple Imputation from `Amelia`
+
+Multiple imputation method from [Amelia](https://gking.harvard.edu/amelia). Implements bootstrapping-based EM algorithm on incomplete data that gives similar results as the standard IP or EMis approaches but considerably faster and can handle many variables. Only a single dataset is generated. Users may change the default parameters of `amelia()`.
+
+
+#### Multiple Imputation via Random Forest from `miceRanger`
+
+Multiple imputation with chained equations (MICE) with random forests from [MICERanger](https://github.com/FarrellDay/miceRanger). This method implements MICE via random forest which is faster and more memory efficient. Users may change the default parameters of `miceRanger()`.
+
+
+<br>
+
+
+### General Tip
+
+We encourage users to be mindful of practical guides on imputation methods rather than blindly using the function with default settings (Hardt et al. 2012; King et al. 2001). For example, including too many auxiliary variables may do more harm than good. Users should also transform variables if necessary, such as including the squared term in the dataset if non-linearity is assumed or logging the variables if they are too skewed. Our function is simply a wrapper for a very complex imputation algorithm with aims to facilitate the ease of SPS. Although this falls outside the scope of our research, we direct readers to the impressive body of work that other scholars have already contributed to on this topic.
+
+
+
+<br>
+
+
+# References
+
+Hardt, J., Herke, M., & Leonhart, R. (2012). Auxiliary variables in multiple imputation in regression with missing X: a warning against including too many in small sample research. BMC medical research methodology, 12, 1-13.
+
+Honaker, J., King, G., & Blackwell, M. (2011). Amelia II: A program for missing data. Journal of statistical software, 45, 1-47.
+
+King, G., Honaker, J., Joseph, A., & Scheve, K. (2001). Analyzing incomplete political science data: An alternative algorithm for multiple imputation. American political science review, 95(1), 49-69.
+
+Wilson, S. (2020). miceRanger: Multiple imputation by chained equations with random forests. R package version, 1(5).
