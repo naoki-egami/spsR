@@ -1,5 +1,5 @@
 #' Creates a world map with target population and selected countries from SPS indicated.
-#' @param data Output from function \code{sps()}.
+#' @param out Output from function \code{sps()}.
 #' @param ... Arguments passed onto \code{fuzzymatch::stringdist_join()}.
 #' @import ggplot2
 #' @import fuzzyjoin
@@ -9,7 +9,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-sps_map_country <- function(out){
+sps_map_country <- function(out, ...){
   # World map data
   world_map <- map_data("world")
   world_map$region <- ifelse(world_map$region %in% c('Trinidad', 'Tobago'), 'Trinidad and Tobago', world_map$region)
@@ -25,7 +25,7 @@ sps_map_country <- function(out){
   world_map$iso3[world_map$subregion == 'Gaza Strip'] <- 'PSG'
 
   # ISO3 matching
-  if (unique(nchar(target))==1 & nchar(target)==3){
+  if (unique(nchar(row.names(out$X)))==1 & nchar(row.names(out$X))==3){
     world_map$target <- ifelse(world_map$iso3 %in% out$selected_sites, 'Selected Sites',
                                ifelse(world_map$iso3 %in% row.names(out$X), 'Target Population', 'Rest of the World'))
   }
