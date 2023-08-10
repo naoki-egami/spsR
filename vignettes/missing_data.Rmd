@@ -6,27 +6,31 @@ output:
 always_allow_html: yes
 ---
 
-# Handling Missing Data
+On this page, we describe how to use the `impute_var` function in `spsRdata` to impute missing values in a dataset. While we demonstrate its utility using the country-level dataset `sps_country_data`, `impute_var` can handle any type of dataset.
 
 ```{r}
-rm(list = ls())
-options(digits = 2)
-library(knitr)
-library(kableExtra)
-library(tidyverse)
 library(spsRdata)
 library(spsR)
-opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, 
-               tidy.opts = list(width.cutoff = 80), tidy = TRUE, fig.align='center',
-               knitr.kable.NA = '')
 ```
 
-```{r}
-data(sps_data)
-sps_data[sps_data$country=='Mexico', c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')]
 
-imputed <- impute_var(data = sps_data, 
-                      countryvar = 'country', 
+**Arguments**
+
+* `data`: A data.frame containing variables to impute.
+* `id_site`: A site-level variable name in `data`.
+* `id_year`: A year variable name in `data`. If `NULL`, values will be merged onto all years in `basedata`. If unspecified, it assumes `data` is cross-sectional.
+* `id_impute`: A vector with one or more variable names for which imputation is performed. If unspecified, it imputes all variables in `data` except for the `id_site` and `id_year` variables.
+* `method`: Imputation method. Choose from "carryforward", "amelia", and "miceranger" (default). 
+* `n_impute`: Used only when "amelia" or "miceranger" is selected in `method`. The number of imputed datasets to produce (equivalent of argument `m` in `amelia()` and `miceRanger()`).
+* `carryforward_yrs`: Used only when "carryforward" is selected in `method`. Maximum number of years allowed to be carried forward. If unspecified, it imputes values from the most recent years available.
+* `...`: Arguments passed onto `Amelia::amelia()` or `miceRanger::miceRanger()`.
+
+```{r}
+data(sps_country_data)
+sps_country_data[sps_country_data$country=='Mexico', c('country', 'year', 'e_p_polity', 'AG.LND.TOTL.K2')]
+
+imputed_data <- impute_var(data = sps_country_data, 
+                           countryvar = 'country', 
                       yearvar = 'year', 
                       imputevars = c('e_p_polity', 'AG.LND.TOTL.K2'),
                       method = 'miceranger')
