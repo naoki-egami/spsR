@@ -7,7 +7,7 @@ home:
 
 navbar:
   structure:
-    left:  [start, tutorials, example, more, faq, reference]
+    left:  [start, tutorials, more, reference]
   sidebar: FALSE
   components:
    start:
@@ -15,12 +15,8 @@ navbar:
     href: articles/intro.html
 
    tutorials:
-    text: Tutorials
-    menu:
-    - text: 1. Practical Guides
-      href: articles/practical_guides.html
-    - text: 2. Methodological Guides
-      href: articles/methods_guides.html
+    text: Practical Guides
+    href: articles/practical_guides.html
 
    example:
     text: Full Example
@@ -37,7 +33,3 @@ navbar:
       href: articles/stratify_sps.html
     - text: 4. SPS Estimator
       href: articles/sps_estimator.html
-
-   faq:
-    text: FAQ
-    href: articles/faq.html

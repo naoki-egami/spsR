@@ -5,9 +5,10 @@ output:
     variant: markdown_github
 ---
 
-On this page, we provide the introduction to `sps` package (10 minute read). 
+On this page, we provide the introduction to `spsR` package (10 minute read). 
 
-\vspace{20pt}
+
+
 
 #### Table of Contents 
 
@@ -27,14 +28,16 @@ External validity of causal findings is a focus of long-standing debates. Whethe
 
 When designing multi-site experiments (or observational studies), the fundamental research design question is **how should we select study sites for external validity?** 
 
-The R package `spsR` aims to help researchers **select sites for external validity with statistical foundation, while accommodating practical and logistical constraints**. In particular, `spsR` implements Synthetic Purposive Sampling (SPS) by [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf), which improves upon conventional purposive sampling by combining ideas from the synthetic control method---it selects diverse sites such that non-selected sites are well approximated by the weighted average of the selected sites. By doing so, even without random sampling, we can make the weighted average of selected sites representative of all the sites, including non-selected sites. Please see [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf) for the methodological details. 
+The R package `spsR` aims to help researchers **select sites for external validity with statistical foundation, while accommodating practical and logistical constraints**. 
+
+In particular, `spsR` implements Synthetic Purposive Sampling (SPS) by [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf), which improves upon conventional purposive sampling by combining ideas from the synthetic control method --- it selects diverse sites such that non-selected sites are well approximated by the weighted average of the selected sites. By doing so, even without random sampling, we can make the weighted average of selected sites representative of all the sites, including non-selected sites. Please see [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf) for the methodological details. 
 
 Using `spsR`, researchers can 
 
 * Select diverse sites based on the SPS framework 
 * Estimate the average causal effect for the population of sites 
 
-On this page, we introduce the basic functionalities that is likely to be sufficient for most users, most of the time. For users who need more advanced functionalities, we offer AAA. 
+<!-- On this page, we introduce the basic functionalities that is likely to be sufficient for most users, most of the time. For users who need more advanced functionalities, we offer AAA.  -->
 
 <br>
 
@@ -49,7 +52,9 @@ data("X_Imm")
 
 In this example, we try to select 6 countries from 15 European countries as study sites for the multi-site survey experiment. 
 
-When selecting study sites for multi-site experiments, we choose site-level variables that we want to diversify. For example, to understand whether causal findings vary across different contexts, researchers might include diverse countries with different GDP, size of migrant population, unemployment rates, and so on. More formally, researchers should choose site-level variables that predict across-site heterogeneity of causal effects. In this illustration, we consider 7 variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of females, the mean age, and the mean education. 
+When selecting study sites for multi-site experiments, we choose site-level variables that we want to diversify. For example, to understand whether causal findings vary across different contexts, researchers might include diverse countries with different GDP, size of migrant population, unemployment rates, and so on. More formally, researchers should choose site-level variables that predict across-site heterogeneity of causal effects. 
+
+In this illustration, we consider 7 variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of females, the mean age, and the mean education. 
 
 ```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 colnames(X_Imm)
@@ -98,21 +103,10 @@ Red triangles represent selected sites and black circles represent non-selected 
 
 We can see that selected sites successfully cover a wide range of values in each site-level variable. 
 
-#### Stratify SPS 
+If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. See the details below. 
 
 <details>
 <summary><font style="font-family: helvetica, arial, freesans, clean, sans-serif; font-size:1.3em; font-weight:bold"> Stratify SPS </font></summary>
-This is a test.
-```{r}
-# This is a test.
-```
-</details>
-
-
-
-
-
-If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. 
 
 For example, we might want to select at least one site that have `Age` larger than `1`. We can incorporate this information as follows. 
 
@@ -132,9 +126,9 @@ st_edu <- stratify_sps(X = X_Imm,
 
 **Arguments**
 
-* `num_site`: A vector of two elements, e.g., `c("at least", 1)`. This argument specifies the number of sites that should satisfy `condition` specified below. The first element should be either `at least` or `at most`. The second element is integer. For example, `c("at least", 1)` means that we stratify SPS such that we select **at least 1** site that satisfies `condition` (specified below).
+* `num_site`: A vector of two elements, e.g., `c("at least", 1)`. This argument specifies the number of sites that should satisfy `condition` specified below. The first element should be either `at least` or `at most`. The second element is integer. For example, `c("at least", 1)` means that we stratify SPS such that we select *at least 1* site that satisfies `condition` (specified below).
 
-* `condition`: A vector of three or four elements, e.g., `c("Age", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is numeric. When the second element is `between`, the third and fourth elements specify values. For example, `c("Age", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have **Age larger than or equal to 1**.
+* `condition`: A vector of three or four elements, e.g., `c("Age", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is numeric. When the second element is `between`, the third and fourth elements specify values. For example, `c("Age", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have *Age larger than or equal to 1*.
 
 In practice, it is often recommended to add simple stratification to every variable: for each variable, we make sure to select at least 1 site above 0.5 standard deviation and at least 1 site below −0.5 standard deviation. This will make sure that SPS will select diverse sites that cover both large and small values in each site-level variable. 
 
@@ -167,9 +161,7 @@ We can also visualize it.
 ```{r, fig.dim = c(7, 7), fig.align = 'center'}
 sps_plot(out_st)
 ```
-
-<br>
-
+</details>
 
 ### `sps_estimator`: Estimate the Average-Site ATE {#sps_estimator}
 

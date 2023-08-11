@@ -5,4 +5,16 @@ output:
     variant: markdown_github
 ---
 
-### Overview 
+On this page, we provide the introduction to `sps` package (10 minute read). 
+
+#### Table of Contents 
+
+1. [Prepare Site-level Data] 
+
+2. [Use Synthetic Purposive Sampling (`sps`)]
+
+3. [Conduct Multi-Site Experiments]
+
+4. [Analyze Multi-Site Experiments (`sps_estimator`)]
+
+<br>
