@@ -165,16 +165,16 @@ sps_plot(out_st)
 
 ### `sps_estimator`: Estimate the Average-Site ATE {#sps_estimator}
 
-We focus on a multi-site causal study where where researchers have (experimental or observational) identification strategies for internal validity within each site and researchers compare results across sites for external validity. `sps_estimator()` will aggregate site-specific ATE estimates to estimate the average-site ATE. 
+We focus on a multi-site causal study where where researchers have (experimental or observational) identification strategies for internal validity within each site and researchers compare results across sites for external validity. `sps_estimator()` will aggregate estimates of the average treatment effects (ATEs) in each specific site in order to estimate the average-site ATE (the average of the ATEs in the population of sites). In our example, the average-site ATE is the average of the ATEs across 15 European countries, including countries that were not selected. 
 
-Here, we use experimental estimates in selected 6 sites from Naumann et al (2018). Users only need to obtain point estimates and standard errors of the average treatment effects (ATEs) in each site. As an example, we use selected sites from `out`. 
+We start with ATE estimates in the selected sites. We use experimental estimates in selected 6 sites from Naumann et al (2018). Users only need to obtain point estimates and standard errors of the average treatment effects (ATEs) in each site. As an example, we use selected sites from `out`. 
 
 ```{r}
 data("exp_estimate_Imm_selected")
 exp_estimate_Imm_selected
 ```
 
-We then aggregate these site-specific ATEs in selected sites to estimate the average-site ATE. 
+For external validity analysis, we then aggregate these site-specific ATEs in selected sites to estimate the average-site ATE. 
 
 ```{r}
 sps_est <- sps_estimator(out = out, 
