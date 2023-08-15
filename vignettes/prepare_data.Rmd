@@ -54,15 +54,15 @@ library(spsRdata)
 
 In R package `spsRdata`, we provide a country-level data set (`sps_country_data`) comprised of 21 variables for 179 countries between 2015 and 2022. It contains a wide range of variables commonly used in the social sciences: they represent political, economic, and social characteristics of countries. These variables are collected from the following sources. 
 
-* [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset)
+* [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset)^[V-Dem data set collects variables from a variety of sources including United Nations, Quality of Government, Clio Infra, and Polity5 Project, and currently includees the most comprehensive political indicators.]
 * [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation)
 * [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1)
 
 `sps_country_data` includes the following variables.
 
 ```{r}
-data(sps_country_data)
-head(sps_country_data, n = 3)
+data(sps_country_data_full)
+head(sps_country_data_full, n = 3)
 ```
 
 
@@ -71,7 +71,7 @@ head(sps_country_data, n = 3)
 ```{r, echo = F}
 library(kableExtra)
 library(knitr)
-kbl(codebook,
+kbl(sps_country_codebook,
       label = "tab:codebook",
       caption = "") %>%
   kable_classic_2(full_width = T) %>%
