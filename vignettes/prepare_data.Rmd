@@ -98,18 +98,18 @@ We follow our example in the [Get Started Page](http://naokiegami.com/spsR/artic
 
 #### <span style="color:#3366CC">**3.1 \ Start with `sps_country_data`**</span> {#start}
 
-In our example, we are interested in 7 country-level variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of female, the mean age, and the mean education. We illustrate how to collect these variables step by step. 
+In our example, we are interested in 7 country-level variables discussed in the original paper: GDP, unemployment rates, size of migrant population, general support for immigration, the proportion of female, the mean age, and the mean education. We illustrate how to collect these variables step by step. 
 
 We are interested in 15 European countries and variables measured in 2013 (the year in which most of the site-level variables are available). If users are running experiments now, they can, of course, choose site-level variables measured in most recent years. 
 
 ```{r}
-sps_country_data1 <- sps_country_data(year = 2013)[, c('country', 'iso3', 'year', 'NY.GDP.MKTP.CD', 'SL.UEM.TOTL.ZS')]
+sps_country_data1 <- sps_country_data(year = 2013)
 ```
 
-Two out of the 7 variables are already in our default data set `sps_country_data`: GDP (`NY.GDP.MKTP.CD`) and unemployment rate (`SL.UNEM.TOTL.ZS`). So we subset the data set to include only those variables we're interested in. 
+Two out of the 7 variables are already in our default data set: GDP (`NY.GDP.MKTP.CD`) and unemployment rate (`SL.UNEM.TOTL.ZS`). So we subset the data set to include only those variables we're interested in. 
 
 ```{r}
-sps_country_data1 <- sps_country_data[, c('country', 'iso3', 'year', 'NY.GDP.MKTP.CD', 'SL.UEM.TOTL.ZS')]
+sps_country_data2 <- sps_country_data1[, c('country', 'iso3', 'year', 'NY.GDP.MKTP.CD', 'SL.UEM.TOTL.ZS')]
 ```
 
 <br>
@@ -123,11 +123,11 @@ search_result <- search_var(keyword = 'international migrant')
 head(search_result, n = 3)
 ```
 
-Based on the search return, users can add variable(s) to the baseline data set using ``add_var``. In our example, we're interested in adding `SM.POP.TOTL.ZS` that captures the proportion of migrant population.
+Based on the search return, users can add variable(s) to the baseline data set using ``merge_data``. In our example, we're interested in adding `SM.POP.TOTL.ZS` that captures the proportion of migrant population.
 
 ```{r}
-sps_country_data2 <- add_var(data = sps_country_data1, vars = c('SM.POP.TOTL.ZS'))
-head(sps_country_data2, n = 3)
+sps_country_data3 <- merge_data(data = sps_country_data2, vars = c('SM.POP.TOTL.ZS'))
+head(sps_country_data3, n = 3)
 ```
 
 <br>
