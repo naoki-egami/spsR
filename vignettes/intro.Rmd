@@ -13,7 +13,7 @@ output:
 <div class="card bg-light mb-3">
   <div class="card-header">**Table of Contents**</div>
   <div class="card-body">
-  1. [**Introduction**](#step): <br> 
+  1. [**Overview**](#step): <br> 
   We provide the overview of `spsR` package.
 
   2. [**Example: Multi-Country Survey Experiment**](#example): <br>
@@ -30,15 +30,16 @@ output:
 
 <br>
 
-### <span style="color:#3366CC">**Overview**</span> {#over}
-
+### <span style="color:#3366CC">**1. \ Overview**</span> {#over}
+<p class="lh-lg">
+</p>
 External validity of causal findings is a focus of long-standing debates. Whether and how can researchers generalize causal findings across different contexts and settings? To address this question, an increasing number of researchers use **a multi-site/multi-context design** where researchers conduct causal studies in multiple sites to compare and aggregate findings across contexts. 
 
 When designing multi-site experiments (or observational studies), the fundamental research design question is **how should we select study sites for external validity?** 
 
 The R package `spsR` aims to help researchers **select sites for external validity with statistical foundation, while accommodating practical and logistical constraints**. 
 
-In particular, `spsR` implements Synthetic Purposive Sampling (SPS) by [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf), which improves upon conventional purposive sampling by combining ideas from the synthetic control method --- it selects diverse sites such that non-selected sites are well approximated by the weighted average of the selected sites. By doing so, even without random sampling, we can make the weighted average of selected sites representative of all the sites, including non-selected sites. Please see [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf) for the methodological details. 
+In particular, `spsR` implements Synthetic Purposive Sampling (SPS) introduced in [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf), which improves upon conventional purposive sampling by combining ideas from the synthetic control method --- it selects diverse sites such that non-selected sites are well approximated by the weighted average of the selected sites. By doing so, even without random sampling, we can make the weighted average of selected sites representative of all the sites, including non-selected sites in the population of sites. Please read [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf) for the methodological details. 
 
 Using `spsR`, researchers can 
 
@@ -49,9 +50,10 @@ Using `spsR`, researchers can
 
 <br>
 
-### <span style="color:#3366CC">**Example: Multi-Country Survey Experiment**</span>  {#example}
-
-We use a multi-country survey experiment on attitudes toward immigrants (Naumann et al., 2018) as an example here. This study aims to answer a long-standing question in the immigration literature---whether and how much do natives prefer highly skilled migrants to low skilled migrants? To do so, in each site, they conduct a survey experiment where they randomly changed the skill level of hypothetical immigrant groups, i.e., “professionals” or “unskilled labors” (treatment variable), and asked respondents to show the support level for this immigrant group (outcome variable). 
+### <span style="color:#3366CC">**2. \ Example: Multi-Country Survey Experiment**</span>  {#example}
+<p class="lh-lg">
+</p>
+We use a multi-country survey experiment on attitudes toward immigrants (Naumann et al., 2018) as an example here. This study aims to answer a long-standing question in the immigration literature---whether and how much do natives prefer highly skilled migrants to low skilled migrants? To do so, in each site, they conduct a survey experiment where they randomly varied the skill level of hypothetical immigrant groups, i.e., “professionals” or “unskilled labors” (treatment variable), and asked respondents to report the support level for this immigrant group (outcome variable). 
 
 ```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 library(spsR)
@@ -82,8 +84,9 @@ sps_plot(X = X_Imm, before_selection = TRUE)
 ```
 <br>
 
-### <span style="color:#3366CC">**`sps`: Site Selection**</span> {#sps}
-
+### <span style="color:#3366CC">**3. \ `sps`: Site Selection**</span> {#sps}
+<p class="lh-lg">
+</p>
 We can use `sps()` to select 6 sites from 15 European countries (the population of sites). We start with the basic version of `sps` and illustrate refinements next. 
 
 ```{r}
@@ -116,7 +119,7 @@ If necessary, users can refine site selection using *stratification* to make sur
 <details>
 <summary><span style="color:#3366CC"><tag class = "h4">**Stratify SPS**</tag></span></font></summary>
 
-For example, we might want to select at least one site that have `Age` larger than `1`. We can incorporate this information as follows. 
+For example, we might want to select at least one site that have `Age` larger than `1` (i.e., 1 standard deviation as we standardized variables above). We can incorporate this information as follows. 
 
 ```{r}
 st_age <- stratify_sps(X = X_Imm, 
@@ -171,9 +174,10 @@ sps_plot(out_st)
 ```
 </details>
 
-### <span style="color:#3366CC">**`sps_estimator`: Estimate the Average-Site ATE**</span> {#sps_estimator}
-
-We focus on a multi-site causal study where where researchers have (experimental or observational) identification strategies for internal validity within each site and researchers compare results across sites for external validity. 
+### <span style="color:#3366CC">**4. \ `sps_estimator`: Estimate the Average-Site ATE**</span> {#sps_estimator}
+<p class="lh-lg">
+</p>
+Once we complete a randomized experiment (or an internally valid observational study) in each site, we now aggregate evidece for external validity.  
 
 `sps_estimator()` will aggregate estimates of the average treatment effects (ATEs) in each specific site in order to estimate the average-site ATE (the average of the ATEs in the population of sites). In our example, the average-site ATE is the average of the ATEs across 15 European countries, including countries that were not selected. 
 

@@ -1,39 +1,79 @@
 ---
-title: "Prepare Site-Level Variables with spsRdata"
+title: "Prepare Country-Level Variables"
 output: 
   md_document:
     variant: markdown_github
 always_allow_html: yes
 ---
 
-The purpose of the R package `spsRdata` is to facilitate the selection of site-level variables to diversify for SPS. Users interested in a multi-country study can use the dataset `sps_country_data` provided in the package to select variables relevant for their research objective, after which they can implement SPS via `spsR` to select study sites. `spsRdata` also includes several functions that allow users to explore additional site-level variables and run simple descriptive analyses.
+<br>
 
-```{r}
+<p class = "h5">**On this page, we explain how to prepare country-level variables with `spsRdata` package (10 minute read).**</p> 
+
+<br>
+<div class="card bg-light mb-3">
+  <div class="card-header">**Table of Contents**</div>
+  <div class="card-body">
+  1. [**Overview**](#over): <br> 
+  We provide the overview of `spsRdata` package.
+
+  2. [**Default Country-Level Data set**](#default): <br>
+  We introduce a default country-level data set to ease data collection.
+
+  3. [**Prepare Your Own Country-Level Data**](#own): <br>
+  We explain how to prepare your own country-level data using several functions in `spsRdata`
+     
+     * [Start with `sps_country_data`](#start) 
+     
+     * [Merge Country-Level Variables from V-Dem or World Bank Data Sets](#v-dem)
+     
+     * [Merge External Data sets](#external) 
+     
+     * [Summarize Data](#summary) 
+  
+  </div>
+</div>
+
+<br>
+
+### <span style="color:#3366CC">**1. \ Overview**</span> {#over}
+<p class="lh-lg">
+</p>
+The purpose of R package `spsRdata` is to facilitate data collection for **multi-country** studies. Users can supply data they prepared on this page in function `sps()` for site selection.
+
+Users can start with the default data set `sps_country_data` that contains a wide range of commonly-used country-level variables in the social sciences. R package `spsRdata` also offers several functions to merge additional country-level variables from well-known data sets (e.g., V-Dem and World Bank) as well as from any external data users want to add. 
+
+*Note*: We emphasize that R package `sps` and the corresponding SPS algorithm can be applied to any type of study site (e.g., states, districts, vilalges, or schools). As *multi-country* studies are most popular in political science, R package `spsRdata` focuses on country-level data collection for now, but we are planning to add more functionalities to facilitate data collection at different levels (e.g., states and cities) in the US as well. 
+
+### <span style="color:#3366CC">**2. \ Default Country-Level Data set** </span> {#default}
+<p class="lh-lg">
+</p>
+```{r eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 library(spsRdata)
-library(spsR)
 ```
 
-### Country-Level Dataset
-
-We provide a country-level site selection dataset (`sps_country_data`) comprised of 21 variables for 179 countries between 2015 and 2022. It contains variables representing political, economic, and social characteristics of countries collected from the following sources: 
+In R package `spsRdata`, we provide a country-level data set (`sps_country_data`) comprised of 21 variables for 179 countries between 2015 and 2022. It contains a wide range of variables commonly used in the social sciences: they represent political, economic, and social characteristics of countries. These variables are collected from the following sources. 
 
 * [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset)
 * [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation)
 * [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1)
 
-`sps_country_data` includes the following variables: 
+`sps_country_data` includes the following variables.
 
 ```{r}
 data(sps_country_data)
 head(sps_country_data, n = 3)
 ```
 
+
+**Descriptions of Variables:**
+
 ```{r, echo = F}
 library(kableExtra)
 library(knitr)
 kbl(codebook,
       label = "tab:codebook",
-      caption = "List of Selected Variables") %>%
+      caption = "") %>%
   kable_classic_2(full_width = T) %>%
   kable_styling(font_size = 12, bootstrap_options = c('hover', 'condensed')) %>%
   column_spec(1, italic = T) %>%
@@ -49,16 +89,21 @@ kbl(codebook,
 <br>
 
 
-### Site-Selection Procedure 
+### <span style="color:#3366CC">**3. \ Prepare Your Own Country-Level Data**</span> {#own}
 
-We use a multi-country survey experiment by Naumann et al. (2018) to demonstrate how to use `sps_country_data` and various functions in `spsRdata`.
+We follow our example in the [Get Started Page](http://naokiegami.com/spsR/articles/intro.html) and use a multi-country survey experiment by Naumann et al. (2018) to illustrate how to use `sps_country_data` and various functions in `spsRdata`. 
 
-<br>
+#### <span style="color:#3366CC">**3.1 \ Start with `sps_country_data`**</span> {#start}
 
+In our example, we are interested in 7 country-level variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of female, the mean age, and the mean education. We illustrate how to collect these variables step by step. 
 
-#### Select from `sps_country_data`
+We are interested in 15 European countries and variables measured in AAA (as the experiments were conducted in AAAA). If users are running experiments now, they can, of course, choose site-level variables measured in most recent years. 
 
-As mentioned in the introduction, we consider 7 site-level variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of female, the mean age, and the mean education. Two out of the 7 variables already exist in `sps_country_data`: GDP and unemployment rate. So we subset the dataset to include only those variables we're interested in diversifying:
+```{r}
+sps_country_data1 <- sps_country_data[, c('country', 'iso3', 'year', 'NY.GDP.MKTP.CD', 'SL.UEM.TOTL.ZS')]
+```
+
+Two out of the 7 variables are already in our default data set `sps_country_data`: GDP (`NY.GDP.MKTP.CD`) and unemployment rate (`SL.UNEM.TOTL.ZS`). So we subset the data set to include only those variables we're interested in. 
 
 ```{r}
 sps_country_data1 <- sps_country_data[, c('country', 'iso3', 'year', 'NY.GDP.MKTP.CD', 'SL.UEM.TOTL.ZS')]
@@ -66,17 +111,16 @@ sps_country_data1 <- sps_country_data[, c('country', 'iso3', 'year', 'NY.GDP.MKT
 
 <br>
 
+#### <span style="color:#3366CC">**3.2 \ Merge Country-Level Variables from V-Dem or World Bank Data Sets**</span> {#v-dem}
 
-#### Search for New Site-Level Variables
-
-Users can also search for other site-level variables in V-Dem and World Bank using keywords via the function ``search_var``, which allows for a regex notation. Here, we look for data on size of migrant population:
+Users can also search for other country-level variables in V-Dem and World Bank using keywords via the function ``search_var``. Here, we look for data on size of migrant population:
 
 ```{r}
 search_result <- search_var(keyword = 'international migrant')
 head(search_result, n = 3)
 ```
 
-Based on the search return, users can add variable(s) to the baseline dataset using ``add_var``. In our example, we're interested in adding `SM.POP.TOTL.ZS` that captures the proportion of migrant population:
+Based on the search return, users can add variable(s) to the baseline data set using ``add_var``. In our example, we're interested in adding `SM.POP.TOTL.ZS` that captures the proportion of migrant population.
 
 ```{r}
 sps_country_data2 <- add_var(data = sps_country_data1, vars = c('SM.POP.TOTL.ZS'))
@@ -86,16 +130,16 @@ head(sps_country_data2, n = 3)
 <br>
 
 
-#### Merge External Dataset
+#### <span style="color:#3366CC">**3.3 \ Merge External Data sets**</span> {#external}
 
-Users can also merge their own dataset. In our example, 4 variables---general support for immigration, the proportion of female, the mean age, and the mean education---come from European Social Survey called `ess_data`:
+Users can also merge their own external data set. In our example, 4 variables---general support for immigration, the proportion of female, the mean age, and the mean education---come from European Social Survey data. As an illustration, we included this external data as `ess_data`.
 
 ```{r}
 data(ess_data)
 head(ess_data, n = 3)
 ```
 
-Users can use the function ``merge_data`` to merge their dataset:
+Users can use function ``merge_data`` to merge their own external data set. 
 
 ```{r}
 sps_country_data3 <- merge_data(basedata = sps_country_data2, newdata = ess_data, id_site = 'country')
@@ -107,9 +151,9 @@ head(sps_country_data3[sps_country_data3$country == 'Czechia',], n = 3)
 * `newdata`: A data.frame that contains new variables to be merged on.
 * `id_country`: A country variable name in `newdata`.
 * `id_year`: A year variable name in `newdata`. If `NULL`, values will be merged onto all years in `basedata`.
-* `iso3`: Logical `TRUE` or `FALSE` indicating whther the values in `id_country` is an ISO3 country code. If `TRUE`, variables in `newdata` is merged onto `basedata` using the ISO3 code. If `FALSE`, then `newdata` is merged using an exact match first, followed by a fuzzy match based on country names. 
+* `iso3`: Logical `TRUE` or `FALSE` indicating whether the values in `id_country` is an ISO3 country code. If `TRUE`, variables in `newdata` is merged onto `basedata` using the ISO3 code. If `FALSE`, then `newdata` is merged using an exact match first, followed by a fuzzy match based on country names. 
 
-We discover that the two countries---Czech Republic and UK---are being matched incorrectly from the fuzzy-match. So we re-code these values and re-merge the dataset:
+We discover that the two countries---Czech Republic and UK---are being matched incorrectly from the fuzzy-match. So we re-code these values and re-merge the data set:
 
 ```{r}
 ess_data$country[ess_data$country == 'Czech Republic'] <- 'Czechia'
@@ -127,9 +171,9 @@ There you have it! With a full set of site-level variables, users can run simple
 <br>
 
 
-#### Descriptive Summary
+#### <span style="color:#3366CC">**3.4 \ Summarize Data**</span> {#summary}
 
-The function ``desc_stat`` returns simple descriptive statistics, number of missing countries in each year, and correlation matrix of all variables contained in the site-level dataset. Character and factor variables are automatically binarized to obtain descriptive statistics:
+The function ``desc_stat`` returns simple descriptive statistics and number of missing entries in each year in the data set. Character and factor variables are automatically binarized to obtain descriptive statistics:
 
 ```{r}
 desc <- desc_stat(data = sps_country_data3)
@@ -138,11 +182,11 @@ head(desc$miss, n = 3)
 ```
 A list object `desc` returns descriptive summary of each variable in the dataset, whereas `miss` returns total counts of missing values (i.e., number of missing countries) in each year in the dataset. If the years in which a user is interested in using contains a lot of missing values (e.g., `NY.GDP.MKTP.CD` is missing for 15 countries in 2022), we suggest imputing missing values using the `impute_var` function, described in **2. Handling Missing Data**.
 
-```{r}
-round(desc$corr[1:3, 1:3], 3)
-```
+<!-- ```{r} -->
+<!-- round(desc$corr[1:3, 1:3], 3) -->
+<!-- ``` -->
 
-A list object `corr` returns correlation matrix for all pairs of variables in the dataset. Highly correlated variables mean that they are capturing similar cross-country contexts, so users might want to consider dropping one of them prior to implementing SPS. 
+<!-- A list object `corr` returns correlation matrix for all pairs of variables in the dataset. Highly correlated variables mean that they are capturing similar cross-country contexts, so users might want to consider dropping one of them prior to implementing SPS.  -->
 
 <br>
 
