@@ -163,6 +163,15 @@ See this page.
    
 If you are considering multi-site experiments where sites are **states or cities in the US**, we find the following data sources to be useful. **Diana, can you add some data sets below?**
 
+* National Historical Geographic Information System (NHGIS): https://www.nhgis.org/
+
+* Census of Governments: https://www.census.gov/programs-surveys/cog.html
+
+* U.S. Bureau of Labor Statistics: https://www.bls.gov/
+
+* Federal Bureau of Investigation: https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/home
+
+
 #### <span style="color:#3366CC">3.3. \ How to Handle Missing Data</span> {#missing}
 <p class="lh-lg">
 </p>
