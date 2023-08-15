@@ -5,24 +5,32 @@ output:
     variant: markdown_github
 ---
 
-On this page, we provide the introduction to `spsR` package (10 minute read). 
+<br>
 
+<p class = "h5">**On this page, we provide the introduction to `spsR` package (10 minute read).**</p> 
 
+<br>
+<div class="card bg-light mb-3">
+  <div class="card-header">**Table of Contents**</div>
+  <div class="card-body">
+  1. [**Introduction**](#step): <br> 
+  We provide the overview of `spsR` package.
 
+  2. [**Example: Multi-Country Survey Experiment**](#example): <br>
+  We introduce an illustraitve example and its data set. 
 
-#### Table of Contents 
+  3. [**`sps`: Site Selection**](#sps): <br>
+  We explain how to use function `sps()` for site selection
 
-1. [Introduction] 
-
-2. [Example: Multi-Country Survey Experiment]
-
-3. [`sps`: Site Selection]
-
-4. [`sps_estimator`: Estimate the Average-Site ATE]
+  4. [**`sps_estimator`: Estimate the Average-Site ATE**](#sps_estimator): <br>
+  We explain how to use function `sps_estimator()` to analyze multi-site studies.
+  
+  </div>
+</div>
 
 <br>
 
-### Introduction
+### <span style="color:#3366CC">**Overview**</span> {#over}
 
 External validity of causal findings is a focus of long-standing debates. Whether and how can researchers generalize causal findings across different contexts and settings? To address this question, an increasing number of researchers use **a multi-site/multi-context design** where researchers conduct causal studies in multiple sites to compare and aggregate findings across contexts. 
 
@@ -41,7 +49,7 @@ Using `spsR`, researchers can
 
 <br>
 
-### Example: Multi-Country Survey Experiment
+### <span style="color:#3366CC">**Example: Multi-Country Survey Experiment**</span>  {#example}
 
 We use a multi-country survey experiment on attitudes toward immigrants (Naumann et al., 2018) as an example here. This study aims to answer a long-standing question in the immigration literature---whether and how much do natives prefer highly skilled migrants to low skilled migrants? To do so, in each site, they conduct a survey experiment where they randomly changed the skill level of hypothetical immigrant groups, i.e., “professionals” or “unskilled labors” (treatment variable), and asked respondents to show the support level for this immigrant group (outcome variable). 
 
@@ -74,7 +82,7 @@ sps_plot(X = X_Imm, before_selection = TRUE)
 ```
 <br>
 
-### `sps`: Site Selection {#sps}
+### <span style="color:#3366CC">**`sps`: Site Selection**</span> {#sps}
 
 We can use `sps()` to select 6 sites from 15 European countries (the population of sites). We start with the basic version of `sps` and illustrate refinements next. 
 
@@ -106,7 +114,7 @@ We can see that selected sites successfully cover a wide range of values in each
 If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. See the details below. 
 
 <details>
-<summary><font style="font-family: helvetica, arial, freesans, clean, sans-serif; font-size:1.3em; font-weight:bold"> Stratify SPS </font></summary>
+<summary><span style="color:#3366CC"><tag class = "h4">**Stratify SPS**</tag></span></font></summary>
 
 For example, we might want to select at least one site that have `Age` larger than `1`. We can incorporate this information as follows. 
 
@@ -163,9 +171,11 @@ sps_plot(out_st)
 ```
 </details>
 
-### `sps_estimator`: Estimate the Average-Site ATE {#sps_estimator}
+### <span style="color:#3366CC">**`sps_estimator`: Estimate the Average-Site ATE**</span> {#sps_estimator}
 
-We focus on a multi-site causal study where where researchers have (experimental or observational) identification strategies for internal validity within each site and researchers compare results across sites for external validity. `sps_estimator()` will aggregate estimates of the average treatment effects (ATEs) in each specific site in order to estimate the average-site ATE (the average of the ATEs in the population of sites). In our example, the average-site ATE is the average of the ATEs across 15 European countries, including countries that were not selected. 
+We focus on a multi-site causal study where where researchers have (experimental or observational) identification strategies for internal validity within each site and researchers compare results across sites for external validity. 
+
+`sps_estimator()` will aggregate estimates of the average treatment effects (ATEs) in each specific site in order to estimate the average-site ATE (the average of the ATEs in the population of sites). In our example, the average-site ATE is the average of the ATEs across 15 European countries, including countries that were not selected. 
 
 We start with ATE estimates in the selected sites. We use experimental estimates in selected 6 sites from Naumann et al (2018). Users only need to obtain point estimates and standard errors of the average treatment effects (ATEs) in each site. As an example, we use selected sites from `out`. 
 

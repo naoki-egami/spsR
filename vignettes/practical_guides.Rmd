@@ -27,11 +27,12 @@ output:
      
      * [How to Handle Missing Data](#missing) 
 
-  4. [**Useful Information for Multi-Country Survey Experiments**](#useful)
+  4. [**Useful Information for Multi-Country Survey Experiments**](#useful): <br>
+  We offer useful information about implementing multi-country survey experiments.
      
-     * Survey Firms 
+     * [Survey Firms](#firms) 
      
-     * Translation 
+     * [Translation](#translation) 
   </div>
 </div>
 
@@ -180,6 +181,20 @@ In political science, one of the most popular types of multi-site experiments is
 <p class="lh-lg">
 </p>
 
+The following survey firms offer service in many countries across the world. 
+
+* Cint (Lucid): https://www.cint.com/consumer-insights-exchange
+
+* YouGov: https://business.yougov.com/product/realtime/international-omnibus
+
+* Dynata: https://www.dynata.com/market-researcher-solutions/global-audiences
+
 #### <span style="color:#3366CC">4.2. \ Translation of Survey Experiments</span> {#translation}
 <p class="lh-lg">
 </p>
+
+It is now easier to translate survey experiments into different languages than ever before. 
+
+* Qualtrics: https://www.qualtrics.com/support/survey-platform/survey-module/survey-tools/translate-survey/
+
+* Gengo.com: https://gengo.com
