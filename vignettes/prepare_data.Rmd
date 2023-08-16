@@ -170,15 +170,6 @@ sps_country_data4 <- merge_data(data = sps_country_data3, newdata = ess_data, id
 head(sps_country_data4[sps_country_data4$country == 'Czechia',])
 ```
 
-There you have it! The data set now includes the site-level variables we want to diversify in SPS. We now subset the final data set to the target population (i.e., 15 European countries in our example), rename the variable names to be more intelligible, and move onto implementing SPS via `spsR`.
-
-```{r}
-row.names(sps_country_data4) <- sps_country_data4$iso3
-X_Imm <- sps_country_data4[sps_country_data4$iso3 %in% ess_data$iso3, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "imm_s_avg")]
-names(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 'Education', 'Immig_Support')
-head(X_Imm, n = 3)
-```
-
 
 <br>
 
@@ -188,17 +179,32 @@ head(X_Imm, n = 3)
 With a full set of site-level variables, users can run simple descriptive analyses to examine distribution, missing values, and correlations. The function ``desc_stat`` returns simple descriptive statistics and number of missing entries in each year in the data set. Character and factor variables are automatically binarized to obtain descriptive statistics:
 
 ```{r}
-desc <- desc_stat(data = sps_country_data3)
+desc <- desc_stat(data = sps_country_data4)
 head(desc$desc, n = 3)
 head(desc$miss, n = 3)
 ```
-A list object `desc` returns descriptive summary of each variable in the dataset, whereas `miss` returns total counts of missing values (i.e., number of missing countries) in each year in the dataset. If the years in which a user is interested in using contains a lot of missing values (e.g., `NY.GDP.MKTP.CD` is missing for 15 countries in 2022), we suggest imputing missing values using the `impute_var` function, described in **2. Handling Missing Data**.
+A list object `desc` returns descriptive summary of each variable in the dataset, whereas `miss` returns total counts of missing values (i.e., number of missing countries) in each year in the dataset. If the years in which a user is interested in using contains a lot of missing values (e.g., `NY.GDP.MKTP.CD` is missing for 7 countries in 2022), we suggest imputing missing values using the `impute_var` function, described in **2. Handling Missing Data**.
 
 <!-- ```{r} -->
 <!-- round(desc$corr[1:3, 1:3], 3) -->
 <!-- ``` -->
 
 <!-- A list object `corr` returns correlation matrix for all pairs of variables in the dataset. Highly correlated variables mean that they are capturing similar cross-country contexts, so users might want to consider dropping one of them prior to implementing SPS.  -->
+
+<br>
+
+
+#### <span style="color:#3366CC">**3.5 \ Clean Data**</span> {#clean}
+
+There you have it! The data set now includes the site-level variables we want to diversify in SPS. We now subset the final data set to the target population (i.e., 15 European countries in our example), rename the variable names to be more intelligible, and move onto implementing SPS via `spsR`.
+
+```{r}
+row.names(sps_country_data4) <- sps_country_data4$iso3
+X_Imm <- sps_country_data4[sps_country_data4$iso3 %in% ess_data$iso3, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "imm_s_avg")]
+names(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 'Education', 'Immig_Support')
+head(X_Imm, n = 3)
+```
+
 
 <br>
 
