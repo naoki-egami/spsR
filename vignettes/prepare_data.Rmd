@@ -41,7 +41,7 @@ always_allow_html: yes
 </p>
 The purpose of R package `spsRdata` is to facilitate data collection for **multi-country** studies. Users can supply data they prepared on this page in function `sps()` for site selection.
 
-Users can start with the default data set `sps_country_data_full` that contains a wide range of commonly-used country-level variables in the social sciences. R package `spsRdata` also offers several functions to merge additional country-level variables from well-known data sets (e.g., V-Dem and World Bank) as well as from any external data users want to add. 
+Users can start with the default data set `sps_country_data` that contains a wide range of commonly-used country-level variables in the social sciences. R package `spsRdata` also offers several functions to merge additional country-level variables from well-known data sets (e.g., V-Dem and World Bank) as well as from any external data users want to add. 
 
 *Note*: We emphasize that R package `sps` and the corresponding SPS algorithm can be applied to any type of study site (e.g., states, districts, villages, or schools). As *multi-country* studies are most popular in political science, R package `spsRdata` focuses on country-level data collection for now, but we are planning to add more functionalities to facilitate data collection at different levels (e.g., states and cities) in the US as well. 
 
@@ -52,17 +52,17 @@ Users can start with the default data set `sps_country_data_full` that contains 
 library(spsRdata)
 ```
 
-In R package `spsRdata`, we provide a country-level data set (`sps_country_data_full`) comprised of 21 variables for 179 countries between 2010 and 2022. It contains a wide range of variables commonly used in the social sciences: they represent political, economic, and social characteristics of countries. These variables are collected from the following sources. 
+In R package `spsRdata`, we provide a country-level data set (`sps_country_data`) comprised of 21 variables for 179 countries between 2010 and 2022. It contains a wide range of variables commonly used in the social sciences: they represent political, economic, and social characteristics of countries. These variables are collected from the following sources. 
 
 * [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset)^[V-Dem data set collects variables from a variety of sources including United Nations, Quality of Government, Clio Infra, and Polity5 Project, and currently includes the most comprehensive political indicators.]
 * [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation)
 * [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1)
 
-`sps_country_data_full` includes the following variables.
+`sps_country_data` includes the following variables.
 
 ```{r}
-data(sps_country_data_full)
-head(sps_country_data_full, n = 3)
+data(sps_country_data)
+head(sps_country_data, n = 3)
 ```
 
 
@@ -103,7 +103,7 @@ In our example, we are interested in 7 country-level variables discussed in the 
 We are interested in 15 European countries and variables measured in 2015 (the year in which most of the site-level variables are available). If users are running experiments now, they can, of course, choose site-level variables measured in most recent years. 
 
 ```{r}
-sps_country_data1 <- sps_country_data(year = 2015)
+sps_country_data1 <- sps_country_data[sps_country_data$year == 2015,]
 ```
 
 Two out of the 7 variables are already in our default data set: GDP (`NY.GDP.MKTP.CD`) and unemployment rate (`SL.UNEM.TOTL.ZS`). So we subset the data set to include only those variables we're interested in. 
