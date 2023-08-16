@@ -157,7 +157,6 @@ Users may use the arguments `data` and `vars` only to add variables from V-Dem o
 
 ```{r}
 sps_country_data4 <- merge_data(data = sps_country_data3, newdata = ess_data, id_site = 'country')
-head(sps_country_data4[sps_country_data4$country == 'Czechia',])
 ```
 
 The function uses fuzzy-match to match country names in two data sets when an exact match does not exist. Here, we discover that the two countries---Czech Republic and UK---are being matched incorrectly from this process. So we instead use an ISO3 code to re-merge the data:
