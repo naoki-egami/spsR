@@ -70,7 +70,9 @@ head(sps_country_data, n = 3)
 
 ```{r}
 data(sps_country_codebook)
+head(sps_country_codebook)
 ```
+
 ```{r, echo = F}
 library(kableExtra)
 library(knitr)
@@ -198,12 +200,12 @@ A list object `desc` returns descriptive summary of each variable in the dataset
 
 There you have it! The data set now includes the site-level variables we want to diversify in SPS. We now subset the final data set to the target population (i.e., 15 European countries in our example), rename the variable names to be more intelligible, and move onto implementing SPS via `spsR`.
 
-```{r}
-row.names(sps_country_data4) <- sps_country_data4$iso3
-X_Imm <- sps_country_data4[sps_country_data4$iso3 %in% ess_data$iso3, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "imm_s_avg")]
-names(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 'Education', 'Immig_Support')
-head(X_Imm, n = 3)
-```
+<!-- ```{r} -->
+<!-- row.names(sps_country_data4) <- sps_country_data4$iso3 -->
+<!-- X_Imm <- sps_country_data4[sps_country_data4$iso3 %in% ess_data$iso3, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "imm_s_avg")] -->
+<!-- names(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 'Education', 'Immig_Support') -->
+<!-- head(X_Imm, n = 3) -->
+<!-- ``` -->
 
 
 <br>

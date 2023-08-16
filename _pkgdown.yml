@@ -2,9 +2,6 @@ url: http://naokiegami.com/spsR/
 template:
   bootstrap: 5
 
-home:
-  sidebar: FALSE
-
 navbar:
   structure:
     left:  [start, tutorials, more, reference]
