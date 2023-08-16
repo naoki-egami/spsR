@@ -177,7 +177,6 @@ row.names(sps_country_data4) <- sps_country_data4$iso3
 X_Imm <- sps_country_data4[sps_country_data4$iso3 %in% ess_data$iso3, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "imm_s_avg")]
 names(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 'Education', 'Immig_Support')
 head(X_Imm, n = 3)
-save(X_Imm, file = "X_Imm.rdata")
 ```
 
 
