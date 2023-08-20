@@ -1,17 +1,17 @@
 ---
-title: "dsl: Design-based Semi-Supervised Learning"
+title: "spsR: R package for Synthetic Purposive Sampling Methods"
 output: 
   md_document:
     variant: markdown_github
 ---
 
-## sps: Synthetic Purposive Sampling
+## spsR: Synthetic Purposive Sampling
 
 ------
 
 **Description:** 
 
-R package `sps` implements the SPS algorithm for site selection and the SPS estimator.
+R package `spsR` implements Synthetic Purposive Sampling (SPS) that allows users to select diverse study sites for external validity, as developed in [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf). 
 
 **Authors:** 
 
@@ -20,12 +20,40 @@ R package `sps` implements the SPS algorithm for site selection and the SPS esti
 
 **Reference:** 
 
-- Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling.
+- [Egami and Lee. (2023+)](https://naokiegami.com/paper/sps.pdf). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling.
 
-### Installation Instructions
+### <span style="color:#3366CC">**Overview of the Website**</span>
+<p class="lh-lg">
+</p>
+
+* **Please start with [Get Started Page](http://naokiegami.com/spsR/articles/intro.html).** 
+    
+    + This page should be sufficient for understanding the basic use of the package.
+
+<p class="lh-lg">
+</p>
+
+* **We provide more detailed practical guides on [Practical Guides](http://naokiegami.com/spsR/articles/intro.html).** 
+    
+    + Include (1) step-by-step instructions, (2) answers to frequently asked questions, (3) suggestions about data collection.
+
+<p class="lh-lg">
+</p>
+
+* **For methodological details, please read [Egami and Lee (2023+)](https://naokiegami.com/paper/sps.pdf).**
+
+<p class="lh-lg">
+</p>
+
+* **We are happy to receive any questions and suggestions about R package `spsR`.**  <br> Please reach out to Naoki ([naoki.egami@columbia.edu](mailto:naoki.egami@columbia.edu)) and Diana ([dl2860@columbia.edu](mailto:dl2860@columbia.edu)).
+
+### <span style="color:#3366CC">**Installation Instructions**</span>
+<p class="lh-lg">
+</p>
+
 You can install the most recent development version using the `devtools` package. First you have to install `devtools` using the following code. Note that you only have to do this once:
 ```{r eval=FALSE} 
-if(!require(devtools)) install.packages("spsR")
+if(!require(devtools)) install.packages("devtools")
 ```   
 
 Then, load `devtools` and use the function `install_github()` to install `spsR`:

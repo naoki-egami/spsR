@@ -3,11 +3,11 @@
 \docType{data}
 \name{X_Imm}
 \alias{X_Imm}
-\title{Data for Checking the function}
+\title{Site-Level Variables for Naumann et al. (2018)}
 \format{
 data
 }
 \description{
-Data for Checking the function
+Site-Level Variables for Naumann et al. (2018)
 }
 \keyword{datasets}

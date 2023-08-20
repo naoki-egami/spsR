@@ -3,11 +3,11 @@
 \docType{data}
 \name{exp_estimate_Imm_selected}
 \alias{exp_estimate_Imm_selected}
-\title{Data for Checking the function}
+\title{Estimated Causal Effects for Selected Study Sites (data from Naumann et al. (2018))}
 \format{
 data
 }
 \description{
-Data for Checking the function
+Estimated Causal Effects for Selected Study Sites (data from Naumann et al. (2018))
 }
 \keyword{datasets}

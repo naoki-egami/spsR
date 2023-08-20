@@ -12,7 +12,7 @@
 #' @import spsRdata
 #' @importFrom metafor rma
 #' @importFrom grDevices adjustcolor
-#' @importFrom stats pnorm qnorm
+#' @importFrom stats pnorm qnorm sd
 #' @importFrom utils combn
 #' @importFrom dplyr case_when
 #' @return \code{sps} returns an object of \code{sps} class.

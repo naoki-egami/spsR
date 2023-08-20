@@ -64,23 +64,24 @@ In this example, we try to select 6 countries from 15 European countries as stud
 
 When selecting study sites for multi-site experiments, we choose site-level variables that we want to diversify. For example, to understand whether causal findings vary across different contexts, researchers might include diverse countries with different GDP, size of migrant population, unemployment rates, and so on. More formally, researchers should choose site-level variables that predict across-site heterogeneity of causal effects. 
 
-In this illustration, we consider 7 variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of females, the mean age, and the mean education. 
+In this illustration, we consider 8 variables discussed in the original paper: GDP (`GDP`), unemployment rates (`Unemployment`), size of migrant population (`Immigration`), the proportion of females (`Female`), the mean age (`Age`), the mean education (`Education`), general support for immigration (`Immig_Support`), and sub-regions in Europe (`Eastern Europe`, `Northern Europe`, `Southern Europe`, `Western Europe`). 
 
 ```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 colnames(X_Imm)
 ```
 
-In practice, it is recommended to standardize each variable to make the scale of site-level variables comparable. That is, each variable has the mean zero and the standard deviation one.  
-
+In practice, it is recommended to standardize each continuous variable to make the scale of site-level variables comparable. That is, each variable has the mean zero and the standard deviation one.  
 ```{r}
-X_Imm <- scale(X_Imm)
+var_cont <-  c('GDP', 'Unemployment', 'Immigration', 
+               'Female', 'Age', 'Education', 'Immig_Support')
+X_Imm[, var_cont] <- scale(X_Imm[, var_cont])
 round(head(X_Imm), 3)
 ```
 
-Users can use `sps_plot()` to visualize the distribution of site-level variables before site selection. 
+Users can use `sps_plot()` to visualize the distribution of site-level variables before site selection. We select the first several variables that are continuous. 
 
 ```{r, fig.dim = c(7, 7), fig.align = 'center'}
-sps_plot(X = X_Imm, before_selection = TRUE)
+sps_plot(X = X_Imm, before_selection = TRUE, columns = var_cont)
 ```
 <br>
 
@@ -107,71 +108,127 @@ out$selected_sites
 Users can investigate the selected sites visually using `sps_plot()`. 
 
 ```{r, fig.dim = c(7, 7), fig.align = 'center'}
-sps_plot(out)
+sps_plot(out, columns = var_cont)
 ```
 
 Red triangles represent selected sites and black circles represent non-selected sites. In the last row and the diagonal plots, users can see the marginal distribution of each variable. All the remaining figures in the middle show bivariate relationships between two variables. 
 
 We can see that selected sites successfully cover a wide range of values in each site-level variable. 
 
-If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. See the details below. 
+If necessary, users can refine site selection using *stratification* to make sure selected sites satisfy certain conditions. This stratification can help users to incorporate various practical, logistical, and ethical constraints. See some examples below. 
 
 <details>
 <summary><span style="color:#3366CC"><tag class = "h4">**Stratify SPS**</tag></span></font></summary>
 
-For example, we might want to select at least one site that have `Age` larger than `1` (i.e., 1 standard deviation as we standardized variables above). We can incorporate this information as follows. 
+In practice, researchers might want to stratify some variables to make sure that study sites satisfy certain conditions. 
+
+#### <span style="color:#3366CC">Example 1: Improve Diversity of Site-Level Variables</span>
+<p class="lh-lg">
+</p>
+It is often useful to select sites that have high, middle, low values in some site-level variables. For example, users might want to make sure that we select at least one country from low, medium, and high GDP countries. 
+
+Users can enforce this condition using `stratify_sps().` 
+
+To select countries with high GDP, we might want to select `at least` `2` sites that have `GDP` `larger than or equal to` `0.5` (i.e., 0.5 standard deviation because we standardized above). We can incorporate this information as follows. 
 
 ```{r}
-st_age <- stratify_sps(X = X_Imm, 
-                       num_site = list("at least", 1), 
-                       condition = list("Age", "larger than or equal to", 1))
+st_GDP_1 <- stratify_sps(X = X_Imm, 
+                         num_site=list("at least", 2), 
+                         condition=list("GDP", "larger than or equal to", 0.5))
 ```
 
-We might also want to select at most two sites that have `Education` between `c(-0.5, 0.5)`. We can incorporate this information as follows. 
+To select countries with medium GDP, we might want to select `at least` `2` sites that have `GDP` `between` `c(-0.25, 0.25)` (i.e., between -0.25 and 0.25 standard deviation). 
 
 ```{r}
-st_edu <- stratify_sps(X = X_Imm, 
-                       num_site = list("at most", 2), 
-                       condition = list("Education", "between", c(-0.5, 0.5)))
+st_GDP_2 <- stratify_sps(X = X_Imm, 
+                         num_site=list("at least", 2), 
+                         condition=list("GDP", "between", c(-0.25, 0.25)))
+```
+
+Finally, to select countries with low GDP, we might want to select `at least` `2` sites that have `GDP` `smaller than or equal to` `-0.5` (i.e., -0.5 standard deviation). 
+
+```{r}
+st_GDP_3 <- stratify_sps(X = X_Imm, 
+                         num_site=list("at least", 2), 
+                         condition=list("GDP", "smaller than or equal to", -0.5))
 ```
 
 **Arguments**
 
 * `num_site`: A list of two elements, e.g., `list("at least", 1)`. This argument specifies the number of sites that should satisfy `condition` specified below. The first element should be either `at least` or `at most`. The second element is integer. For example, `list("at least", 1)` means that we stratify SPS such that we select *at least 1* site that satisfies `condition` (specified below).
 
-* `condition`: A list of three elements, e.g., `list("Age", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is a vector of length 1 or 2. When the second element is `between`, the third element should be a vector of two values. For example, `list("Age", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have *Age larger than or equal to 1*.
-
-In practice, it is often recommended to add simple stratification to every variable: for each variable, we make sure to select at least 1 site above 0.5 standard deviation and at least 1 site below −0.5 standard deviation. This will make sure that SPS will select diverse sites that cover both large and small values in each site-level variable. 
-
-```{r}
-st_large <- st_small <- list()
-for(v in 1:7){
-  st_large[[v]] <- stratify_sps(X = X_Imm, num_site = list("at least", 1), condition = list(colnames(X_Imm)[v], "larger than or equal to", 0.5))
-  st_small[[v]] <- stratify_sps(X = X_Imm, num_site = list("at least", 1), condition = list(colnames(X_Imm)[v], "smaller than or equal to", -0.5))
-}
-```
+* `condition`: A list of three elements, e.g., `list("GDP", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is a vector of length 1 or 2. When the second element is `between`, the third element should be a vector of two values. For example, `list("GDP", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have *GDP larger than or equal to 1*.
 
 After specifying these statification, researchers can supply them to `sps()`. 
 
 ```{r}
-out_st <- sps(X = X_Imm, N_s = 6, stratify = c(st_large, st_small))
+out_GDP <- sps(X = X_Imm, 
+               N_s = 6, 
+               stratify = list(st_GDP_1, st_GDP_2, st_GDP_3))
 ```
 
 **Arguments**
 
 * `stratify`: A `list` where each element is an output from function `stratify_sps()`.
 
-After stratification, SPS selected the following 6 sites. 
 ```{r}
-out_st$selected_sites
+out_GDP$selected_sites
 ```
 
 
-We can also visualize it. 
+#### <span style="color:#3366CC">Example 2: Select Countries from Each Sub-Region</span>
+<p class="lh-lg">
+</p>
+It is often useful to select sites from different subgroups. For example, users might want to make sure that we select at least one country from each of 4 sub-regions of Europe. 
 
-```{r, fig.dim = c(7, 7), fig.align = 'center'}
-sps_plot(out_st)
+The following code ensures to select `at least` `1` site from countries that have `Northern Europe = 1`.
+
+```{r}
+st_NE <- 
+  stratify_sps(X=X_Imm, 
+               num_site=list("at least", 1), 
+               condition=list("Northern Europe", "larger than or equal to", 1))
 ```
+
+Similarly, the following codes ensure that we select `at least` `1` site from countries that have `Eastern Europe = 1`, `Western Europe = 1` and `Southern Europe = 1`, respectively.
+
+```{r}
+st_EE <- 
+  stratify_sps(X=X_Imm, 
+               num_site=list("at least", 1), 
+               condition=list("Eastern Europe", "larger than or equal to", 1))
+
+st_WE <- 
+  stratify_sps(X=X_Imm, 
+               num_site=list("at least", 1), 
+               condition=list("Western Europe", "larger than or equal to", 1))
+
+st_SE <- 
+  stratify_sps(X=X_Imm, 
+               num_site=list("at least", 1), 
+               condition=list("Southern Europe", "larger than or equal to", 1))
+```
+
+Finally, users combine them into one `list` and supply it to function `sps()`. 
+
+```{r}
+out_region <- sps(X = X_Imm, 
+                  N_s = 6, 
+                  stratify = list(st_NE, st_EE, st_WE, st_SE))
+```
+
+```{r}
+out_region$selected_sites
+```
+
+Please see [Stratified SPS](http://naokiegami.com/spsR/articles/stratify_sps.html) for practical recommendations about stratification.
+
+<!-- We can also visualize it.  -->
+
+<!-- ```{r, fig.dim = c(7, 7), fig.align = 'center'} -->
+<!-- sps_plot(out_region) -->
+<!-- ``` -->
+
 </details>
 
 ### <span style="color:#3366CC">**4. \ `sps_estimator`: Estimate the Average-Site ATE**</span> {#sps_estimator}
@@ -204,6 +261,12 @@ We can check the results using `summary` function.
 ```{r}
 summary(sps_est)
 ```
+
+We can also visualize both site-specific ATEs and the average-site ATE together using `plot()`.
+```{r}
+plot(sps_est)
+```
+
 
 Finally, users can use site-level cross-validation to assess the influence of unobserved moderators. In particular, users can randomly choose half of the selected sites as if they were unobserved non-selected sites and predict the average ATE of those non-selected sites based on the remaining selected sites. The null hypothesis is that the predicted ATEs are the same as the observed ATEs. 
 

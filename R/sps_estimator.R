@@ -78,7 +78,7 @@ sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, X_sel
   se_overall <- sqrt(sum(std_w^2 *(se^2 + bet_var)))
   out_overall <- c(estimate_overall, se_overall); names(out_overall) <- c("Estimate", "Std. Error")
 
-  out <- list("average_site_ATE" = out_overall, "site_specific_ATE" = out_each, "bet_se" = sqrt(bet_var))
+  out <- list("average_site_ATE" = out_overall, "site_specific_ATE" = out_each, "bet_se" = sqrt(bet_var), "estimates_selected" = estimates_selected)
 
   class(out) <- c(class(out), "sps_estimator")
 

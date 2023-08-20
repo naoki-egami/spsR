@@ -1,18 +1,11 @@
-#' Data for Checking the function
+#' Site-Level Variables for Naumann et al. (2018)
 #' @name X_Imm
 #' @docType data
 #' @format data
 #' @keywords datasets
 NULL
 
-#' Data for Checking the function
-#' @name exp_estimate_Imm
-#' @docType data
-#' @format data
-#' @keywords datasets
-NULL
-
-#' Data for Checking the function
+#' Estimated Causal Effects for Selected Study Sites (data from Naumann et al. (2018))
 #' @name exp_estimate_Imm_selected
 #' @docType data
 #' @format data

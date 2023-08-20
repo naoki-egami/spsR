@@ -91,7 +91,8 @@ Users can check the codebook using `data(sps_country_codebook)`.
 
 ```{r}
 data(sps_country_codebook)
-sps_country_codebook[sps_country_codebook$Variable %in% c("country", "year", "NY.GDP.MKTP.CD", "SP.POP.TOTL"), ]
+sps_country_codebook[sps_country_codebook$Variable %in% 
+                       c("country", "year", "NY.GDP.MKTP.CD", "SP.POP.TOTL"), ]
 ```
 
 
@@ -106,21 +107,26 @@ We follow our example in the [Get Started Page](http://naokiegami.com/spsR/artic
 #### <span style="color:#3366CC">**3.1 \ Start with `sps_country_data`**</span> {#start}
 <p class="lh-lg">
 </p>
-In our example, we are interested in 7 country-level variables discussed in the original paper: GDP, unemployment rates, size of migrant population, general support for immigration, the proportion of female, the mean age, and the mean education. We illustrate how to collect these variables step by step. 
+In our example, we are interested in 8 country-level variables discussed in the original paper: GDP, unemployment rates, size of migrant population, general support for immigration, the proportion of female, the mean age, the mean education, and sub-regions in Europe. We illustrate how to collect these variables step by step. 
 
 We are interested in 15 European countries and variables measured in 2015 (the year in which Naumann et al (2018)'s experiments were conducted). If users are running experiments now, they can, of course, choose site-level variables measured in most recent years. 
 
 ```{r}
-country_use <- c("Austria", "Belgium", "Czechia", "Denmark", "Finland", "France", "Germany", "Ireland",
-                 "Netherlands", "Norway", "Slovenia", "Spain", "Sweden", "Switzerland", "United Kingdom")
+country_use <- c("Austria", "Belgium", "Czechia", "Denmark", "Finland", 
+                 "France", "Germany", "Ireland","Netherlands", "Norway", 
+                 "Slovenia", "Spain", "Sweden", "Switzerland", "United Kingdom")
 
-sps_country_data1 <- sps_country_data[sps_country_data$year == 2015 & sps_country_data$country %in% country_use,]
+sps_country_data1 <- 
+  sps_country_data[sps_country_data$year == 2015 & 
+                     sps_country_data$country %in% country_use,]
 ```
 
-Two out of the 7 variables are already in our default data set: GDP (`NY.GDP.MKTP.CD`) and unemployment rate (`SL.UNEM.TOTL.ZS`). So we subset the data set to include only those variables we're interested in. 
+Three out of the 8 variables are already in our default data set: sub-regions (`subregion`), GDP (`NY.GDP.MKTP.CD`) and unemployment rate (`SL.UNEM.TOTL.ZS`). So we subset the data set to include only those variables we're interested in. 
 
 ```{r}
-sps_country_data2 <- sps_country_data1[, c("country", "iso3", "year", "NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS")]
+sps_country_data2 <- sps_country_data1[, c("country", "iso3", 
+                                           "subregion", "year", 
+                                           "NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS")]
 ```
 
 <br>
@@ -138,7 +144,8 @@ head(search_result, n = 3)
 Based on the search return, users can add variable(s) to the baseline data set using ``merge_data``. In our example, we're interested in adding `SM.POP.TOTL.ZS` that captures the proportion of migrant population.
 
 ```{r}
-sps_country_data3 <- merge_data(data = sps_country_data2, vars = c("SM.POP.TOTL.ZS"))
+sps_country_data3 <- merge_data(data = sps_country_data2, 
+                                vars = c("SM.POP.TOTL.ZS"))
 ```
 **Arguments**
 
@@ -166,13 +173,15 @@ First, it is strongly recommended to standardize country names using ISO3 code. 
 
 ```{r}
 library(countrycode)
-ess_data$iso3 <- countrycode(sourcevar = ess_data$country, origin = "country.name", destination = "iso3c")
+ess_data$iso3 <- countrycode(sourcevar = ess_data$country, 
+                             origin = "country.name", destination = "iso3c")
 ```
 
 Then, users can use the same function ``merge_data`` to merge their own external data set as well.
 
 ```{r}
-sps_country_data4 <- merge_data(data = sps_country_data3, newdata = ess_data, id_site = 'iso3')
+sps_country_data4 <- merge_data(data = sps_country_data3, 
+                                newdata = ess_data, id_site = 'iso3')
 ```
 
 **Arguments**
@@ -209,14 +218,36 @@ A list object `desc` returns descriptive summary of each variable in the data se
 #### <span style="color:#3366CC">**3.5 \ Clean Data for `sps()`**</span> {#clean}
 <p class="lh-lg">
 </p>
-Finally, we clean data for function `sps()`. First, we need to have informative row names for the data. Second, we only keep relevant variables and rename them. 
+Finally, we clean data for function `sps()`. First, we need to have informative row names for the data. 
 
 ```{r}
 row.names(sps_country_data4) <- sps_country_data4$country
-X_Imm <- sps_country_data4[, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "support_imm")]
-colnames(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 'Education', 'Immig_Support')
+```
+
+Second, for categorical variables, we binarize them. 
+
+```{r}
+X_region <- model.matrix(~ subregion - 1, 
+                         data = sps_country_data4[, "subregion", drop = FALSE])
+
+colnames(X_region) <- c("Eastern Europe", "Northern Europe", 
+                        "Southern Europe", "Western Europe")
+```
+
+Third, we keep all relevant variables and rename them. 
+
+```{r}
+X_Imm <- cbind(sps_country_data4[, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", 
+                                     "SM.POP.TOTL.ZS", "female", "age", 
+                                     "education", "support_imm")], 
+               X_region)
+
+colnames(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 
+                     'Education', 'Immig_Support', 
+                     colnames(X_region))
 head(X_Imm, n = 3)
 ```
+
 This `X_Imm` is ready for function `sps()`.
 
 <!-- ```{r} -->
