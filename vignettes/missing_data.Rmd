@@ -44,9 +44,9 @@ We impute the two variables using `amelia`. By specifying `id_site` and `id_time
 
 ```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE, results = FALSE}
 imputed_data <- impute_var(data = sps_country_data, 
-                           id_site = 'country', 
-                           id_year = 'year', 
-                           id_impute = c('e_p_polity', 'NY.GDP.MKTP.CD'),
+                           id_unit = 'country', 
+                           id_time = 'year', 
+                           var_impute = c('e_p_polity', 'NY.GDP.MKTP.CD'),
                            method = "amelia")
 ```
 
@@ -57,13 +57,12 @@ apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.n
 **Arguments**
 
 * `data`: A `data.frame` containing variables to impute.
-* `id_site`: A unique identifier for sites. A column name in `data`. 
-* `id_time`: A unique identifier for time index. A column name in `data`. If `NULL`, values will be merged onto all years in `basedata`. If unspecified, it assumes `data` is cross-sectional.
+* `id_unit`: A unique identifier for sites. A column name in `data`. 
+* `id_time`: A unique identifier for time index. A column name in `data`. If unspecified, it assumes `data` is cross-sectional.
 * `var_impute`: A vector with one or more variable names for which imputation is performed. If unspecified (`NULL`), it imputes all variables in `data` except for the `id_site` and `id_time` variables.
 * `var_predictor`: A vector with one or more variable names that we use as predictors to impute variables in `var_impute`. If unspecified (`NULL`), the function uses all variables in `data` except for variables in `var_impute`.
 * `method`: Imputation method. Choose `amelia` or `miceranger`. Default is `amelia`. 
 * `n_impute`: The number of imputed data sets to produce (equivalent of argument `m` in `amelia()` and `miceRanger()`). Default is 5.
-<!-- * `carryforward_yrs`: Used only when "carryforward" is selected in `method`. Maximum number of years allowed to be carried forward. If unspecified, it imputes values from the most recent years available. -->
 * `...`: Arguments passed onto `Amelia::amelia()` or `miceRanger::miceRanger()`.
 
 **Imputation Methods**
