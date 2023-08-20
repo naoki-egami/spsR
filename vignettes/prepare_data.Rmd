@@ -79,19 +79,17 @@ sps_country_codebook[sps_country_codebook$Variable %in% c("country", "year", "NY
 ```{r, echo = F}
 library(kableExtra)
 library(knitr)
-kbl(sps_country_codebook,
-      label = "tab:codebook",
-      caption = "") %>%
+kbl(sps_country_codebook) %>%
   kable_classic_2(full_width = T) %>%
   kable_styling(font_size = 12, bootstrap_options = c('hover', 'condensed')) %>%
   column_spec(1, italic = T) %>%
   pack_rows('Key Identifiers', 1, 3) %>%
-  pack_rows('Geographic Indicators', 4, 5) %>%
-  pack_rows('Democracy Indicators', 6, 8) %>%
-  pack_rows('Political Indicators', 9, 14) %>%
-  pack_rows('Economic Indicators', 15, 16) %>%
-  pack_rows('Sociodemographic Indicators', 17, 19) %>%
-  pack_rows('Social Indicators', 20, 21)
+  pack_rows('Geographic Indicators', 4, 6) %>%
+  pack_rows('Democracy Indicators', 7, 9) %>%
+  pack_rows('Political Indicators', 10, 15) %>%
+  pack_rows('Economic Indicators', 16, 17) %>%
+  pack_rows('Sociodemographic Indicators', 18, 20) %>%
+  pack_rows('Social Indicators', 21, 22)
 ```
 
 <br>
