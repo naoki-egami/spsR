@@ -59,17 +59,17 @@ Users first specify a target population of sites from which they sample sites. T
 
 It is recommended to choose contextual moderators that predict differences in the ATEs across sites. This step is what researchers are already doing implicitly when diversifying one or two variables by hand in practice. With SPS, users can incorporate all the covariates that are expected to moderate the ATEs across sites (instead of just one or two variables). For example, in our example on the [Get Started Page](http://naokiegami.com/spsR/articles/intro.html), we chose 7 variables discussed in the original paper: GDP, size of migrant population, unemployment rates, general support for immigration, the proportion of females, the mean age, and the mean education.
 
-We recommend against including too many irrelevant variables because SPS might decrease the balance on key variables to improve the balance on such irrelevant variables. When there is a concern about unobserved site-level variables, it is recommended to include some proxies of such unobserved variables, if feasible. By diversifying such observed proxies that are associated with the unobserved variables, SPS can often mitigate the potential influence of unobserved variables. Please also see AAA to learn more about how to handle unmeasured confounders. 
+We recommend against including too many irrelevant variables because SPS might decrease the balance on key variables to improve the balance on such irrelevant variables. When there is a concern about unobserved site-level variables, it is recommended to include some proxies of such unobserved variables, if feasible. By diversifying such observed proxies that are associated with the unobserved variables, SPS can often mitigate the potential influence of unobserved variables. Please also see [Common Questions and Concerns](#question) below to learn more about how to handle unmeasured confounders. 
 
-More practically, to ease the implementation, we offer the default county-level data that contain most of common country-level variables social scientists often diversify, e.g., geography, polity score, GDP, population, education-level, and so on. Please see AAA. 
+More practically, to ease data collection, we offer the default county-level data set that contains most of common country-level variables social scientists often diversify, e.g., geography, polity score, GDP, population, education-level, and so on. Please see [Prepare Country-Level Data](http://naokiegami.com/spsR/articles/prepare_data.html). 
 </details>
 
 <details>
 <summary>**Step 3: Run (Stratified) Synthetic Purposive Sampling**</summary>  
 
-After collecting site-level variables (see AAA), users can run function `sps()` to optimally diversify the chosen site-level variables. Please see the [Get Started Page](http://naokiegami.com/spsR/articles/intro.html) for implementation. 
+After collecting site-level variables (see some recommendations in [Prepare Site-Level Varaibles](#prepare)), users can run function `sps()` to optimally diversify the chosen site-level variables. Please see the [Get Started Page](http://naokiegami.com/spsR/articles/intro.html) for implementation. 
 
-It is recommended to *stratify* key site-level variables using function `stratify_sps()`. This stratification can allow users to impose certain conditions to site selection. For example, researchers can make sure to select at least one country from each region of the world. Researchers can also incorporate other domain knowledge and practical constraints into SPS. For example, users might not be able to run experiments in certain countries that are not covered by online survey firms. Users might want to include certain sites because they provide a hard test for a given theory. Please see AAA for different examples of stratification. 
+It is recommended to *stratify* key site-level variables using function `stratify_sps()`. This stratification can allow users to impose certain conditions to site selection. For example, researchers can make sure to select at least one country from each region of the world. Researchers can also incorporate other domain knowledge and practical constraints into SPS. For example, users might not be able to run experiments in certain countries that are not covered by online survey firms. Users might want to include certain sites because they provide a hard test for a given theory. Please see [Stratified SPS](http://naokiegami.com/spsR/articles/stratify_sps.html) for different examples of stratification. 
 
 In practice, it is recommended to visualize site election using function `sps_plot()` and check how selected sites cover a wide range of values in each site-level variable. 
 </details>
@@ -103,9 +103,9 @@ Finally, to empirically test the potential influence of unobserved site-level va
 
 In this function, we randomly choose half of the selected sites as if they were unobserved non-selected sites and predict the average ATE of those non-selected sites based on the remaining selected sites. By repeating the same procedure many times, researchers can empirically check how well the SPS estimator can credibly infer the ATEs in non-selected sites. When users pass this test, there is no evidence of significant bias from unobserved site-level variables, while researchers can never confirm it as in usual statistical tests. 
 
-When users fail this test, it implies large across-site heterogeneity, not explained by site-level variables. We view this as an opportunity for further research (rather than a failure of the study) because it shows that there remains a large amount of across-site heterogeneity that existing theories cannot account for. In such scenarios, researchers can consider sequential learning: rather than viewing the current study as the final confirmation, researchers could suggest a new study by sequentially applying SPS.
+When users fail this test, it implies large across-site heterogeneity, not explained by site-level variables. We view this as an opportunity for further research (rather than a failure of the given multi-site causal study) because it shows that there remains a large amount of across-site heterogeneity that existing theories cannot account for. In such scenarios, researchers can consider sequential learning: rather than viewing the current study as the final confirmation, researchers could suggest a new study by sequentially applying SPS.
 
-**Add a quick example here?**
+<!-- **Add a quick example here?** -->
 
 </details>
 
@@ -129,7 +129,19 @@ Researchers might be worried about the potential influence of unobserved moderat
 </details>
 
 <details><summary><tag class = "h5">2.2 \ `sps()` did not diversify some variables well. What should I do? </tag></summary>
- **I will add this later**
+
+Example 1: While you wanted to select diverse countries that have high, middle, and low GDP countries, the SPS algorithm did not select any country from the top 20 percentile of the GDP distribution and did not select high GDP country. 
+
+Example 2: While you wanted to select diverse countries from each sub-region of Europe, the SPS algorithm did not select any country from Southern Europe and over-sampled Northern Europe. 
+
+Without any instruction, `sps()` might not perfectly diversify all variables as you wish because the function has to achieve diversity in all variables and make some trade-off. If users want to achieve specific conditions, researchers can directly enforce such conditions to `sps()` using stratification via function `stratify_sps()`.
+ 
+Solution to Example 1: Researchers can use `stratify_sps()` to make sure that `sps()` will select at least one country from the top 20 percentile of the GDP distribution. 
+
+Solution to Example 2: Researchers can use `stratify_sps()` to make sure that `sps()` will select at least one country from Southern and Northern Europe, respectively.
+
+Please see [Stratified SPS](http://naokiegami.com/spsR/articles/stratify_sps.html) to learn how to use stratification to improve diversity and include practical constraints and domain knowledge into the SPS algorithm. 
+ 
 </details>
 
 <details><summary><tag class = "h5">2.3 \ Isn't Random Sampling Better?</tag></summary>
@@ -151,17 +163,17 @@ In practice, users need to prepare site-level variables for the population of si
 
 For users who are considering multi-site experiments where sites are **countries**, we offer the companion R package `spsRdata`, which contains
 
-1. the default country-level data (`sps_country_data`) that contain a wide range of the most commonly used country-level data
+1. the default country-level data set (`sps_country_data`) that contains a wide range of the most commonly used country-level data
 
 2. easy-to-use functions to merge more variables from a variety of common data sets (e.g., V-Dem and World Bank)
 
-See this page. 
+See [Prepare Country-Level Data](http://naokiegami.com/spsR/articles/prepare_data.html). 
 
 #### <span style="color:#3366CC">3.2. \ State- or City-Level Variables in the US</span> {#prepare-us}
 <p class="lh-lg">
 </p>
    
-If you are considering multi-site experiments where sites are **states or cities in the US**, we find the following data sources to be useful. **Diana, can you add some data sets below?**
+If you are considering multi-site experiments where sites are **states or cities in the US**, the following data sources might be useful. 
 
 * National Historical Geographic Information System (NHGIS): https://www.nhgis.org/
 
@@ -176,7 +188,7 @@ If you are considering multi-site experiments where sites are **states or cities
 <p class="lh-lg">
 </p>
    
-Once you collect site-level variables, you might find some missing data. To handle missing data easily, we offer function `impute_var()` in R package `spsRdata` to impute missing data based on the state-of-the-art missing data imputation methods. Please see [Handle Missing Data]. After imputing missing data, users can run `sps()`. 
+Once you collect site-level variables, you might find some missing data. To handle missing data easily, we offer function `impute_var()` in R package `spsRdata` to impute missing data based on the state-of-the-art missing data imputation methods. Please see [Handle Missing Data](http://naokiegami.com/spsR/articles/missing_data.html). After imputing missing data, users can run `sps()`. 
 
 <br>
 
@@ -202,7 +214,7 @@ The following survey firms offer service in many countries across the world.
 <p class="lh-lg">
 </p>
 
-It is now easier to translate survey experiments into different languages than ever before. 
+It is easier to translate survey experiments into different languages than ever before. 
 
 * Qualtrics: https://www.qualtrics.com/support/survey-platform/survey-module/survey-tools/translate-survey/
 

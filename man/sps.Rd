@@ -8,9 +8,9 @@ sps(
   X,
   N_s,
   stratify = NULL,
-  site_selected = NULL,
-  site_unavailable = NULL,
-  lambda = c(1, 1, 0.05),
+  site_include = NULL,
+  site_exclude = NULL,
+  lambda = c(1, 1, 0),
   seed = 1234
 )
 }
@@ -21,9 +21,9 @@ sps(
 
 \item{stratify}{(Optional. Default = \code{NULL}) Output from function \code{stratify_sps()}. This argument helps users incorporate practical and logistical constraints. See examples on \url{http://naokiegami.com/spsR/articles/stratify_sps.html}}
 
-\item{site_selected}{(Optional. Default = \code{NULL}) Names of sites users always want to select (or have already selected).}
+\item{site_include}{(Optional. Default = \code{NULL}) Names of sites users want to always include (or have already selected).}
 
-\item{site_unavailable}{(Optional. Default = \code{NULL}) Names of sites users cannot select.}
+\item{site_exclude}{(Optional. Default = \code{NULL}) Names of sites users want to always exclude.}
 
 \item{lambda}{Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0.1)}. Users who want to fine-tune the tuning parameters, please see examples on \url{http://naokiegami.com/spsR/articles/methods_guides.html}.}
 

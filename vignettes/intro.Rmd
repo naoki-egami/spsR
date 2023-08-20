@@ -123,31 +123,31 @@ For example, we might want to select at least one site that have `Age` larger th
 
 ```{r}
 st_age <- stratify_sps(X = X_Imm, 
-                       num_site = c("at least", 1), 
-                       condition = c("Age", "larger than or equal to", 1))
+                       num_site = list("at least", 1), 
+                       condition = list("Age", "larger than or equal to", 1))
 ```
 
 We might also want to select at most two sites that have `Education` between `c(-0.5, 0.5)`. We can incorporate this information as follows. 
 
 ```{r}
 st_edu <- stratify_sps(X = X_Imm, 
-                       num_site = c("at most", 2), 
-                       condition = c("Education", "between", -0.5, 0.5))
+                       num_site = list("at most", 2), 
+                       condition = list("Education", "between", c(-0.5, 0.5)))
 ```
 
 **Arguments**
 
-* `num_site`: A vector of two elements, e.g., `c("at least", 1)`. This argument specifies the number of sites that should satisfy `condition` specified below. The first element should be either `at least` or `at most`. The second element is integer. For example, `c("at least", 1)` means that we stratify SPS such that we select *at least 1* site that satisfies `condition` (specified below).
+* `num_site`: A list of two elements, e.g., `list("at least", 1)`. This argument specifies the number of sites that should satisfy `condition` specified below. The first element should be either `at least` or `at most`. The second element is integer. For example, `list("at least", 1)` means that we stratify SPS such that we select *at least 1* site that satisfies `condition` (specified below).
 
-* `condition`: A vector of three or four elements, e.g., `c("Age", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is numeric. When the second element is `between`, the third and fourth elements specify values. For example, `c("Age", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have *Age larger than or equal to 1*.
+* `condition`: A list of three elements, e.g., `list("Age", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is a vector of length 1 or 2. When the second element is `between`, the third element should be a vector of two values. For example, `list("Age", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have *Age larger than or equal to 1*.
 
 In practice, it is often recommended to add simple stratification to every variable: for each variable, we make sure to select at least 1 site above 0.5 standard deviation and at least 1 site below −0.5 standard deviation. This will make sure that SPS will select diverse sites that cover both large and small values in each site-level variable. 
 
 ```{r}
 st_large <- st_small <- list()
 for(v in 1:7){
-  st_large[[v]] <- stratify_sps(X = X_Imm, num_site = c("at least", 1), condition = c(colnames(X_Imm)[v], "larger than or equal to", 0.5))
-  st_small[[v]] <- stratify_sps(X = X_Imm, num_site = c("at least", 1), condition = c(colnames(X_Imm)[v], "smaller than or equal to", -0.5))
+  st_large[[v]] <- stratify_sps(X = X_Imm, num_site = list("at least", 1), condition = list(colnames(X_Imm)[v], "larger than or equal to", 0.5))
+  st_small[[v]] <- stratify_sps(X = X_Imm, num_site = list("at least", 1), condition = list(colnames(X_Imm)[v], "smaller than or equal to", -0.5))
 }
 ```
 

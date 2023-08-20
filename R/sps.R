@@ -2,8 +2,8 @@
 #' @param X Site-level variables for the target population of sites. Row names should be names of sites.
 #' @param N_s Number of study sites to be selected.
 #' @param stratify (Optional. Default = \code{NULL}) Output from function \code{stratify_sps()}. This argument helps users incorporate practical and logistical constraints. See examples on \url{http://naokiegami.com/spsR/articles/stratify_sps.html}
-#' @param site_selected (Optional. Default = \code{NULL}) Names of sites users always want to select (or have already selected).
-#' @param site_unavailable (Optional. Default = \code{NULL}) Names of sites users cannot select.
+#' @param site_include (Optional. Default = \code{NULL}) Names of sites users want to always include (or have already selected).
+#' @param site_exclude (Optional. Default = \code{NULL}) Names of sites users want to always exclude.
 #' @param lambda Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0.1)}. Users who want to fine-tune the tuning parameters, please see examples on \url{http://naokiegami.com/spsR/articles/methods_guides.html}.
 #' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
 #' @import CVXR
@@ -28,14 +28,28 @@
 
 sps <- function(X, N_s,
                 stratify = NULL,
-                site_selected = NULL,
-                site_unavailable = NULL,
-                lambda = c(1, 1, 0.05),
+                site_include = NULL,
+                site_exclude = NULL,
+                lambda = c(1, 1, 0),
                 seed = 1234){
 
   # Housekeeping
 
   ## X
+  if(any(is.na(X))){
+    stop(" X contains missing data. Please supply X without missing values. Consider using `impute_var()` in R package `spsRdata`. ")
+  }
+
+  ## factor or character
+  if(all(sapply(X, class) == "numeric") == FALSE){
+    stop(" X contains `factor` or `character` variables. Before using sps(), please convert them into numeric or binary variables. ")
+  }
+  ##
+  X_sd <- apply(X, 2, sd)
+  if(max(X_sd)/min(X_sd) >= 100){
+    warning(" Some variables in X have standard deviation more than 100 times larger than other variables. This might cause estimation problem. Please consider using `scale()` to make standard deviations of variables comparable. ")
+  }
+
   ### Need to add Missing data
   X <- as.matrix(X)
   class(X) <- "matrix"
@@ -47,10 +61,10 @@ sps <- function(X, N_s,
   }
 
   ## N_s
-  if(N_s <= length(site_selected)){
-    stop(" N_s should be larger than length(site_selected) ")
-    # N_s <- N_s + length(site_selected)
-    # N_s is defined including site_selected
+  if(N_s <= length(site_include)){
+    stop(" N_s should be larger than length(site_include) ")
+    # N_s <- N_s + length(site_include)
+    # N_s is defined including site_include
   }
 
   ## stratify
@@ -71,26 +85,26 @@ sps <- function(X, N_s,
       C  <- do.call("rbind", C_l)
     }
   }
-  # site_selected
-  if(all(is.null(site_selected)) == FALSE){
-    if(all(site_selected %in% rownames(X)) == FALSE){
-      stop(" site_selected should be a subset of rownames(X) ")
+  # site_include
+  if(all(is.null(site_include)) == FALSE){
+    if(all(site_include %in% rownames(X)) == FALSE){
+      stop(" site_include should be a subset of rownames(X) ")
     }else{
-      site_selected_ind <- which(site_selected %in% rownames(X))
+      site_include_ind <- which(rownames(X) %in% site_include)
     }
   }else{
-    site_selected_ind <- NULL
+    site_include_ind <- NULL
   }
 
-  # site_unavailable
-  if(all(is.null(site_unavailable)) == FALSE){
-    if(all(site_unavailable %in% rownames(X)) == FALSE){
-      stop(" site_unavailable should be a subset of rownames(X) ")
+  # site_exclude
+  if(all(is.null(site_exclude)) == FALSE){
+    if(all(site_exclude %in% rownames(X)) == FALSE){
+      stop(" site_exclude should be a subset of rownames(X) ")
     }else{
-      site_unavailable_ind <- which(site_unavailable %in% rownames(X))
+      site_exclude_ind <- which(rownames(X) %in% site_exclude)
     }
   }else{
-    site_unavailable_ind <- NULL
+    site_exclude_ind <- NULL
   }
 
 
@@ -126,13 +140,13 @@ sps <- function(X, N_s,
   for(l in 1:L){
     co_11[[l]] <- Z[,l] == (1-S)*X[,l] - t(Q) %*% X[,l]
   }
-  if(all(is.null(site_selected_ind)) == FALSE){
-    co_12 <- S[site_selected_ind] == 1
+  if(all(is.null(site_include_ind)) == FALSE){
+    co_12 <- S[site_include_ind] == 1
   }else{
     co_12 <- NULL
   }
-  if(all(is.null(site_unavailable_ind)) == FALSE){
-    co_13 <- S[site_unavailable_ind] == 0
+  if(all(is.null(site_exclude_ind)) == FALSE){
+    co_13 <- S[site_exclude_ind] == 0
   }else{
     co_13 <- NULL
   }
@@ -160,8 +174,19 @@ sps <- function(X, N_s,
   # Objective Function
   # obj <- Minimize( sum_squares(Z)/(L*(N-s)))
 
-  obj <- Minimize( lambda[1]*sum_squares(Z)/(L*(N-N_s)) +lambda[2]*(sum_entries(Q*Xs)/(N-N_s)) + lambda[3]*sum_squares(Q)/(N-N_s) )
+  # Check Infeasibility
+  # check_inf <- Problem(Minimize(sum_entries(S)), constraints)
+  # res_inf <- solve(check_inf)
+  # if(res_inf$status != "optimal"){
+  #   stop(" Constraints are infeasible. Please check whether conditions in`stratify` are feasible. ")
+  # }
 
+  cat("Selecting Study Sites...")
+  if(lambda[3] == 0){
+    obj <- Minimize( lambda[1]*sum_squares(Z)/(L*(N-N_s)) + lambda[2]*(sum_entries(Q*Xs)/(N-N_s)))
+  }else{
+    obj <- Minimize( lambda[1]*sum_squares(Z)/(L*(N-N_s)) + lambda[2]*(sum_entries(Q*Xs)/(N-N_s)) + lambda[3]*sum_squares(Q)/(N-N_s) )
+  }
   p <- Problem(obj, constraints)
 
   set.seed(seed)
@@ -186,6 +211,17 @@ sps <- function(X, N_s,
                        "Q" = Q_out,
                        "N_s" = N_s,
                        "N" = N)
+
+  if(any(is.na(selected_sites))){
+    message("\n The optimization fails. \n")
+    if(res$status == "infeasible" | res$status == "infeasible_inaccurate"){
+      message("\n Constraints are infeasible. Please check whether conditions in`stratify` are feasible. \n")
+    }else if(res$status == "unbounded" | res$status == "unbounded_inaccurate"){
+      message("\n The objective function is unbounded. Some problems in X. \n")
+    }else if(res$status == "solver_error"){
+      message("\n Errors in the underlying package `CVXR`. \n")
+    }
+  }
 
   out <- list("selected_sites" = selected_sites,
               "W" = W_out,

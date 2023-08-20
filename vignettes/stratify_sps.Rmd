@@ -5,4 +5,199 @@ output:
     variant: markdown_github
 ---
 
-### Overview 
+<br>
+
+<p class = "h5">**On this page, we explain how to use `stratify_sps()` to incorporate various practical constraints and domain knowledge to `sps()`.**</p> 
+
+<br>
+<div class="card bg-light mb-3">
+  <div class="card-header">**Table of Contents**</div>
+  <div class="card-body">
+  * [**Case 1: Always Include or Always Exclude**](#case1): <br> 
+  How can we always include or exclude certain sites? 
+
+  * [**Case 2: Stratify Variables using `stratify_sps()`**](#case2): <br>
+  How can we enforce certain conditions to site-level variables? 
+
+  * [**Case 3**](#case3): <br>
+  ???
+  
+  </div>
+</div>
+
+<br>
+
+On this page, we use Naumann et al. (2018) (`data(X_Imm)`) as an example.
+
+```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+library(spsR)
+data("X_Imm")
+
+# To make the scale of variables comparable, we standardize variables. 
+X_Imm <- scale(X_Imm) 
+```
+
+
+### <span style="color:#3366CC">**Case 1: Always Include or Always Exclude**</span> {#case1}
+<p class="lh-lg">
+</p>
+
+In some cases, researchers might want to always include or always exclude certain sites. 
+
+Let's start with cases when we always include certain sites. Users might want to conduct studies in certain sites, for example, because those sites are substantively important or provide "hard tests" for a given theory. 
+
+Suppose users always want to include "Sweden" as one of study sites. If so, users can explicitly incorporate this constraint as follows. 
+
+```{r, message=FALSE}
+out <- sps(X = X_Imm, N_s = 6, site_include = c("Sweden"))
+out$selected_sites
+```
+
+In other cases, researchers might want to always exclude certain sites. For example, users might not be able to conduct studies in certain sites because survey firms do not offer service in certain countries. 
+
+Suppose users always want to exclude "Denmark" and "Spain" from study sites. If so, users can explicitly incorporate this constraint as follows. 
+
+```{r}
+out <- sps(X = X_Imm, N_s = 6, site_exclude = c("Denmark", "Spain"))
+out$selected_sites
+```
+
+Of course, users can incorporate both constraints together. 
+
+```{r}
+out <- sps(X = X_Imm, N_s = 6, 
+           site_include = c("Sweden"), 
+           site_exclude = c("Denmark", "Spain"))
+out$selected_sites
+```
+
+<br>
+
+### <span style="color:#3366CC">**Case 2: Stratify Variables using `stratify_sps()`**</span> {#case2}
+<p class="lh-lg">
+</p>
+
+In some cases, researchers might want to stratify some variables to make sure that study sites satisfy certain conditions. 
+
+For example, users might want to make sure that we select at least one country from low, middle, and high GDP countries. For example, 
+
+* at least one country from the top 20 percentile of the GDP distribution
+* at least one country between 40th and 60th percentiles of the GDP distribution 
+* at least one country from the bottom 20 percentile of the GDP distribution
+
+Users can enforce this condition using `stratify_sps().` 
+
+Researchers can ensure to select `at least` `1` site that have `GDP` larger than or equal to the 80 percentile (`quantile(X_Imm[, "GDP"], prob = c(0.8))`).  
+
+```{r}
+q_80 <- quantile(X_Imm[, "GDP"], prob = c(0.8))
+
+st_GDP_80 <- 
+  stratify_sps(X = X_Imm, 
+               num_site = list("at least", 1), 
+               condition = list("GDP", "larger than or equal to", q_80))
+```
+
+Similarly, researchers can ensure to select `at least` `1` site that have `GDP` between the 40th and 60th percentile (`quantile(X_Imm[, "GDP"], prob = c(0.4, 0.6))`). 
+
+```{r}
+q_40_60 <- quantile(X_Imm[, "GDP"], prob = c(0.4, 0.6))
+         
+st_GDP_40_60 <- 
+  stratify_sps(X = X_Imm, 
+               num_site = list("at least", 1), 
+               condition = list("GDP", "between", q_40_60))
+```
+
+Users can also ensure to select `at least` `1` site that have `GDP` smaller than or equal to the 20 percentile (`quantile(X_Imm[, "GDP"], prob = c(0.2))`).  
+
+```{r}
+q_20 <- quantile(X_Imm[, "GDP"], prob = c(0.2))
+
+st_GDP_20 <-  
+  stratify_sps(X = X_Imm, 
+               num_site = list("at least", 1), 
+               condition = list("GDP", "smaller than or equal to", q_20))
+```
+
+**Arguments**
+
+* `num_site`: A list of two elements, e.g., `list("at least", 1)`. This argument specifies the number of sites that should satisfy `condition` specified below. The first element should be either `at least` or `at most`. The second element is integer. For example, `list("at least", 1)` means that we stratify SPS such that we select *at least 1* site that satisfies `condition` (specified below).
+
+* `condition`: A list of three elements, e.g., `list("Age", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is a vector of length 1 or 2. When the second element is `between`, the third element should be a vector of two values. For example, `list("Age", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have *Age larger than or equal to 1*.
+
+Finally, users can combine these different stratification into one `list` and supply it to function `sps()`. 
+
+```{r}
+out_st <- sps(X = X_Imm, N_s = 6, 
+              stratify = list(st_GDP_80, st_GDP_40_60, st_GDP_20))
+out_st$selected_sites
+```
+
+##### <span style="color:#3366CC">Stratify Each Variable</span> 
+
+In practice, it is often recommended to add simple stratification to every variable to make sure that we can cover low and high values in each dimension. For example, after standardizing each variable, we can make sure to select at least 1 site above 0.5 standard deviation and at least 1 site below −0.5 standard deviation.
+
+```{r}
+st_large <- st_small <- list()
+for(v in 1:7){
+st_large[[v]] <- stratify_sps(X = X_Imm, 
+                              num_site = list("at least", 1), 
+                              condition = list(colnames(X_Imm)[v], "larger than or equal to", 0.5))
+st_small[[v]] <- stratify_sps(X = X_Imm, 
+                              num_site = list("at least", 1), 
+                              condition = list(colnames(X_Imm)[v], "smaller than or equal to", -0.5))
+}
+st_combined <- c(st_large, st_small)
+```
+
+```{r}
+out_st <- sps(X = X_Imm, N_s = 6, stratify = st_combined)
+out_st$selected_sites
+```
+
+<br>
+
+### <span style="color:#3366CC">**Case 3: Region Example Later**</span>  {#case3}
+<p class="lh-lg">
+</p>
+
+```{r}
+library(spsRdata)
+region_use <- c("Europe & Central Asia", "Latin America & Caribbean")
+country_base <- subset(sps_country_data, 
+                       region %in% c("Europe & Central Asia", "Latin America & Caribbean") 
+                       & SP.POP.TOTL >= 20000000 
+                       & year == 2022)
+```
+
+This population of sites contain 10 countries from `Europe & Central Asia` and `Latin`
+```{r}
+table(country_base$region)
+```
+
+```{r}
+region_X <- model.matrix(~ region - 1, data = country_base[, "region", drop = FALSE])
+colnames(region_X) <- c("Europe & Central Asia", "Latin America & Caribbean")
+```
+
+```{r}
+X_continuous <- scale(country_base[, c("SP.POP.TOTL", "v2x_gender", "v2x_libdem")])  # Standardize Continuous variables 
+X_use <- cbind(X_continuous, region_X) 
+```
+
+```{r}
+rownames(X_use) <- country_base$country
+```
+
+```{r}
+st_Europe <- stratify_sps(X = X_use, num_site = c("at least", 1), condition = c("Europe & Central Asia", "larger than or equal to", 1))
+st_LA <- stratify_sps(X = X_use, num_site = c("at least", 1), condition = c("Latin America & Caribbean", "larger than or equal to", 1))
+```
+
+```{r}
+out_st_region <- sps(X = X_use, N_s = 6, stratify = list(st_Europe, st_LA))
+```
+
+
+

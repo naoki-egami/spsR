@@ -29,7 +29,9 @@ always_allow_html: yes
      
      * [Merge External Data sets](#external) 
      
-     * [Summarize Data](#summary) 
+     * [Check Data](#summary) 
+     
+     * [Clean Data for `sps()`](#clean) 
   
   </div>
 </div>
@@ -55,7 +57,8 @@ library(spsRdata)
 In R package `spsRdata`, we provide a country-level data set (`sps_country_data`) comprised of 22 variables for 179 countries between 2010 and 2022. It contains a wide range of variables commonly used in the social sciences: they represent political, economic, and social characteristics of countries. These variables are collected from the following sources. 
 
 * [Varieties of Democracy (V-Dem) project](https://v-dem.net/data/the-v-dem-dataset)
-      * V-Dem data set collects variables from a variety of sources including United Nations, Quality of Government, Clio Infra, and Polity5 Project, and currently includes the most comprehensive political indicators. 
+    + V-Dem data set collects variables from a variety of sources including United Nations, Quality of Government, Clio Infra, and Polity5 Project, and currently includes the most comprehensive political indicators. 
+        
 * [World Bank Indicators](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation)
 * [UN Statistics](https://unstats.un.org/unsd/methodology/m49/overview)
 * [University of Groningen's World Languages](https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&selectedCollection=&zoom=3&lat=0&lng=0&pitch=0&bearing=0&basemap=dark&labels=light&layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&aoi=&page=1&sort=most-viewed&sortDirection=-1)
@@ -66,14 +69,6 @@ In R package `spsRdata`, we provide a country-level data set (`sps_country_data`
 data(sps_country_data)
 head(sps_country_data, n = 3)
 ```
-
-Users can check the code book using `data(sps_country_codebook)`. 
-
-```{r}
-data(sps_country_codebook)
-sps_country_codebook[sps_country_codebook$Variable %in% c("country", "year", "NY.GDP.MKTP.CD", "SP.POP.TOTL"), ]
-```
-
 **Descriptions of Variables:**
 
 ```{r, echo = F}
@@ -91,6 +86,14 @@ kbl(sps_country_codebook) %>%
   pack_rows('Sociodemographic Indicators', 18, 20) %>%
   pack_rows('Social Indicators', 21, 22)
 ```
+
+Users can check the codebook using `data(sps_country_codebook)`. 
+
+```{r}
+data(sps_country_codebook)
+sps_country_codebook[sps_country_codebook$Variable %in% c("country", "year", "NY.GDP.MKTP.CD", "SP.POP.TOTL"), ]
+```
+
 
 <br>
 
@@ -117,7 +120,7 @@ sps_country_data1 <- sps_country_data[sps_country_data$year == 2015 & sps_countr
 Two out of the 7 variables are already in our default data set: GDP (`NY.GDP.MKTP.CD`) and unemployment rate (`SL.UNEM.TOTL.ZS`). So we subset the data set to include only those variables we're interested in. 
 
 ```{r}
-sps_country_data2 <- sps_country_data1[, c('country', 'iso3', 'year', 'NY.GDP.MKTP.CD', 'SL.UEM.TOTL.ZS')]
+sps_country_data2 <- sps_country_data1[, c("country", "iso3", "year", "NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS")]
 ```
 
 <br>
@@ -128,20 +131,24 @@ sps_country_data2 <- sps_country_data1[, c('country', 'iso3', 'year', 'NY.GDP.MK
 Users can also search for other country-level variables in V-Dem and World Bank using keywords via the function ``search_var``. Here, we look for data on size of migrant population:
 
 ```{r}
-search_result <- search_var(keyword = 'international migrant')
+search_result <- search_var(keyword = "international migrant")
 head(search_result, n = 3)
 ```
 
 Based on the search return, users can add variable(s) to the baseline data set using ``merge_data``. In our example, we're interested in adding `SM.POP.TOTL.ZS` that captures the proportion of migrant population.
 
 ```{r}
-sps_country_data3 <- merge_data(data = sps_country_data2, vars = c('SM.POP.TOTL.ZS'))
-head(sps_country_data3, n = 3)
+sps_country_data3 <- merge_data(data = sps_country_data2, vars = c("SM.POP.TOTL.ZS"))
 ```
 **Arguments**
 
 * `data`: A `data.frame` where the new variables should be merged onto. 
 * `vars`: A vector with one or more variable names that should be merged onto `data`. We merge variables from V-Dem or World Bank data sets (use ``search_var()`` to search for names of new variables).
+
+```{r}
+head(sps_country_data3, n = 3)
+```
+
 
 <br>
 
@@ -155,7 +162,7 @@ Users can also merge their own external data set. In our example, 4 variables---
 data(ess_data)
 head(ess_data, n = 3)
 ```
-First, it is strongly recommended to standardize country names using ISO3 code. Users can do this very easily with R package `countrycode`.
+First, it is strongly recommended to standardize country names using ISO3 code. Users can do this easily with R package `countrycode`.
 
 ```{r}
 library(countrycode)
@@ -174,7 +181,7 @@ sps_country_data4 <- merge_data(data = sps_country_data3, newdata = ess_data, id
 * `newdata`: A `data.frame` that contains new variables to be merged on. When `newdata = NULL,` the function merges variables from V-Dem or World Bank data sets.
 * `vars`: A vector with one or more variable names that should be merged onto `data`. When `newdata = NULL,` this must be specified  (use ``search_var()`` to search for new variables). When `newdata` is specified and `vars = NULL` (default), the function merges all variables in `newdata`.
 * `id_site`: A unique identifier for sites. A column name in `data`. 
-* `id_year`: A unique identifier for time index. A column name in both `data` and `newdata`. If `NULL`, the same values in `newdata` will be merged onto all years in `data`. Ignored if `newdata` is `NULL`.
+* `id_year`: A unique identifier for year. A column name in both `data` and `newdata`. If `NULL` (default), the function assumes `newdata` is the cross-sectional data and the same values in `newdata` will be merged to all years in `data`. Ignored if `newdata` is `NULL`.
 
 <!-- The function uses fuzzy-match to match country names in two data sets when an exact match does not exist. Here, we discover that the two countries---Czech Republic and UK---are being matched incorrectly from this process. So we instead use an ISO3 code to re-merge the data: -->
 

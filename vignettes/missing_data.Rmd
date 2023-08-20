@@ -10,7 +10,7 @@ always_allow_html: yes
 
 <p class="lh-lg">
 
-**On this page, we describe how to use the `impute_var` function in R package `spsRdata` to impute missing values in a data set.**
+**On this page, we describe how to use function `impute_var()` in R package `spsRdata` to impute missing values in a data set.**
 
 <br>
 **Note**: We offer function `impute_var`, which is simply a wrapper for two popular missing-data-imputation methods, `amelia` and `miceRanger`. Our goal is to facilitate data collection and data cleaning such that users can use functions in R package `spsR` easily. Please read papers and user guides of a missing-data-imputation method you choose ([Amelia](https://gking.harvard.edu/amelia) and [MICERanger](https://github.com/FarrellDay/miceRanger)).
@@ -28,7 +28,7 @@ library(spsRdata)
 
 `impute_var` in R package `spsRdata` imputes missing values in both continuous and categorical variables. 
 
-Categorical variables (`character` or `factor`) are converted into dummies for each unique values prior to imputation. The data set can be either cross-sectional or time-series cross-sectional. Here, we demonstrate the utility of `impute_var` using the country-level data set `sps_country_data`, but `impute_var` can handle any type of data set.
+Categorical variables (`character` or `factor`) are converted into dummies for each unique value prior to imputation. The data set can be either cross-sectional or time-series cross-sectional. Here, we demonstrate the utility of `impute_var` using the country-level data set `sps_country_data`, but `impute_var` can handle any type of data set.
 
 ```{r}
 data(sps_country_data)
@@ -57,8 +57,8 @@ apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.n
 **Arguments**
 
 * `data`: A `data.frame` containing variables to impute.
-* `id_unit`: A unique identifier for sites. A column name in `data`. 
-* `id_time`: A unique identifier for time index. A column name in `data`. If unspecified, it assumes `data` is cross-sectional.
+* `id_site`: A unique identifier for sites. A column name in `data`. 
+* `id_time`: A unique identifier for time index. A column name in `data`. If unspecified (`NULL`; default), it assumes `data` is cross-sectional.
 * `var_impute`: A vector with one or more variable names for which imputation is performed. If unspecified (`NULL`), it imputes all variables in `data` except for the `id_site` and `id_time` variables.
 * `var_predictor`: A vector with one or more variable names that we use as predictors to impute variables in `var_impute`. If unspecified (`NULL`), the function uses all variables in `data` except for variables in `var_impute`.
 * `method`: Imputation method. Choose `amelia` or `miceranger`. Default is `amelia`. 
