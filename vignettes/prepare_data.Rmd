@@ -206,7 +206,7 @@ Finally, we clean data for function `sps()`. First, we need to have informative 
 
 ```{r}
 row.names(sps_country_data4) <- sps_country_data4$country
-X_Imm <- sps_country_data4[, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "imm_s_avg")]
+X_Imm <- sps_country_data4[, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", "SM.POP.TOTL.ZS", "female", "age", "education", "support_imm")]
 colnames(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 'Education', 'Immig_Support')
 head(X_Imm, n = 3)
 ```
