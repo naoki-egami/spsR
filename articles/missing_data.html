@@ -38,27 +38,16 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/intro.html">Get Started</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-tutorials">Tutorials</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-    <a class="dropdown-item" href="../articles/practical_guides.html">1. Practical Guides</a>
-    <a class="dropdown-item" href="../articles/methods_guides.html">2. Methodological Guides</a>
-  </div>
-</li>
 <li class="nav-item">
-  <a class="nav-link" href="../articles/full_example.html">Full Example</a>
+  <a class="nav-link" href="../articles/practical_guides.html">Practical Guides</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-more">
-    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Site-level Variables</a>
+    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Country-Level Variables</a>
     <a class="dropdown-item" href="../articles/missing_data.html">2. Handle Missing Data</a>
     <a class="dropdown-item" href="../articles/stratify_sps.html">3. Stratified SPS</a>
-    <a class="dropdown-item" href="../articles/sps_estimator.html">4. SPS Estimator</a>
   </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/faq.html">FAQ</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -89,15 +78,135 @@
 
     
     
-<div class="section level2">
-<h2 id="prepare-site-level-variabels">Prepare Site-Level Variabels<a class="anchor" aria-label="anchor" href="#prepare-site-level-variabels"></a>
-</h2>
-<p>Diana, please add your instruction of creating the data here.</p>
-<p>This page only focuses on creating the original data.</p>
-<p>You don’t need to talk about how to specify the target population of
-sites.</p>
+<p><br></p>
+<p class="lh-lg">
+</p>
+<p><strong>On this page, we describe how to use function
+<code><a href="https://rdrr.io/pkg/spsRdata/man/impute_var.html" class="external-link">impute_var()</a></code> in R package <code>spsRdata</code> to impute
+missing values in a data set.</strong></p>
+<br><strong>Note</strong>: We offer function <code>impute_var</code>,
+which is simply a wrapper for two popular missing-data-imputation
+methods, <code>amelia</code> and <code>miceRanger</code>. Our goal is to
+facilitate data collection and data cleaning such that users can use
+functions in R package <code>spsR</code> easily. Please read papers and
+user guides of a missing-data-imputation method you choose (<a href="https://gking.harvard.edu/amelia" class="external-link">Amelia</a> and <a href="https://github.com/FarrellDay/miceRanger" class="external-link">MICERanger</a>).
+
+<p><br></p>
+<div class="section level3">
+<h3 id="example-impute-missing-values-with-impute_var">
+<span style="color:#3366CC"><strong>Example: Impute Missing Values
+with <code>impute_var</code></strong></span><a class="anchor" aria-label="anchor" href="#example-impute-missing-values-with-impute_var"></a>
+</h3>
+<p class="lh-lg">
+</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsRdata/">spsRdata</a></span><span class="op">)</span></span></code></pre></div>
+<p><code>impute_var</code> in R package <code>spsRdata</code> imputes
+missing values in both continuous and categorical variables.</p>
+<p>Categorical variables (<code>character</code> or <code>factor</code>)
+are converted into dummies for each unique value prior to imputation.
+The data set can be either cross-sectional or time-series
+cross-sectional. Here, we demonstrate the utility of
+<code>impute_var</code> using the country-level data set
+<code>sps_country_data</code>, but <code>impute_var</code> can handle
+any type of data set.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sps_country_data</span><span class="op">)</span></span></code></pre></div>
+<p>As an example, we will impute two variables, Polity score
+(<code>e_p_polity</code>) and GDP (<code>NY.GDP.MKTP.CD</code>), which
+have some missing values.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">sps_country_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     e_p_polity NY.GDP.MKTP.CD </span></span>
+<span><span class="co">##            822            107</span></span></code></pre>
+<p>We impute the two variables using <code>amelia</code>. By specifying
+<code>id_site</code> and <code>id_time</code>, function
+<code>impute_var</code> can respect the time-series cross-sectional data
+structure. When we only specify <code>id_site</code>, the underlying
+imputation method assumes the cross-sectional data.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">imputed_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/impute_var.html" class="external-link">impute_var</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data</span>, </span>
+<span>                           id_unit <span class="op">=</span> <span class="st">'country'</span>, </span>
+<span>                           id_time <span class="op">=</span> <span class="st">'year'</span>, </span>
+<span>                           var_impute <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span><span class="op">)</span>,</span>
+<span>                           method <span class="op">=</span> <span class="st">"amelia"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">imputed_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     e_p_polity NY.GDP.MKTP.CD </span></span>
+<span><span class="co">##              0              0</span></span></code></pre>
+<p><strong>Arguments</strong></p>
+<ul>
+<li>
+<code>data</code>: A <code>data.frame</code> containing variables to
+impute.</li>
+<li>
+<code>id_site</code>: A unique identifier for sites. A column name
+in <code>data</code>.</li>
+<li>
+<code>id_time</code>: A unique identifier for time index. A column
+name in <code>data</code>. If unspecified (<code>NULL</code>; default),
+it assumes <code>data</code> is cross-sectional.</li>
+<li>
+<code>var_impute</code>: A vector with one or more variable names
+for which imputation is performed. If unspecified (<code>NULL</code>),
+it imputes all variables in <code>data</code> except for the
+<code>id_site</code> and <code>id_time</code> variables.</li>
+<li>
+<code>var_predictor</code>: A vector with one or more variable names
+that we use as predictors to impute variables in
+<code>var_impute</code>. If unspecified (<code>NULL</code>), the
+function uses all variables in <code>data</code> except for variables in
+<code>var_impute</code>.</li>
+<li>
+<code>method</code>: Imputation method. Choose <code>amelia</code>
+or <code>miceranger</code>. Default is <code>amelia</code>.</li>
+<li>
+<code>n_impute</code>: The number of imputed data sets to produce
+(equivalent of argument <code>m</code> in <code>amelia()</code> and
+<code>miceRanger()</code>). Default is 5.</li>
+<li>
+<code>...</code>: Arguments passed onto
+<code><a href="https://rdrr.io/pkg/Amelia/man/amelia.html" class="external-link">Amelia::amelia()</a></code> or
+<code><a href="https://rdrr.io/pkg/miceRanger/man/miceRanger.html" class="external-link">miceRanger::miceRanger()</a></code>.</li>
+</ul>
+<p><strong>Imputation Methods</strong></p>
+<ol style="list-style-type: decimal">
+<li>
+<a href="https://gking.harvard.edu/amelia" class="external-link">Amelia</a>. Please read
+Honaker, King, and Blackwell (2011) for more details.</li>
+<li>
+<a href="https://github.com/FarrellDay/miceRanger" class="external-link">MICERanger</a>.
+Please read Wilson (2020) for more details.</li>
+</ol>
+<div class="section level4">
+<h4 id="practical-suggestions">
+<strong>Practical Suggestions</strong><a class="anchor" aria-label="anchor" href="#practical-suggestions"></a>
+</h4>
+<p>Missing data imputation works better when users supply more variables
+and observations because the underlying method can learn relationships
+between different variables better. Therefore, in practice, we recommend
+imputing missing data first before sub-setting the data to the target
+population of sites and site-level variables they diversify. For
+example, if users want to use <code>sps_country_data</code> we provide
+in <code>spsRdata</code>, they can impute missing data first using the
+full data and then subset the data to focus on their target population
+of sites and site-level variables of interest.</p>
+<p><br></p>
 </div>
-  </main>
+</div>
+<div class="section level3">
+<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
+<p>Honaker, J., King, G., &amp; Blackwell, M. (2011). Amelia II: A
+program for missing data. Journal of statistical software, 45, 1-47.</p>
+<p>King, G., Honaker, J., Joseph, A., &amp; Scheve, K. (2001). Analyzing
+incomplete political science data: An alternative algorithm for multiple
+imputation. American political science review, 95(1), 49-69.</p>
+<p>Wilson, S. (2020). miceRanger: Multiple imputation by chained
+equations with random forests. R package version, 1(5).</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

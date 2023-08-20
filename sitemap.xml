@@ -43,16 +43,28 @@
     <loc>http://naokiegami.com/spsR/reference/X_Imm.html</loc>
   </url>
   <url>
-    <loc>http://naokiegami.com/spsR/reference/exp_estimate_Imm.html</loc>
-  </url>
-  <url>
     <loc>http://naokiegami.com/spsR/reference/exp_estimate_Imm_selected.html</loc>
   </url>
   <url>
     <loc>http://naokiegami.com/spsR/reference/index.html</loc>
   </url>
   <url>
+    <loc>http://naokiegami.com/spsR/reference/plot.sps_estimator.html</loc>
+  </url>
+  <url>
     <loc>http://naokiegami.com/spsR/reference/sps.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/reference/sps_cv.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/reference/sps_estimator.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/reference/sps_plot.html</loc>
+  </url>
+  <url>
+    <loc>http://naokiegami.com/spsR/reference/stratify_sps.html</loc>
   </url>
   <url>
     <loc>http://naokiegami.com/spsR/reference/summary.sps_estimator.html</loc>

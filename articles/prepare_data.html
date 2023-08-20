@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="spsR">
-<title>Prepare Site-Level Variables • spsR</title>
+<title>Prepare Country-Level Variables • spsR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Prepare Site-Level Variables">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Prepare Country-Level Variables">
 <meta property="og:description" content="spsR">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -38,27 +38,16 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/intro.html">Get Started</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-tutorials">Tutorials</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-    <a class="dropdown-item" href="../articles/practical_guides.html">1. Practical Guides</a>
-    <a class="dropdown-item" href="../articles/methods_guides.html">2. Methodological Guides</a>
-  </div>
-</li>
 <li class="nav-item">
-  <a class="nav-link" href="../articles/full_example.html">Full Example</a>
+  <a class="nav-link" href="../articles/practical_guides.html">Practical Guides</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-more">
-    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Site-level Variables</a>
+    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Country-Level Variables</a>
     <a class="dropdown-item" href="../articles/missing_data.html">2. Handle Missing Data</a>
     <a class="dropdown-item" href="../articles/stratify_sps.html">3. Stratified SPS</a>
-    <a class="dropdown-item" href="../articles/sps_estimator.html">4. SPS Estimator</a>
   </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/faq.html">FAQ</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -77,10 +66,10 @@
 
 
 
-
+<script src="prepare_data_files/kePrint-0.0.1/kePrint.js"></script><link href="prepare_data_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Prepare Site-Level Variables</h1>
+      <img src="" class="logo" alt=""><h1>Prepare Country-Level Variables</h1>
             
       
       
@@ -89,15 +78,866 @@
 
     
     
-<div class="section level2">
-<h2 id="prepare-site-level-variabels">Prepare Site-Level Variabels<a class="anchor" aria-label="anchor" href="#prepare-site-level-variabels"></a>
-</h2>
-<p>Diana, please add your instruction of creating the data here.</p>
-<p>This page only focuses on creating the original data.</p>
-<p>You don’t need to talk about how to specify the target population of
-sites.</p>
+<p><br></p>
+<p class="h5">
+<strong>On this page, we explain how to prepare country-level variables
+with <code>spsRdata</code> package (10 minute read).</strong>
+</p>
+<br><div class="card bg-light mb-3">
+<div class="card-header">
+<strong>Table of Contents</strong>
 </div>
-  </main>
+<div class="card-body">
+<ol style="list-style-type: decimal">
+<li><p><a href="#over"><strong>Overview</strong></a>: <br> We provide
+the overview of <code>spsRdata</code> package.</p></li>
+<li><p><a href="#default"><strong>Default Country-Level Data
+set</strong></a>: <br> We introduce a default country-level data set to
+ease data collection.</p></li>
+<li>
+<p><a href="#own"><strong>Prepare Your Own Country-Level
+Data</strong></a>: <br> We explain how to prepare your own country-level
+data using several functions in <code>spsRdata</code></p>
+<ul>
+<li><p><a href="#start">Start with
+<code>sps_country_data</code></a></p></li>
+<li><p><a href="#v-dem">Merge Country-Level Variables from V-Dem or
+World Bank Data Sets</a></p></li>
+<li><p><a href="#external">Merge External Data sets</a></p></li>
+<li><p><a href="#summary">Check Data</a></p></li>
+<li><p><a href="#clean">Clean Data for <code>sps()</code></a></p></li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<p><br></p>
+<div class="section level4">
+<h4 id="over">
+<span style="color:#3366CC"><strong>1.
+ Overview</strong></span><a class="anchor" aria-label="anchor" href="#over"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>The purpose of R package <code>spsRdata</code> is to facilitate data
+collection for <strong>multi-country</strong> studies. Users can supply
+data they prepared on this page in function <code><a href="../reference/sps.html">sps()</a></code> for site
+selection.</p>
+<p>Users can start with the default data set
+<code>sps_country_data</code> that contains a wide range of
+commonly-used country-level variables in the social sciences. R package
+<code>spsRdata</code> also offers several functions to merge additional
+country-level variables from well-known data sets (e.g., V-Dem and World
+Bank) as well as from any external data users want to add.</p>
+<p><em>Note</em>: We emphasize that R package <code>sps</code> and the
+corresponding SPS algorithm can be applied to any type of study site
+(e.g., states, districts, villages, or schools). As
+<em>multi-country</em> studies are most popular in political science, R
+package <code>spsRdata</code> focuses on country-level data collection
+for now, but we are planning to add more functionalities to facilitate
+data collection at different levels (e.g., states and cities) in the US
+as well.</p>
+</div>
+<div class="section level4">
+<h4 id="default">
+<span style="color:#3366CC"><strong>2.  Default Country-Level Data
+set</strong> </span><a class="anchor" aria-label="anchor" href="#default"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsRdata/">spsRdata</a></span><span class="op">)</span></span></code></pre></div>
+<p>In R package <code>spsRdata</code>, we provide a country-level data
+set (<code>sps_country_data</code>) comprised of 22 variables for 179
+countries between 2010 and 2022. It contains a wide range of variables
+commonly used in the social sciences: they represent political,
+economic, and social characteristics of countries. These variables are
+collected from the following sources.</p>
+<ul>
+<li>
+<a href="https://v-dem.net/data/the-v-dem-dataset" class="external-link">Varieties of
+Democracy (V-Dem) project</a>
+<ul>
+<li>V-Dem data set collects variables from a variety of sources
+including United Nations, Quality of Government, Clio Infra, and Polity5
+Project, and currently includes the most comprehensive political
+indicators.</li>
+</ul>
+</li>
+<li><a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation" class="external-link">World
+Bank Indicators</a></li>
+<li><a href="https://unstats.un.org/unsd/methodology/m49/overview" class="external-link">UN
+Statistics</a></li>
+<li><a href="https://resourcewatch.org/data/explore/soc_071_world_languages?section=Discover&amp;selectedCollection=&amp;zoom=3&amp;lat=0&amp;lng=0&amp;pitch=0&amp;bearing=0&amp;basemap=dark&amp;labels=light&amp;layers=%255B%257B%2522dataset%2522%253A%252220662342-dcdd-4a42-9f58-bcc80217de71%2522%252C%2522opacity%2522%253A1%252C%2522layer%2522%253A%2522f2d76e6b-060d-4dc9-83ea-284bef6b2aae%2522%257D%255D&amp;aoi=&amp;page=1&amp;sort=most-viewed&amp;sortDirection=-1" class="external-link">University
+of Groningen’s World Languages</a></li>
+</ul>
+<p><code>sps_country_data</code> includes the following variables.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sps_country_data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sps_country_data</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   country iso3 year                    region       subregion AG.LND.TOTL.K2</span></span>
+<span><span class="co">## 1  Mexico  MEX 2010 Latin America &amp; Caribbean Central America        1943950</span></span>
+<span><span class="co">## 2  Mexico  MEX 2011 Latin America &amp; Caribbean Central America        1943950</span></span>
+<span><span class="co">## 3  Mexico  MEX 2012 Latin America &amp; Caribbean Central America        1943950</span></span>
+<span><span class="co">##   e_p_polity v2x_libdem v2x_polyarchy v2x_elecreg v2x_corr v2x_divparctrl</span></span>
+<span><span class="co">## 1          8      0.459         0.649           1    0.637         -1.567</span></span>
+<span><span class="co">## 2          8      0.457         0.647           1    0.637         -1.567</span></span>
+<span><span class="co">## 3          8      0.449         0.645           1    0.662         -1.454</span></span>
+<span><span class="co">##   v2x_gender v2x_rule v2x_ex_military SL.UEM.TOTL.ZS NY.GDP.MKTP.CD    lang</span></span>
+<span><span class="co">## 1      0.745    0.581           0.071           5.30   1.057801e+12 Spanish</span></span>
+<span><span class="co">## 2      0.746    0.581           0.071           5.17   1.180487e+12 Spanish</span></span>
+<span><span class="co">## 3      0.761    0.562           0.071           4.89   1.201094e+12 Spanish</span></span>
+<span><span class="co">##   SP.POP.TOTL SE.PRM.CUAT.ZS v2x_civlib v2xpe_exlsocgr</span></span>
+<span><span class="co">## 1   112532401       74.74190      0.688          0.538</span></span>
+<span><span class="co">## 2   114150481             NA      0.687          0.538</span></span>
+<span><span class="co">## 3   115755909       77.18234      0.694          0.538</span></span></code></pre>
+<p><strong>Descriptions of Variables:</strong></p>
+<pre><code><span><span class="co">## Loading required package: kableExtra</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,</span></span>
+<span><span class="co">## logical.return = TRUE, : there is no package called 'kableExtra'</span></span></code></pre>
+<pre><code><span><span class="co">## Installing package into '/home/runner/work/_temp/Library'</span></span>
+<span><span class="co">## (as 'lib' is unspecified)</span></span></code></pre>
+<pre><code><span><span class="co">## also installing the dependencies 'selectr', 'cpp11', 'rvest', 'webshot', 'svglite'</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: knitr</span></span></code></pre>
+<table class="table  lightable-classic-2 table table-hover table-condensed" style='font-family: "Arial Narrow", "Source Sans Pro", sans-serif; margin-left: auto; margin-right: auto; font-size: 12px; margin-left: auto; margin-right: auto;'>
+<thead><tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+Scale
+</th>
+<th style="text-align:left;">
+Coverage
+</th>
+<th style="text-align:left;">
+Source
+</th>
+</tr></thead>
+<tbody>
+<tr grouplength="3">
+<td colspan="5" style="border-bottom: 0;">
+<strong>Key Identifiers</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+country
+</td>
+<td style="text-align:left;">
+Country name used by V-Dem (original variable: country_name)
+</td>
+<td style="text-align:left;">
+Text
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+iso3
+</td>
+<td style="text-align:left;">
+ISO3 country code (original variable: country_text_id)
+</td>
+<td style="text-align:left;">
+3-letter code
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+World Bank
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+year
+</td>
+<td style="text-align:left;">
+Year coded annually from 1789-2022
+</td>
+<td style="text-align:left;">
+Integer (1789 to 2022)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr grouplength="3">
+<td colspan="5" style="border-bottom: 0;">
+<strong>Geographic Indicators</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+region
+</td>
+<td style="text-align:left;">
+World bank region category
+</td>
+<td style="text-align:left;">
+Text (7 unique values)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+World Bank
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+subregion
+</td>
+<td style="text-align:left;">
+UN subregion category
+</td>
+<td style="text-align:left;">
+Text (20 unique values)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+UN Statistics
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+AG.LND.TOTL.K2
+</td>
+<td style="text-align:left;">
+A country’s total land area (excl. area under inland water bodies,
+national claims to continental shelf, and exclusive economic zones)
+</td>
+<td style="text-align:left;">
+Continuous (in sq. km)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+World Bank
+</td>
+</tr>
+<tr grouplength="3">
+<td colspan="5" style="border-bottom: 0;">
+<strong>Democracy Indicators</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+e_p_polity
+</td>
+<td style="text-align:left;">
+Polity score computed by subtracting the autocracy score from the
+democracy score; Data for 2019 and 2020 exists for US only.
+</td>
+<td style="text-align:left;">
+Interval, from -10 (strongly autocratic) to +10 (strongly democratic)
+</td>
+<td style="text-align:left;">
+2010 - 2018
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_libdem
+</td>
+<td style="text-align:left;">
+Liberal democracy index: measures to what extent the individual and
+minority rights are protected against the tyranny of the state and the
+tyranny of the majority
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_polyarchy
+</td>
+<td style="text-align:left;">
+Electoral democracy index: measures to what extent the ideal of
+electoral democracy is achieved
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr grouplength="6">
+<td colspan="5" style="border-bottom: 0;">
+<strong>Political Indicators</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_elecreg
+</td>
+<td style="text-align:left;">
+Electoral regime index: measures whether regularly scheduled national
+elections on course
+</td>
+<td style="text-align:left;">
+Binary (0 = (a) the election was “aborted” (those elected did not resume
+power) or (b) an “electoral interruption”; 1 = an executive or
+legislative election is held)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_corr
+</td>
+<td style="text-align:left;">
+Political corruption index: measures pervasiveness of political
+corruption
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_divparctrl
+</td>
+<td style="text-align:left;">
+Divided party control index: measures whether executive and legislature
+are controlled by different political parties.
+</td>
+<td style="text-align:left;">
+Interval, the positive extreme signifies Divided party control, the
+intermediate values signify Unified coalition control, and the negative
+extreme signifies Unified party control
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_gender
+</td>
+<td style="text-align:left;">
+Women political empowerment index: measures level of increasing capacity
+for women, leading to greater choice, agency, and participation in
+societal decision-making
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_rule
+</td>
+<td style="text-align:left;">
+Rule of law index: measures to what extent laws are enforced
+transparently, independently, predictably, and impartially
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_ex_military
+</td>
+<td style="text-align:left;">
+Military dimension index: measures to what extent the power base of the
+chief executive determined by the military
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 0;">
+<strong>Economic Indicators</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+SL.UEM.TOTL.ZS
+</td>
+<td style="text-align:left;">
+Unemployment: share of the labor force that is without work but
+available for and seeking employment
+</td>
+<td style="text-align:left;">
+Interval, from 0 to 100 (% of total labor force)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+World Bank
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+NY.GDP.MKTP.CD
+</td>
+<td style="text-align:left;">
+GDP
+</td>
+<td style="text-align:left;">
+Continuous (current US dollar)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+World Bank
+</td>
+</tr>
+<tr grouplength="3">
+<td colspan="5" style="border-bottom: 0;">
+<strong>Sociodemographic Indicators</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+lang
+</td>
+<td style="text-align:left;">
+Official language used in the country: separated by “|” if there are
+more than one official languages
+</td>
+<td style="text-align:left;">
+Text
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+Groningen
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+SP.POP.TOTL
+</td>
+<td style="text-align:left;">
+Total population
+</td>
+<td style="text-align:left;">
+Continuous
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+World Bank
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+SE.PRM.CUAT.ZS
+</td>
+<td style="text-align:left;">
+Share of population ages over 25 that attained or completed primary
+education
+</td>
+<td style="text-align:left;">
+Interval, from 0 to 100 (% of population 25+)
+</td>
+<td style="text-align:left;">
+2010 - 2020
+</td>
+<td style="text-align:left;">
+World Bank
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 0;">
+<strong>Social Indicators</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2x_civlib
+</td>
+<td style="text-align:left;">
+Civil liberties index: measures the extent to which civil liberty is
+respected.
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1)
+</td>
+<td style="text-align:left;">
+2010 - 2022
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-style: italic;padding-left: 2em;" indentlevel="1">
+v2xpe_exlsocgr
+</td>
+<td style="text-align:left;">
+Exclusion by social group index: measures to what extent individuals are
+denied access to services or participation in governed spaces based on
+their identity or belonging to a particular group.
+</td>
+<td style="text-align:left;">
+Interval, from low to high (0-1); Lower scores indicate a normatively
+better situation (e.g. more democratic) and higher scores a normatively
+worse situation (e.g. less democratic)
+</td>
+<td style="text-align:left;">
+2010 - 2021
+</td>
+<td style="text-align:left;">
+V-Dem
+</td>
+</tr>
+</tbody>
+</table>
+<p>Users can check the codebook using
+<code>data(sps_country_codebook)</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sps_country_codebook</span><span class="op">)</span></span>
+<span><span class="va">sps_country_codebook</span><span class="op">[</span><span class="va">sps_country_codebook</span><span class="op">$</span><span class="va">Variable</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> </span>
+<span>                       <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"country"</span>, <span class="st">"year"</span>, <span class="st">"NY.GDP.MKTP.CD"</span>, <span class="st">"SP.POP.TOTL"</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##          Variable                                                  Description</span></span>
+<span><span class="co">## 1         country Country name used by V-Dem (original variable: country_name)</span></span>
+<span><span class="co">## 3            year                           Year coded annually from 1789-2022</span></span>
+<span><span class="co">## 17 NY.GDP.MKTP.CD                                                          GDP</span></span>
+<span><span class="co">## 19    SP.POP.TOTL                                             Total population</span></span>
+<span><span class="co">##                             Scale    Coverage     Source</span></span>
+<span><span class="co">## 1                            Text 2010 - 2022      V-Dem</span></span>
+<span><span class="co">## 3          Integer (1789 to 2022) 2010 - 2022      V-Dem</span></span>
+<span><span class="co">## 17 Continuous (current US dollar) 2010 - 2022 World Bank</span></span>
+<span><span class="co">## 19                     Continuous 2010 - 2022 World Bank</span></span></code></pre>
+<p><br></p>
+</div>
+<div class="section level4">
+<h4 id="own">
+<span style="color:#3366CC"><strong>3.  Prepare Your Own
+Country-Level Data</strong></span><a class="anchor" aria-label="anchor" href="#own"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>We follow our example in the <a href="http://naokiegami.com/spsR/articles/intro.html">Get Started
+Page</a> and use a multi-country survey experiment by Naumann et
+al. (2018) to illustrate how to use <code>sps_country_data</code> and
+various functions in <code>spsRdata</code>.</p>
+<div class="section level5">
+<h5 id="start">
+<span style="color:#3366CC"><strong>3.1  Start with
+<code>sps_country_data</code></strong></span><a class="anchor" aria-label="anchor" href="#start"></a>
+</h5>
+<p class="lh-lg">
+</p>
+<p>In our example, we are interested in 8 country-level variables
+discussed in the original paper: GDP, unemployment rates, size of
+migrant population, general support for immigration, the proportion of
+female, the mean age, the mean education, and sub-regions in Europe. We
+illustrate how to collect these variables step by step.</p>
+<p>We are interested in 15 European countries and variables measured in
+2015 (the year in which Naumann et al (2018)’s experiments were
+conducted). If users are running experiments now, they can, of course,
+choose site-level variables measured in most recent years.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">country_use</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Austria"</span>, <span class="st">"Belgium"</span>, <span class="st">"Czechia"</span>, <span class="st">"Denmark"</span>, <span class="st">"Finland"</span>, </span>
+<span>                 <span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"Ireland"</span>,<span class="st">"Netherlands"</span>, <span class="st">"Norway"</span>, </span>
+<span>                 <span class="st">"Slovenia"</span>, <span class="st">"Spain"</span>, <span class="st">"Sweden"</span>, <span class="st">"Switzerland"</span>, <span class="st">"United Kingdom"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sps_country_data1</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">sps_country_data</span><span class="op">[</span><span class="va">sps_country_data</span><span class="op">$</span><span class="va">year</span> <span class="op">==</span> <span class="fl">2015</span> <span class="op">&amp;</span> </span>
+<span>                     <span class="va">sps_country_data</span><span class="op">$</span><span class="va">country</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">country_use</span>,<span class="op">]</span></span></code></pre></div>
+<p>Three out of the 8 variables are already in our default data set:
+sub-regions (<code>subregion</code>), GDP (<code>NY.GDP.MKTP.CD</code>)
+and unemployment rate (<code>SL.UNEM.TOTL.ZS</code>). So we subset the
+data set to include only those variables we’re interested in.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sps_country_data2</span> <span class="op">&lt;-</span> <span class="va">sps_country_data1</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"country"</span>, <span class="st">"iso3"</span>, </span>
+<span>                                           <span class="st">"subregion"</span>, <span class="st">"year"</span>, </span>
+<span>                                           <span class="st">"NY.GDP.MKTP.CD"</span>, <span class="st">"SL.UEM.TOTL.ZS"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<p><br></p>
+</div>
+<div class="section level5">
+<h5 id="v-dem">
+<span style="color:#3366CC"><strong>3.2  Merge Country-Level
+Variables from V-Dem or World Bank Data Sets</strong></span><a class="anchor" aria-label="anchor" href="#v-dem"></a>
+</h5>
+<p class="lh-lg">
+</p>
+<p>Users can also search for other country-level variables in V-Dem and
+World Bank using keywords via the function <code>search_var</code>.
+Here, we look for data on size of migrant population:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">search_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/search_var.html" class="external-link">search_var</a></span><span class="op">(</span>keyword <span class="op">=</span> <span class="st">"international migrant"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">search_result</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">##   Variable          Name                             Description Coverage Source</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> SG.POP.MIGR.FE.ZS Female migrants (% of internati… Percentage… Annual   World…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> SM.POP.TOTL       International migrant stock, to… Internatio… Annual   World…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> SM.POP.TOTL.ZS    International migrant stock (% … Internatio… Annual   World…</span></span></code></pre>
+<p>Based on the search return, users can add variable(s) to the baseline
+data set using <code>merge_data</code>. In our example, we’re interested
+in adding <code>SM.POP.TOTL.ZS</code> that captures the proportion of
+migrant population.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sps_country_data3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/merge_data.html" class="external-link">merge_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data2</span>, </span>
+<span>                                vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SM.POP.TOTL.ZS"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "newdata is unspecified. Merging variables listed in vars onto data."</span></span>
+<span><span class="co">## [1] "Merging SM.POP.TOTL.ZS from World Bank"</span></span></code></pre>
+<p><strong>Arguments</strong></p>
+<ul>
+<li>
+<code>data</code>: A <code>data.frame</code> where the new variables
+should be merged onto.</li>
+<li>
+<code>vars</code>: A vector with one or more variable names that
+should be merged onto <code>data</code>. We merge variables from V-Dem
+or World Bank data sets (use <code><a href="https://rdrr.io/pkg/spsRdata/man/search_var.html" class="external-link">search_var()</a></code> to search for
+names of new variables).</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sps_country_data3</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   iso3 year     country       subregion NY.GDP.MKTP.CD SL.UEM.TOTL.ZS</span></span>
+<span><span class="co">## 1  SWE 2015      Sweden Northern Europe   5.051038e+11           7.43</span></span>
+<span><span class="co">## 2  CHE 2015 Switzerland  Western Europe   6.941182e+11           4.80</span></span>
+<span><span class="co">## 3  FRA 2015      France  Western Europe   2.439189e+12          10.35</span></span>
+<span><span class="co">##   SM.POP.TOTL.ZS</span></span>
+<span><span class="co">## 1       16.76756</span></span>
+<span><span class="co">## 2       29.38669</span></span>
+<span><span class="co">## 3       12.08848</span></span></code></pre>
+<p><br></p>
+</div>
+<div class="section level5">
+<h5 id="external">
+<span style="color:#3366CC"><strong>3.3  Merge External Data
+sets</strong></span><a class="anchor" aria-label="anchor" href="#external"></a>
+</h5>
+<p class="lh-lg">
+</p>
+<p>Users can also merge their own external data set. In our example, 4
+variables—the proportion of female, the mean age, the mean education,
+and general support for immigration—come from European Social Survey
+data. As an illustration, we included this external data as
+<code>ess_data</code>.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ess_data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ess_data</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Groups:   country [3]</span></span></span>
+<span><span class="co">##   country        female   age education support_imm</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> Austria         0.509  49.5      2.33        2.95</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Belgium         0.492  47.5      2.74        3.13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> Czech Republic  0.529  46.7      2.68        2.28</span></span></code></pre>
+<p>First, it is strongly recommended to standardize country names using
+ISO3 code. Users can do this easily with R package
+<code>countrycode</code>.</p>
+<pre><code><span><span class="co">## Loading required package: countrycode</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,</span></span>
+<span><span class="co">## logical.return = TRUE, : there is no package called 'countrycode'</span></span></code></pre>
+<pre><code><span><span class="co">## Installing package into '/home/runner/work/_temp/Library'</span></span>
+<span><span class="co">## (as 'lib' is unspecified)</span></span></code></pre>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/countrycode/" class="external-link">countrycode</a></span><span class="op">)</span></span>
+<span><span class="va">ess_data</span><span class="op">$</span><span class="va">iso3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://vincentarelbundock.github.io/countrycode/reference/countrycode.html" class="external-link">countrycode</a></span><span class="op">(</span>sourcevar <span class="op">=</span> <span class="va">ess_data</span><span class="op">$</span><span class="va">country</span>, </span>
+<span>                             origin <span class="op">=</span> <span class="st">"country.name"</span>, destination <span class="op">=</span> <span class="st">"iso3c"</span><span class="op">)</span></span></code></pre></div>
+<p>Then, users can use the same function <code>merge_data</code> to
+merge their own external data set as well.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sps_country_data4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/merge_data.html" class="external-link">merge_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data3</span>, </span>
+<span>                                newdata <span class="op">=</span> <span class="va">ess_data</span>, id_site <span class="op">=</span> <span class="st">'iso3'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "id_year unspecified. Assumes newdata is cross-sectional."</span></span></code></pre>
+<p><strong>Arguments</strong></p>
+<ul>
+<li>
+<code>data</code>: A <code>data.frame</code> where the new variables
+should be merged onto.</li>
+<li>
+<code>newdata</code>: A <code>data.frame</code> that contains new
+variables to be merged on. When <code>newdata = NULL,</code> the
+function merges variables from V-Dem or World Bank data sets.</li>
+<li>
+<code>vars</code>: A vector with one or more variable names that
+should be merged onto <code>data</code>. When
+<code>newdata = NULL,</code> this must be specified (use
+<code><a href="https://rdrr.io/pkg/spsRdata/man/search_var.html" class="external-link">search_var()</a></code> to search for new variables). When
+<code>newdata</code> is specified and <code>vars = NULL</code>
+(default), the function merges all variables in
+<code>newdata</code>.</li>
+<li>
+<code>id_site</code>: A unique identifier for sites. A column name
+in <code>data</code>.</li>
+<li>
+<code>id_year</code>: A unique identifier for year. A column name in
+both <code>data</code> and <code>newdata</code>. If <code>NULL</code>
+(default), the function assumes <code>newdata</code> is the
+cross-sectional data and the same values in <code>newdata</code> will be
+merged to all years in <code>data</code>. Ignored if
+<code>newdata</code> is <code>NULL</code>.</li>
+</ul>
+<!-- The function uses fuzzy-match to match country names in two data sets when an exact match does not exist. Here, we discover that the two countries---Czech Republic and UK---are being matched incorrectly from this process. So we instead use an ISO3 code to re-merge the data: --><!-- ```{r} --><!-- library(countrycode) --><!-- ess_data$iso3 <- countrycode(sourcevar = ess_data$country, origin = "country.name", destination = "iso3c") --><!-- ess_data <- ess_data[,which(names(ess_data) != 'country')] --><!-- head(ess_data, n = 3) --><!-- sps_country_data4 <- merge_data(data = sps_country_data3, newdata = ess_data, id_site = 'iso3') --><!-- head(sps_country_data4[sps_country_data4$country == 'Czechia',]) --><!-- ``` -->
+</div>
+<div class="section level5">
+<h5 id="summary">
+<span style="color:#3366CC"><strong>3.4  Check
+Data</strong></span><a class="anchor" aria-label="anchor" href="#summary"></a>
+</h5>
+<p class="lh-lg">
+</p>
+<p>Users can run simple descriptive analyses to examine distribution and
+missing values. The function <code>desc_stat</code> returns simple
+descriptive statistics and number of missing entries in each year in the
+data set. Character and factor variables are automatically binarized to
+obtain descriptive statistics:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">desc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/desc_stat.html" class="external-link">desc_stat</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">desc</span><span class="op">$</span><span class="va">desc</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##         variable         mean        stdev          min          p10</span></span>
+<span><span class="co">## 1 NY.GDP.MKTP.CD 9.456782e+11 1.067538e+12 4.310751e+10 2.066336e+11</span></span>
+<span><span class="co">## 2 SL.UEM.TOTL.ZS 7.967333e+00 4.399676e+00 4.300000e+00 4.692000e+00</span></span>
+<span><span class="co">## 3 SM.POP.TOTL.ZS 1.344696e+01 5.756509e+00 3.842226e+00 7.483406e+00</span></span>
+<span><span class="co">##            p25          p50          p75          p90          max  n</span></span>
+<span><span class="co">## 1 2.972241e+11 4.623356e+11 9.808649e+11 2.736590e+12 3.357586e+12 15</span></span>
+<span><span class="co">## 2 5.175000e+00 6.870000e+00 9.170000e+00 1.017400e+01 2.206000e+01 15</span></span>
+<span><span class="co">## 3 1.155432e+01 1.269024e+01 1.539799e+01 1.718646e+01 2.938669e+01 15</span></span>
+<span><span class="co">##   nmiss_total</span></span>
+<span><span class="co">## 1           0</span></span>
+<span><span class="co">## 2           0</span></span>
+<span><span class="co">## 3           0</span></span></code></pre>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">desc</span><span class="op">$</span><span class="va">miss</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##         variable nmiss_total nmiss:2015</span></span>
+<span><span class="co">## 1 NY.GDP.MKTP.CD           0          0</span></span>
+<span><span class="co">## 2 SL.UEM.TOTL.ZS           0          0</span></span>
+<span><span class="co">## 3 SM.POP.TOTL.ZS           0          0</span></span></code></pre>
+<p>A list object <code>desc</code> returns descriptive summary of each
+variable in the data set, whereas <code>miss</code> returns total counts
+of missing values (i.e., number of missing countries) in each year in
+the data set. If the years in which a user is interested in using
+contains a lot of missing values, we suggest imputing missing values
+using the <code>impute_var</code> function in R package
+<code>spsR</code>. Please see <a href="http://naokiegami.com/spsR/articles/missing_data.html">Handle
+Missing Data</a>.</p>
+</div>
+<div class="section level5">
+<h5 id="clean">
+<span style="color:#3366CC"><strong>3.5  Clean Data for
+<code>sps()</code></strong></span><a class="anchor" aria-label="anchor" href="#clean"></a>
+</h5>
+<p class="lh-lg">
+</p>
+<p>Finally, we clean data for function <code><a href="../reference/sps.html">sps()</a></code>. First, we
+need to have informative row names for the data.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sps_country_data4</span><span class="op">$</span><span class="va">country</span></span></code></pre></div>
+<p>Second, for categorical variables, we binarize them.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X_region</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">subregion</span> <span class="op">-</span> <span class="fl">1</span>, </span>
+<span>                         data <span class="op">=</span> <span class="va">sps_country_data4</span><span class="op">[</span>, <span class="st">"subregion"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X_region</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Eastern Europe"</span>, <span class="st">"Northern Europe"</span>, </span>
+<span>                        <span class="st">"Southern Europe"</span>, <span class="st">"Western Europe"</span><span class="op">)</span></span></code></pre></div>
+<p>Third, we keep all relevant variables and rename them.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X_Imm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NY.GDP.MKTP.CD"</span>, <span class="st">"SL.UEM.TOTL.ZS"</span>, </span>
+<span>                                     <span class="st">"SM.POP.TOTL.ZS"</span>, <span class="st">"female"</span>, <span class="st">"age"</span>, </span>
+<span>                                     <span class="st">"education"</span>, <span class="st">"support_imm"</span><span class="op">)</span><span class="op">]</span>, </span>
+<span>               <span class="va">X_region</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X_Imm</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GDP'</span>, <span class="st">'Unemployment'</span>, <span class="st">'Immigration'</span>, <span class="st">'Female'</span>, <span class="st">'Age'</span>, </span>
+<span>                     <span class="st">'Education'</span>, <span class="st">'Immig_Support'</span>, </span>
+<span>                     <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X_region</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">X_Imm</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                      GDP Unemployment Immigration    Female      Age Education</span></span>
+<span><span class="co">## Austria     381971148531         5.72    17.46573 0.5088666 49.48649  2.326121</span></span>
+<span><span class="co">## Belgium     462335574841         8.48    12.28353 0.4922179 47.50259  2.741683</span></span>
+<span><span class="co">## Switzerland 694118186380         4.80    29.38669 0.4833333 48.04039  2.523684</span></span>
+<span><span class="co">##             Immig_Support Eastern Europe Northern Europe Southern Europe</span></span>
+<span><span class="co">## Austria          2.948402              0               0               0</span></span>
+<span><span class="co">## Belgium          3.130319              0               0               0</span></span>
+<span><span class="co">## Switzerland      3.444831              0               0               0</span></span>
+<span><span class="co">##             Western Europe</span></span>
+<span><span class="co">## Austria                  1</span></span>
+<span><span class="co">## Belgium                  1</span></span>
+<span><span class="co">## Switzerland              1</span></span></code></pre>
+<p>This <code>X_Imm</code> is ready for function <code><a href="../reference/sps.html">sps()</a></code>.</p>
+<!-- ```{r} -->
+<!-- round(desc$corr[1:3, 1:3], 3) -->
+<!-- ``` -->
+<!-- A list object `corr` returns correlation matrix for all pairs of variables in the dataset. Highly correlated variables mean that they are capturing similar cross-country contexts, so users might want to consider dropping one of them prior to implementing SPS.  -->
+<p><br></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Michael Coppedge et al. 2023. “V-Dem Dataset V13.” Varieties of
+Democracy (V-Dem) Project. <a href="https://doi.org/10.23696/VDEMDS23" class="external-link uri">https://doi.org/10.23696/VDEMDS23</a>.</p>
+<p>University of Groningen. 2016. “World Languages.” University of
+Groningen Open Data. www.resourcewatch.org.</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

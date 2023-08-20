@@ -38,27 +38,16 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/intro.html">Get Started</a>
 </li>
-<li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-tutorials">Tutorials</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-    <a class="dropdown-item" href="../articles/practical_guides.html">1. Practical Guides</a>
-    <a class="dropdown-item" href="../articles/methods_guides.html">2. Methodological Guides</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/full_example.html">Full Example</a>
+<li class="active nav-item">
+  <a class="nav-link" href="../articles/practical_guides.html">Practical Guides</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-more">
-    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Site-level Variables</a>
+    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Country-Level Variables</a>
     <a class="dropdown-item" href="../articles/missing_data.html">2. Handle Missing Data</a>
     <a class="dropdown-item" href="../articles/stratify_sps.html">3. Stratified SPS</a>
-    <a class="dropdown-item" href="../articles/sps_estimator.html">4. SPS Estimator</a>
   </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/faq.html">FAQ</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -89,11 +78,363 @@
 
     
     
-<div class="section level3">
-<h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
-</h3>
+<p><br></p>
+<p class="h5">
+<strong>On this page, we provide the practical guidance to
+<code>spsR</code> package.</strong>
+</p>
+<br><div class="card bg-light mb-3">
+<div class="card-header">
+<strong>Table of Contents</strong>
 </div>
-  </main>
+<div class="card-body">
+<ol style="list-style-type: decimal">
+<li><p><a href="#step"><strong>Step by Step Instruction</strong></a>:
+<br> We summarize the implementation details and
+recommendations.</p></li>
+<li><p><a href="#question"><strong>Common Questions and
+Concerns</strong></a>: <br> We answer common questions (e.g, concerns of
+unmeasured variables).</p></li>
+<li>
+<p><a href="#prepare"><strong>Prepare Site-Level
+Variables</strong></a>: <br> We offer several data sets and functions to
+ease data collection</p>
+<ul>
+<li><p><a href="#prepare-country">Country-Level Variables</a></p></li>
+<li><p><a href="#prepare-us">State- or City-Level Variables in the
+US</a></p></li>
+<li><p><a href="#missing">How to Handle Missing Data</a></p></li>
+</ul>
+</li>
+<li>
+<p><a href="#useful"><strong>Useful Information for Multi-Country
+Survey Experiments</strong></a>: <br> We offer useful information about
+implementing multi-country survey experiments.</p>
+<ul>
+<li><p><a href="#firms">Survey Firms</a></p></li>
+<li>
+<p><a href="#translation">Translation</a></p>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+
+</div>
+<p><br></p>
+<div class="section level3">
+<h3 id="step">
+<span style="color:#3366CC"><strong>1.  Step by Step
+Instruction</strong></span><a class="anchor" aria-label="anchor" href="#step"></a>
+</h3>
+<p class="lh-lg">
+</p>
+<p>Here, we summarize step by step instructions about how to use
+<code>spsR</code> package to (1) select study sites and (2) estimate the
+average-site average treatment effect (the average-site ATE).</p>
+<div class="section level4">
+<h4 id="site-selection-via-synthetic-purposive-sampling">
+<span style="color:#3366CC">1.1  Site Selection via Synthetic
+Purposive Sampling</span><a class="anchor" aria-label="anchor" href="#site-selection-via-synthetic-purposive-sampling"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>How can we select study sites for external validity?</p>
+<details><summary><strong>Step 1: Define the target population of sites</strong>
+</summary>
+Users first specify a target population of sites from which they sample
+sites. This defines the target against which external validity of a
+given substantive theory is evaluated. This step is equivalent to
+clarifying the eligibility criteria or the scope condition of your
+theory, e.g., if a theory is developed to explain advanced democracies
+in Europe, the target population of sites should include advanced
+democracies in Europe but should not include other countries, such as
+Japan or the U.S. In our example on the <a href="http://naokiegami.com/spsR/articles/intro.html">Get Started
+Page</a>, we chose 15 European countries as the target population of
+sites.
+</details><details><summary><strong>Step 2: Choose site-level variables that you want to
+diversify</strong>
+</summary><p>It is recommended to choose contextual moderators that predict
+differences in the ATEs across sites. This step is what researchers are
+already doing implicitly when diversifying one or two variables by hand
+in practice. With SPS, users can incorporate all the covariates that are
+expected to moderate the ATEs across sites (instead of just one or two
+variables). For example, in our example on the <a href="http://naokiegami.com/spsR/articles/intro.html">Get Started
+Page</a>, we chose 7 variables discussed in the original paper: GDP,
+size of migrant population, unemployment rates, general support for
+immigration, the proportion of females, the mean age, and the mean
+education.</p>
+<p>We recommend against including too many irrelevant variables because
+SPS might decrease the balance on key variables to improve the balance
+on such irrelevant variables. When there is a concern about unobserved
+site-level variables, it is recommended to include some proxies of such
+unobserved variables, if feasible. By diversifying such observed proxies
+that are associated with the unobserved variables, SPS can often
+mitigate the potential influence of unobserved variables. Please also
+see <a href="#question">Common Questions and Concerns</a> below to learn
+more about how to handle unmeasured confounders.</p>
+More practically, to ease data collection, we offer the default
+county-level data set that contains most of common country-level
+variables social scientists often diversify, e.g., geography, polity
+score, GDP, population, education-level, and so on. Please see <a href="http://naokiegami.com/spsR/articles/prepare_data.html">Prepare
+Country-Level Data</a>.
+</details><details><summary><strong>Step 3: Run (Stratified) Synthetic Purposive Sampling</strong>
+</summary><p>After collecting site-level variables (see some recommendations in <a href="#prepare">Prepare Site-Level Varaibles</a>), users can run
+function <code><a href="../reference/sps.html">sps()</a></code> to optimally diversify the chosen site-level
+variables. Please see the <a href="http://naokiegami.com/spsR/articles/intro.html">Get Started
+Page</a> for implementation.</p>
+<p>It is recommended to <em>stratify</em> key site-level variables using
+function <code><a href="../reference/stratify_sps.html">stratify_sps()</a></code>. This stratification can allow
+users to impose certain conditions to site selection. For example,
+researchers can make sure to select at least one country from each
+region of the world. Researchers can also incorporate other domain
+knowledge and practical constraints into SPS. For example, users might
+not be able to run experiments in certain countries that are not covered
+by online survey firms. Users might want to include certain sites
+because they provide a hard test for a given theory. Please see <a href="http://naokiegami.com/spsR/articles/stratify_sps.html">Stratified
+SPS</a> for different examples of stratification.</p>
+In practice, it is recommended to visualize site election using function
+<code><a href="../reference/sps_plot.html">sps_plot()</a></code> and check how selected sites cover a wide range
+of values in each site-level variable.
+</details>
+</div>
+<div class="section level4">
+<h4 id="analyze">
+<span style="color:#3366CC">1.2  Analyzing Multi-Site Causal
+Studies</span><a class="anchor" aria-label="anchor" href="#analyze"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>Once we complete studies (e.g., randomized experiments) in each
+selected study, how can we aggregate evidence for external validity
+analysis?</p>
+<details><summary><strong>Step 1: Estimate the site-specific ATEs (internal validity
+analysis)</strong>
+</summary><p>Users can first report internal validity analyses, focusing on causal
+estimates within selected sites. For this purpose, researchers can use
+whatever estimator they would like to use to estimate the ATEs in each
+site, e.g., difference-in-means or linear regression estimators. Because
+SPS has selected diverse sites, researchers can investigate how causal
+estimates vary across diverse contexts.</p>
+</details><details><summary><strong>Step 2: Estimate the average-site ATE (external validity
+analysis)</strong>
+</summary><p>Researchers can use function <code><a href="../reference/sps_estimator.html">sps_estimator()</a></code> to estimate
+the average-site ATE and test whether causal findings in selected sites
+generalize to a broader population of sites.</p>
+<p>In practice, researchers can use <code>plot(sps_est)</code> to
+visualize site-specific ATEs and the average-site ATE together. Here
+<code>sps_est</code> is the output from <code><a href="../reference/sps_estimator.html">sps_estimator()</a></code>.
+Please see the <a href="http://naokiegami.com/spsR/articles/intro.html">Get Started
+Page</a> for implementation.</p>
+</details><details><summary><strong>Step 3: Cross-Validation to Assess the Potential Influence of
+Unmeasured Moderators</strong>
+</summary><p>Finally, to empirically test the potential influence of unobserved
+site-level variables, researchers can conduct site-level
+cross-validation using function <code><a href="../reference/sps_cv.html">sps_cv()</a></code>. Please see the <a href="http://naokiegami.com/spsR/articles/intro.html">Get Started
+Page</a> for implementation.</p>
+<p>In this function, we randomly choose half of the selected sites as if
+they were unobserved non-selected sites and predict the average ATE of
+those non-selected sites based on the remaining selected sites. By
+repeating the same procedure many times, researchers can empirically
+check how well the SPS estimator can credibly infer the ATEs in
+non-selected sites. When users pass this test, there is no evidence of
+significant bias from unobserved site-level variables, while researchers
+can never confirm it as in usual statistical tests.</p>
+<p>When users fail this test, it implies large across-site
+heterogeneity, not explained by site-level variables. We view this as an
+opportunity for further research (rather than a failure of the given
+multi-site causal study) because it shows that there remains a large
+amount of across-site heterogeneity that existing theories cannot
+account for. In such scenarios, researchers can consider sequential
+learning: rather than viewing the current study as the final
+confirmation, researchers could suggest a new study by sequentially
+applying SPS.</p>
+<!-- **Add a quick example here?** -->
+</details><p><br></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="question">
+<span style="color:#3366CC"><strong>2.  Common Questions and
+Concerns</strong></span><a class="anchor" aria-label="anchor" href="#question"></a>
+</h3>
+<p class="lh-lg">
+</p>
+<details><summary><tag class="h5">2.1  I am worried about unmeasured variables. What
+should I do?</tag></summary><p>Researchers might be worried about the potential influence of
+unobserved moderators. We clarify several points about how to reason
+about unobserved moderators.</p>
+<ol style="list-style-type: decimal">
+<li><p>Compared to the current practice of purposive sampling, where
+researchers often only focus on one or two variables, this concern is
+mitigated in SPS because users can include any number of site-level
+moderators based on their domain and theoretical knowledge.</p></li>
+<li><p>Diversifying observed site-level variables can often help
+diversify even unobserved site-level variables when many key site-level
+variables are correlated. In addition, if unobserved variables are
+independent of observed site-level variables, this does not lead to
+unobserved bias because the distribution of unobserved variables will be
+the same in selected and non-selected sites, if we select sites only
+based on observed variables. Therefore, SPS will make the potential
+influence of unobserved moderators bigger only when diversifying
+observed site-level variables somehow reduces the diversity of
+unobserved site-level variables, which requires users to believe some
+complicated nonlinear relationships between observed and unobserved
+site-level variables.</p></li>
+<li><p>While diversifying observed site-level variables can often
+diversify unobserved site-level variables, it is always recommended to
+empirically assess the influence of unobserved moderators using
+site-level cross-validation using function <code><a href="../reference/sps_cv.html">sps_cv()</a></code> (see
+the third step in <a href="#analyze">Section 1.2 Analyzing Multi-Site
+Causal Studies</a>).</p></li>
+<li><p>Finally, SPS focuses on the mean squared error and does not
+assume the absence of unobserved moderators, so its theoretical
+guarantees are valid even if there exist unobserved moderators. The SPS
+algorithm can reduce the mean squared error further if users can include
+more predictive moderators, but unobserved moderators do not invalidate
+the use of SPS. Please see Section 5.3 of <a href="https://naokiegami.com/paper/sps.pdf" class="external-link">Egami and Lee (2023+)</a>
+for its theoretical foundation.</p></li>
+</ol></details><details><summary><tag class="h5">2.2  <code>sps()</code> did not diversify some
+variables well. What should I do? </tag></summary><p>Example 1: While you wanted to select diverse countries that have
+high, middle, and low GDP countries, the SPS algorithm did not select
+any country from the top 20 percentile of the GDP distribution and did
+not select high GDP country.</p>
+<p>Example 2: While you wanted to select diverse countries from each
+sub-region of Europe, the SPS algorithm did not select any country from
+Southern Europe and over-sampled Northern Europe.</p>
+<p>Without any instruction, <code><a href="../reference/sps.html">sps()</a></code> might not perfectly
+diversify all variables as you wish because the function has to achieve
+diversity in all variables and make some trade-off. If users want to
+achieve specific conditions, researchers can directly enforce such
+conditions to <code><a href="../reference/sps.html">sps()</a></code> using stratification via function
+<code><a href="../reference/stratify_sps.html">stratify_sps()</a></code>.</p>
+<p>Solution to Example 1: Researchers can use
+<code><a href="../reference/stratify_sps.html">stratify_sps()</a></code> to make sure that <code><a href="../reference/sps.html">sps()</a></code> will
+select at least one country from the top 20 percentile of the GDP
+distribution.</p>
+<p>Solution to Example 2: Researchers can use
+<code><a href="../reference/stratify_sps.html">stratify_sps()</a></code> to make sure that <code><a href="../reference/sps.html">sps()</a></code> will
+select at least one country from Southern and Northern Europe,
+respectively.</p>
+<p>Please see <a href="http://naokiegami.com/spsR/articles/stratify_sps.html">Stratified
+SPS</a> to learn how to use stratification to improve diversity and
+include practical constraints and domain knowledge into the SPS
+algorithm.</p>
+</details><details><summary><tag class="h5">2.3  Isn’t Random Sampling Better?</tag></summary><p>If random sampling is feasible and the number of sites to be sampled
+is relatively large, it is recommended to rely on random sampling.
+However, in many social science settings, random sampling has been
+infeasible (see the literature review in <a href="https://naokiegami.com/paper/sps.pdf" class="external-link">Egami and Lee (2023+)</a>).
+The proposed SPS is complementary to random sampling and is most useful
+when random sampling is infeasible.</p>
+</details><p><br></p>
+</div>
+<div class="section level3">
+<h3 id="prepare">
+<span style="color:#3366CC"><strong>3.  Prepare Site-Level
+Variables</strong></span><a class="anchor" aria-label="anchor" href="#prepare"></a>
+</h3>
+<p class="lh-lg">
+</p>
+<p>In practice, users need to prepare site-level variables for the
+population of sites before using functions in <code>spsR</code> package.
+We offer some practical guides to ease this data collection.</p>
+<div class="section level4">
+<h4 id="prepare-country">
+<span style="color:#3366CC">3.1.  Country-Level
+Variables</span><a class="anchor" aria-label="anchor" href="#prepare-country"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>For users who are considering multi-site experiments where sites are
+<strong>countries</strong>, we offer the companion R package
+<code>spsRdata</code>, which contains</p>
+<ol style="list-style-type: decimal">
+<li><p>the default country-level data set
+(<code>sps_country_data</code>) that contains a wide range of the most
+commonly used country-level data</p></li>
+<li><p>easy-to-use functions to merge more variables from a variety of
+common data sets (e.g., V-Dem and World Bank)</p></li>
+</ol>
+<p>See <a href="http://naokiegami.com/spsR/articles/prepare_data.html">Prepare
+Country-Level Data</a>.</p>
+</div>
+<div class="section level4">
+<h4 id="prepare-us">
+<span style="color:#3366CC">3.2.  State- or City-Level Variables in
+the US</span><a class="anchor" aria-label="anchor" href="#prepare-us"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>If you are considering multi-site experiments where sites are
+<strong>states or cities in the US</strong>, the following data sources
+might be useful.</p>
+<ul>
+<li><p>National Historical Geographic Information System (NHGIS): <a href="https://www.nhgis.org/" class="external-link uri">https://www.nhgis.org/</a></p></li>
+<li><p>Census of Governments: <a href="https://www.census.gov/programs-surveys/cog.html" class="external-link uri">https://www.census.gov/programs-surveys/cog.html</a></p></li>
+<li><p>U.S. Bureau of Labor Statistics: <a href="https://www.bls.gov/" class="external-link uri">https://www.bls.gov/</a></p></li>
+<li><p>Federal Bureau of Investigation: <a href="https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/home" class="external-link uri">https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/home</a></p></li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="missing">
+<span style="color:#3366CC">3.3.  How to Handle Missing
+Data</span><a class="anchor" aria-label="anchor" href="#missing"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>Once you collect site-level variables, you might find some missing
+data. To handle missing data easily, we offer function
+<code><a href="https://rdrr.io/pkg/spsRdata/man/impute_var.html" class="external-link">impute_var()</a></code> in R package <code>spsRdata</code> to impute
+missing data based on the state-of-the-art missing data imputation
+methods. Please see <a href="http://naokiegami.com/spsR/articles/missing_data.html">Handle
+Missing Data</a>. After imputing missing data, users can run
+<code><a href="../reference/sps.html">sps()</a></code>.</p>
+<p><br></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="useful">
+<span style="color:#3366CC"><strong>4.  Useful Information for
+Multi-Country Survey Experiments</strong></span><a class="anchor" aria-label="anchor" href="#useful"></a>
+</h3>
+<p class="lh-lg">
+</p>
+<p>In political science, one of the most popular types of multi-site
+experiments is a multi-country survey experiment. We offer some
+practical guides to ease the implementation of multi-country survey
+experiments.</p>
+<div class="section level4">
+<h4 id="firms">
+<span style="color:#3366CC">4.1.  Survey Firms</span><a class="anchor" aria-label="anchor" href="#firms"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>The following survey firms offer service in many countries across the
+world.</p>
+<ul>
+<li><p>Cint (Lucid): <a href="https://www.cint.com/consumer-insights-exchange" class="external-link uri">https://www.cint.com/consumer-insights-exchange</a></p></li>
+<li><p>YouGov: <a href="https://business.yougov.com/product/realtime/international-omnibus" class="external-link uri">https://business.yougov.com/product/realtime/international-omnibus</a></p></li>
+<li><p>Dynata: <a href="https://www.dynata.com/market-researcher-solutions/global-audiences" class="external-link uri">https://www.dynata.com/market-researcher-solutions/global-audiences</a></p></li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="translation">
+<span style="color:#3366CC">4.2.  Translation of Survey
+Experiments</span><a class="anchor" aria-label="anchor" href="#translation"></a>
+</h4>
+<p class="lh-lg">
+</p>
+<p>It is easier to translate survey experiments into different languages
+than ever before.</p>
+<ul>
+<li><p>Qualtrics: <a href="https://www.qualtrics.com/support/survey-platform/survey-module/survey-tools/translate-survey/" class="external-link uri">https://www.qualtrics.com/support/survey-platform/survey-module/survey-tools/translate-survey/</a></p></li>
+<li><p>Gengo.com: <a href="https://gengo.com" class="external-link uri">https://gengo.com</a></p></li>
+</ul>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

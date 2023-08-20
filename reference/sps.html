@@ -21,27 +21,16 @@
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/intro.html">Get Started</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-tutorials">Tutorials</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-    <a class="dropdown-item" href="../articles/practical_guides.html">1. Practical Guides</a>
-    <a class="dropdown-item" href="../articles/methods_guides.html">2. Methodological Guides</a>
-  </div>
-</li>
 <li class="nav-item">
-  <a class="nav-link" href="../articles/full_example.html">Full Example</a>
+  <a class="nav-link" href="../articles/practical_guides.html">Practical Guides</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-more">
-    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Site-level Variables</a>
+    <a class="dropdown-item" href="../articles/prepare_data.html">1. Prepare Country-Level Variables</a>
     <a class="dropdown-item" href="../articles/missing_data.html">2. Handle Missing Data</a>
     <a class="dropdown-item" href="../articles/stratify_sps.html">3. Stratified SPS</a>
-    <a class="dropdown-item" href="../articles/sps_estimator.html">4. SPS Estimator</a>
   </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/faq.html">FAQ</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -71,9 +60,9 @@
 <span>  <span class="va">X</span>,</span>
 <span>  <span class="va">N_s</span>,</span>
 <span>  stratify <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lambda <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0.05</span><span class="op">)</span>,</span>
-<span>  site_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  site_unavailable <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  site_include <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  site_exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1234</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -81,31 +70,31 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>X</dt>
-<dd><p>Site-level covariates for the target population of sites</p></dd>
+<dd><p>Site-level variables for the target population of sites. Row names should be names of sites.</p></dd>
 
 
 <dt>N_s</dt>
-<dd><p>Number of study sites to be selected</p></dd>
+<dd><p>Number of study sites to be selected.</p></dd>
 
 
 <dt>stratify</dt>
-<dd><p>Stratify</p></dd>
+<dd><p>(Optional. Default = <code>NULL</code>) Output from function <code><a href="stratify_sps.html">stratify_sps()</a></code>. This argument helps users incorporate practical and logistical constraints. See examples on <a href="http://naokiegami.com/spsR/articles/stratify_sps.html">http://naokiegami.com/spsR/articles/stratify_sps.html</a></p></dd>
+
+
+<dt>site_include</dt>
+<dd><p>(Optional. Default = <code>NULL</code>) Names of sites users want to always include (or have already selected).</p></dd>
+
+
+<dt>site_exclude</dt>
+<dd><p>(Optional. Default = <code>NULL</code>) Names of sites users want to always exclude.</p></dd>
 
 
 <dt>lambda</dt>
-<dd><p>A</p></dd>
-
-
-<dt>site_selected</dt>
-<dd><p>A</p></dd>
-
-
-<dt>site_unavailable</dt>
-<dd><p>A</p></dd>
+<dd><p>Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change <code>lambda</code>. Default values are <code>c(1, 1, 0.1)</code>. Users who want to fine-tune the tuning parameters, please see examples on <a href="http://naokiegami.com/spsR/articles/methods_guides.html">http://naokiegami.com/spsR/articles/methods_guides.html</a>.</p></dd>
 
 
 <dt>seed</dt>
-<dd><p>Numeric. `seed` used internally. Default = 1234.</p></dd>
+<dd><p>Numeric. <code>seed</code> used internally. Default = <code>1234</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -114,14 +103,10 @@
 
 <p><code>sps</code> returns an object of <code>sps</code> class.</p>
 <p></p>
-<ul><li><p><code>ss</code>: Estimated external robustness.</p></li>
-<li><p><code>W</code>: Estimates of the pAMCE for all factors in each bootstrap sample.</p></li>
-<li><p><code>obj</code>: Estimated values of the objective function</p></li>
-<li><p><code>X</code>: X</p></li>
-<li><p><code>Q</code>: Q</p></li>
-<li><p><code>N</code>: N</p></li>
-<li><p><code>N_s</code>: N_s</p></li>
-<li><p><code>...</code>: Values for internal use.</p></li>
+<ul><li><p><code>selected_sites</code>: Names of sites the SPS algorithm selected.</p></li>
+<li><p><code>W</code>: Estimated weights to approximate non-selected sites using selected sites. <code>W</code> will be used in the subsequent estimation of the average-site ATE.</p></li>
+<li><p><code>obj</code>: Estimated values of the objective function, separately for three parts.</p></li>
+<li><p><code>internal</code>: Objects useful for internal use of the function.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
