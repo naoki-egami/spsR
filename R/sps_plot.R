@@ -21,7 +21,8 @@ sps_plot <- function(out, title = NULL, columns = NULL, size = 2, before_selecti
 
 
     p <- sps_plot_base(X = X_use, title = title)
-    p
+
+    suppressWarnings(print(p))
 
   }else{
     N <- length(out$internal$ss)
@@ -105,7 +106,7 @@ sps_plot <- function(out, title = NULL, columns = NULL, size = 2, before_selecti
                                    panel.grid.minor = element_line(linewidth = rel(0.5)))
       }
     }
-    p
+    suppressWarnings(print(p))
   }
 }
 

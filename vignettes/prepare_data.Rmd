@@ -71,7 +71,7 @@ head(sps_country_data, n = 3)
 ```
 **Descriptions of Variables:**
 
-```{r, echo = F}
+```{r, echo = F, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 if(!require(kableExtra)) install.packages("kableExtra")
 if(!require(knitr)) install.packages("knitr")
 
@@ -174,7 +174,7 @@ head(ess_data, n = 3)
 ```
 First, it is strongly recommended to standardize country names using ISO3 code. Users can do this easily with R package `countrycode`.
 
-```{r, echo = F}
+```{r, echo = F, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 if(!require(countrycode)) install.packages("countrycode")
 ```
 
