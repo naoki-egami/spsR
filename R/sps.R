@@ -4,7 +4,7 @@
 #' @param stratify (Optional. Default = \code{NULL}) Output from function \code{stratify_sps()}. This argument helps users incorporate practical and logistical constraints. See examples on \url{http://naokiegami.com/spsR/articles/stratify_sps.html}
 #' @param site_include (Optional. Default = \code{NULL}) Names of sites users want to always include (or have already selected).
 #' @param site_exclude (Optional. Default = \code{NULL}) Names of sites users want to always exclude.
-#' @param lambda Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0.1)}. Users who want to fine-tune the tuning parameters, please see examples on \url{http://naokiegami.com/spsR/articles/methods_guides.html}.
+#' @param lambda Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0)}. Users who want to fine-tune the tuning parameters, please see the methodological details in Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).
 #' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
 #' @import CVXR
 #' @import ggplot2
@@ -33,9 +33,11 @@ sps <- function(X, N_s,
                 lambda = c(1, 1, 0),
                 seed = 1234){
 
+  # ###############
   # Housekeeping
-
+  # ###############
   ## X
+  ## X contains NA
   if(any(is.na(X))){
     stop(" X contains missing data. Please supply X without missing values. Consider using `impute_var()` in R package `spsRdata`. ")
   }
@@ -44,15 +46,18 @@ sps <- function(X, N_s,
   if(all(sapply(X, class) == "numeric") == FALSE){
     stop(" X contains `factor` or `character` variables. Before using sps(), please convert them into numeric or binary variables. ")
   }
-  ##
+
+  ## sd of each variable is so differnet
   X_sd <- apply(X, 2, sd)
   if(max(X_sd)/min(X_sd) >= 100){
     warning(" Some variables in X have standard deviation more than 100 times larger than other variables. This might cause estimation problem. Please consider using `scale()` to make standard deviations of variables comparable. ")
   }
 
-  ### Need to add Missing data
+  ## Transform to matrix
   X <- as.matrix(X)
   class(X) <- "matrix"
+
+  ## If there is only one variable
   if(ncol(X) == 1){
     X_orig <- X
     X <- cbind(1, X)
@@ -60,7 +65,17 @@ sps <- function(X, N_s,
     X_orig <- X
   }
 
+  ## row names
+  if(any(is.null(rownames(X)))){
+    warning(" rownames(X) is NULL. We use 1, 2, ... to represent names of sites. ")
+    rownames(X) <- seq(from = 1, to = nrow(X))
+  }
+
   ## N_s
+  if(N_s > nrow(X)){
+    stop(" N_s cannot be larger than the number of sites in X. ")
+  }
+
   if(N_s <= length(site_include)){
     stop(" N_s should be larger than length(site_include) ")
     # N_s <- N_s + length(site_include)
@@ -85,6 +100,7 @@ sps <- function(X, N_s,
       C  <- do.call("rbind", C_l)
     }
   }
+
   # site_include
   if(all(is.null(site_include)) == FALSE){
     if(all(site_include %in% rownames(X)) == FALSE){
@@ -107,6 +123,7 @@ sps <- function(X, N_s,
     site_exclude_ind <- NULL
   }
 
+  ###### (End of Housekeeping)
 
   N <- nrow(X)
   L <- ncol(X)
