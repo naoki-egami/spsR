@@ -13,13 +13,13 @@ output:
 <div class="card bg-light mb-3">
   <div class="card-header">**Table of Contents**</div>
   <div class="card-body">
-  * [**Case 2: Improve Diversity of Site-Level Variables**](#case2): <br>
+  * [**Case 1: Improve Diversity of Site-Level Variables**](#case2): <br>
   How can we use stratification to improve diversity?
 
   * [**Case 2: Select Sites from Different Subgroups**](#case3): <br>
   How can we use stratification to select sites from different subgroups?
   
-  * [**Case 1: Always Include or Always Exclude**](#case1): <br> 
+  * [**Case 3: Always Include or Always Exclude**](#case1): <br> 
   How can we always include or exclude certain sites? 
   
   </div>
