@@ -1,6 +1,6 @@
 #' Site-level Cross-Validation for Synthetic Purposive Sampling
 #' @param out Output from function \code{sps()}
-#' @param estimates_selected data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be names of the selected sites.
+#' @param estimates_selected data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be the names of the selected sites.
 #' @param K (Default = \code{2}) Fold of the cross-validation.
 #' @param max_iter (Default = \code{100}) How many times the function repeats K-fold cross-validation.
 #' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
@@ -13,18 +13,26 @@
 #' @export
 sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100, seed = 1234){
 
+  ## Housekeeping
+  if(("sps" %in% class(out)) == FALSE){
+    stop(" `out` should be an output from function `sps()` ")
+  }
+  selected_sites <- out$selected_sites
 
-  if(all(rownames(estimates_selected) %in% out$selected_sites) == FALSE){
-    stop(" `rownames(estimates_selected)` should match to names of the selected sites (`out$selected`) ")
+  ## estimates_selected
+  if(setequal(rownames(estimates_selected), selected_sites) == FALSE){
+    stop(" `rownames(estimates_selected)` should match to `selected_sites` ")
   }
 
+  ## X_selected
+  X_selected <- out$internal$X[out$internal$ss == 1, , drop = FALSE]
+
   # reordering
-  estimates_selected <- estimates_selected[match(out$selected_sites, rownames(estimates_selected)),]
+  estimates_selected <- estimates_selected[match(rownames(X_selected), rownames(estimates_selected)), ]
+
 
   estimate <- estimates_selected[, 1]
   se <- estimates_selected[, 2]
-
-  X_selected <- out$internal$X[out$internal$ss == 1, , drop = FALSE]
 
   s <- nrow(X_selected)
   ind <- seq(1:s)
@@ -48,7 +56,8 @@ sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100,
     ss_use[s_use] <- 1
 
     # estimate
-    out_cv_i <- sps_estimator_non_selected(X = X_selected, ss = ss_use,
+    out_cv_i <- sps_estimator_non_selected(X = X_selected,
+                                           ss = ss_use,
                                            estimate = estimate[s_use], se = se[s_use])
 
     # truth

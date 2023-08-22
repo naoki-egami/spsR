@@ -8,9 +8,7 @@ sps_estimator(
   out = NULL,
   estimates_selected = NULL,
   X = NULL,
-  X_selected = NULL,
-  site_selected = NULL,
-  W = NULL
+  selected_sites = NULL
 )
 }
 \arguments{
@@ -18,13 +16,9 @@ sps_estimator(
 
 \item{estimates_selected}{data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be names of the selected sites.}
 
-\item{X}{(Optional. Use this only when sites are selected based on \code{sps()}. Default = \code{NULL}) Site-level variables for the target population of sites. Row names should be names of sites.}
+\item{X}{(Optional. Use this only when sites are not selected based on \code{sps()}. Default = \code{NULL}) Site-level variables for the target population of sites. Row names should be names of sites.}
 
-\item{X_selected}{(Optional. Use this only when sites are selected based on \code{sps()}. Default = \code{NULL}) Site-level variables for the selected sites. Row names should be names of sites.}
-
-\item{site_selected}{(Optional. Use this only when sites are selected based on \code{sps()}. Default = \code{NULL}) Names of sites users selected.}
-
-\item{W}{(Optional. Default = \code{NULL}) Estimated weights to be used for estimation. When \code{NULL}, the function will estimate weights given the selected sites.}
+\item{selected_sites}{(Optional. Use this only when sites are not selected based on \code{sps()}. Default = \code{NULL}) Names of sites users selected. This should be a subset of rownames(X).}
 }
 \value{
 \code{sps_estimator} returns an object of \code{sps_estimator} class.

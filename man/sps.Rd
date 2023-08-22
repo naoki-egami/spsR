@@ -15,7 +15,7 @@ sps(
 )
 }
 \arguments{
-\item{X}{Site-level variables for the target population of sites. Row names should be names of sites.}
+\item{X}{Site-level variables for the target population of sites. Row names should be names of sites. X cannot contain missing data.}
 
 \item{N_s}{Number of study sites to be selected.}
 
@@ -25,7 +25,7 @@ sps(
 
 \item{site_exclude}{(Optional. Default = \code{NULL}) Names of sites users want to always exclude.}
 
-\item{lambda}{Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0.1)}. Users who want to fine-tune the tuning parameters, please see examples on \url{http://naokiegami.com/spsR/articles/methods_guides.html}.}
+\item{lambda}{Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0)}. Users who want to fine-tune the tuning parameters, please see the methodological details in Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).}
 
 \item{seed}{Numeric. \code{seed} used internally. Default = \code{1234}.}
 }

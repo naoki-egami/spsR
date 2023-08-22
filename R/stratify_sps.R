@@ -29,7 +29,7 @@ stratify_sps <- function(X, num_site = NULL, condition = NULL){
   if((num_site[[1]] %in% c("at least", "at most")) == FALSE){
      stop(" The first element of `num_site` should be either `at least` or `at most` ")
   }
-  if(class(num_site[[2]]) != "numeric"){
+  if(is.numeric(num_site[[2]]) == FALSE){
     stop(" The second element of `num_site` should be class `numeric` ")
   }
   ## condition
@@ -41,11 +41,11 @@ stratify_sps <- function(X, num_site = NULL, condition = NULL){
                             "between")) == FALSE){
     stop(" The second element of `condition` should be `larger than or equal to`, `smaller than or equal to`, or `between` ")
   }
-  if(class(num_site[[3]]) != "numeric"){
+  if(is.numeric(condition[[3]]) == FALSE){
     stop(" The third element of `condition` should be class `numeric` ")
   }
-  if(num_site[[2]] == "between"){
-    if(length(num_site[[3]]) !=2){
+  if(condition[[2]] == "between"){
+    if(length(condition[[3]]) !=2){
       stop(" When the second element of `condition` is `between`, the third element of `condition` should be a vector of two values. ")
     }
   }
@@ -58,6 +58,12 @@ stratify_sps <- function(X, num_site = NULL, condition = NULL){
                         condition[[2]] == "between" ~ "between")
   value <- condition[[3]]
   C_use <- stratify_base(X = X, columns = col_use, type = type_use, value = value)
+
+  cat(paste0("There are ", sum(C_use), " sites that satisfy the specified `condition` and sps() will select ", num_site[[1]], " ", num_site[[2]], " sites from those.\n"))
+
+  if(sum(C_use) == 0){
+    warnings(paste0("There is no site that satisfies the specified `condition`"))
+  }
 
   # Creating c0 (right-hand-side)
   if(num_site[[1]] == "at least"){

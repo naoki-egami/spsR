@@ -159,7 +159,7 @@ st_GDP_3 <- stratify_sps(X = X_Imm,
 
 * `condition`: A list of three elements, e.g., `list("GDP", "larger than or equal to", 1)`. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either `larger than or equal to`, `smaller than or equal to`, or `between`. The third element is a vector of length 1 or 2. When the second element is `between`, the third element should be a vector of two values. For example, `list("GDP", "larger than or equal to", 1)` means that we stratify SPS such that we select `num_site` sites that have *GDP larger than or equal to 1*.
 
-After specifying these statification, researchers can supply them to `sps()`. 
+After specifying these staratification, researchers can supply them to `sps()`. 
 
 ```{r}
 out_GDP <- sps(X = X_Imm, 

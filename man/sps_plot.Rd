@@ -4,14 +4,7 @@
 \alias{sps_plot}
 \title{Plot function for \code{sps}}
 \usage{
-sps_plot(
-  out,
-  title = NULL,
-  columns = NULL,
-  size = 2,
-  before_selection = FALSE,
-  X = NULL
-)
+sps_plot(out, title = NULL, columns = NULL, before_selection = FALSE, X = NULL)
 }
 \arguments{
 \item{out}{Output from function \code{sps()}}
@@ -19,8 +12,6 @@ sps_plot(
 \item{title}{Title of the plot}
 
 \item{columns}{(Optional. Default = \code{NULL}) Names of columns users want to visualize. When \code{NULL}, the function plots every column.}
-
-\item{size}{(Default = \code{2}) Size of texts on the summary panel.}
 
 \item{before_selection}{Logical (\code{TRUE} or \code{FALSE}. Default = \code{FALSE}). When \code{FALSE}, the function will compare selected and non-selected sites. When \code{TRUE}, the function simply visualizes the distribution of site-level variables in the target population of sites.}
 

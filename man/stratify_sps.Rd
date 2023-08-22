@@ -7,7 +7,7 @@
 stratify_sps(X, num_site = NULL, condition = NULL)
 }
 \arguments{
-\item{X}{Site-level variables for the target population of sites. Row names should be names of sites.}
+\item{X}{Site-level variables for the target population of sites. Row names should be names of sites. X cannot contain missing data.}
 
 \item{num_site}{A list of two elements, e.g., \code{list("at least", 1)}. This argument specifies the number of sites that should satisfy \code{condition} specified below. The first element should be either \code{at least} or \code{at most}. The second element is integer. For example, \code{list("at least", 1)} means that we stratify SPS such that we select *at least 1* site that satisfies \code{condition} (specified below).}
 

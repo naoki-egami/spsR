@@ -15,7 +15,7 @@ sps_cv(
 \arguments{
 \item{out}{Output from function \code{sps()}}
 
-\item{estimates_selected}{data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be names of the selected sites.}
+\item{estimates_selected}{data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be the names of the selected sites.}
 
 \item{K}{(Default = \code{2}) Fold of the cross-validation.}
 

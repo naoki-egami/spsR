@@ -20,7 +20,7 @@ sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, selec
   if(any(is.na(estimates_selected))){
     stop(" `estimates_selected` contains missing data. Please supply `estimates_selected` without missing values. ")
   }
-  message(" `estimates_selected` should have point estimates and their standard errors ")
+  # cat(" `estimates_selected` should have point estimates and their standard errors ")
 
   if(is.null(out) == FALSE){  ## site selection is done with sps()
 
@@ -28,7 +28,6 @@ sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, selec
     if(("sps" %in% class(out)) == FALSE){
       stop(" `out` should be an output from function `sps()` ")
     }
-    sps_used <- TRUE
     selected_sites <- out$selected_sites
 
     ## estimates_selected
