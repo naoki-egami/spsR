@@ -60,9 +60,7 @@
 <span>  out <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  estimates_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  X_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  site_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  W <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  selected_sites <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -77,19 +75,11 @@
 
 
 <dt>X</dt>
-<dd><p>(Optional. Use this only when sites are selected based on <code><a href="sps.html">sps()</a></code>. Default = <code>NULL</code>) Site-level variables for the target population of sites. Row names should be names of sites.</p></dd>
+<dd><p>(Optional. Use this only when sites are not selected based on <code><a href="sps.html">sps()</a></code>. Default = <code>NULL</code>) Site-level variables for the target population of sites. Row names should be names of sites.</p></dd>
 
 
-<dt>X_selected</dt>
-<dd><p>(Optional. Use this only when sites are selected based on <code><a href="sps.html">sps()</a></code>. Default = <code>NULL</code>) Site-level variables for the selected sites. Row names should be names of sites.</p></dd>
-
-
-<dt>site_selected</dt>
-<dd><p>(Optional. Use this only when sites are selected based on <code><a href="sps.html">sps()</a></code>. Default = <code>NULL</code>) Names of sites users selected.</p></dd>
-
-
-<dt>W</dt>
-<dd><p>(Optional. Default = <code>NULL</code>) Estimated weights to be used for estimation. When <code>NULL</code>, the function will estimate weights given the selected sites.</p></dd>
+<dt>selected_sites</dt>
+<dd><p>(Optional. Use this only when sites are not selected based on <code><a href="sps.html">sps()</a></code>. Default = <code>NULL</code>) Names of sites users selected. This should be a subset of rownames(X).</p></dd>
 
 </dl></div>
     <div class="section level2">

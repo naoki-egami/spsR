@@ -70,7 +70,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>X</dt>
-<dd><p>Site-level variables for the target population of sites. Row names should be names of sites.</p></dd>
+<dd><p>Site-level variables for the target population of sites. Row names should be names of sites. X cannot contain missing data.</p></dd>
 
 
 <dt>N_s</dt>
@@ -90,7 +90,7 @@
 
 
 <dt>lambda</dt>
-<dd><p>Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change <code>lambda</code>. Default values are <code>c(1, 1, 0.1)</code>. Users who want to fine-tune the tuning parameters, please see examples on <a href="http://naokiegami.com/spsR/articles/methods_guides.html">http://naokiegami.com/spsR/articles/methods_guides.html</a>.</p></dd>
+<dd><p>Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change <code>lambda</code>. Default values are <code>c(1, 1, 0)</code>. Users who want to fine-tune the tuning parameters, please see the methodological details in Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).</p></dd>
 
 
 <dt>seed</dt>
