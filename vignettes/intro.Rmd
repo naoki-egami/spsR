@@ -250,6 +250,11 @@ For external validity analysis, we then aggregate these site-specific ATEs in se
 ```{r}
 sps_est <- sps_estimator(out = out, 
                          estimates_selected = exp_estimate_Imm_selected)
+
+sps_est2 <- sps_estimator(X = out$internal$X, estimates_selected = exp_estimate_Imm_selected, 
+                          selected_sites = sort(unique(out$selected_sites)))
+summary(sps_est)
+summary(sps_est2)
 ```
 
 **Arguments** 

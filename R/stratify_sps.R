@@ -1,5 +1,5 @@
 #' Stratification for Synthetic Purposive Sampling
-#' @param X Site-level variables for the target population of sites. Row names should be names of sites.
+#' @param X Site-level variables for the target population of sites. Row names should be names of sites. X cannot contain missing data.
 #' @param num_site A list of two elements, e.g., \code{list("at least", 1)}. This argument specifies the number of sites that should satisfy \code{condition} specified below. The first element should be either \code{at least} or \code{at most}. The second element is integer. For example, \code{list("at least", 1)} means that we stratify SPS such that we select *at least 1* site that satisfies \code{condition} (specified below).
 #' @param condition A list of three elements, e.g., \code{list("GDP", "larger than or equal to", 1)}. This argument specifies conditions for stratification. The first element should be a name of a site-level variable. The second element should be either \code{larger than or equal to}, \code{smaller than or equal to}, or \code{between}. The third element is a vector of length 1 or 2. When the second element is \code{between}, the third element should be a vector of two values. For example, \code{list("GDP", "larger than or equal to", 1)} means that we stratify SPS such that we select \code{num_site} sites that have *GDP larger than or equal to 1*.
 #' @return \code{stratify_sps} returns an object of \code{stratify_sps} class, which we supply to \code{sps()}.
@@ -11,36 +11,55 @@
 #' @export
 stratify_sps <- function(X, num_site = NULL, condition = NULL){
 
-  col_use <- condition[[1]]
-
-  if((condition[[2]] %in% c("larger than or equal to",
-                          "smaller than or equal to",
-                          "between")) == FALSE){
-    stop("The second element of `condition` should be `larger than or equal to`, `smaller than or equal to`, or `between` ")
+  # ###############
+  # Housekeeping
+  # ###############
+  ## X
+  ## X contains NA
+  if(any(is.na(X))){
+    stop(" X contains missing data. Please supply X without missing values. Consider using `impute_var()` in R package `spsRdata`. ")
   }
+
+  ## factor or character
+  if(all(sapply(X, class) == "numeric") == FALSE){
+    stop(" X contains `factor` or `character` variables. Before using sps(), please convert them into numeric or binary variables. ")
+  }
+
+  ## num_site
   if((num_site[[1]] %in% c("at least", "at most")) == FALSE){
-    stop("The first element of `num_site` should be `larger than or equal to` or `smaller than or equal to` ")
+     stop(" The first element of `num_site` should be either `at least` or `at most` ")
   }
+  if(class(num_site[[2]]) != "numeric"){
+    stop(" The second element of `num_site` should be class `numeric` ")
+  }
+  ## condition
+  if((condition[[1]] %in% colnames(X)) == FALSE){
+    stop(" The first element of `condition` should be one of `colnames(X)` ")
+  }
+  if((condition[[2]] %in% c("larger than or equal to",
+                            "smaller than or equal to",
+                            "between")) == FALSE){
+    stop(" The second element of `condition` should be `larger than or equal to`, `smaller than or equal to`, or `between` ")
+  }
+  if(class(num_site[[3]]) != "numeric"){
+    stop(" The third element of `condition` should be class `numeric` ")
+  }
+  if(num_site[[2]] == "between"){
+    if(length(num_site[[3]]) !=2){
+      stop(" When the second element of `condition` is `between`, the third element of `condition` should be a vector of two values. ")
+    }
+  }
+  ######
 
+  # Creating C (left-hand-side)
+  col_use <- condition[[1]]
   type_use <- case_when(condition[[2]] == "larger than or equal to" ~ "geq",
                         condition[[2]] == "smaller than or equal to" ~ "leq",
                         condition[[2]] == "between" ~ "between")
-  # if(type_use == "between"){
-  #   value <- c(condition[3], condition[4])
-  # }else{
-  #   value <- c(condition[3])
-  # }
   value <- condition[[3]]
-
-  # C_l <- list()
-  # for(i in 1:length(columns)){
-  #   col_use <- columns[i]
-  #   C_l[[i]] <- stratify_base(X = X, columns = col_use, type = type_use, value = value)
-  # }
-  # C_use <- do.call("rbind", C_l)
-
   C_use <- stratify_base(X = X, columns = col_use, type = type_use, value = value)
 
+  # Creating c0 (right-hand-side)
   if(num_site[[1]] == "at least"){
     c0_value <- as.numeric(num_site[[2]])
   }else if(num_site[1] == "at most"){

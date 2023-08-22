@@ -1,5 +1,5 @@
 #' Synthetic Purposive Sampling: Site Selection for External Validity
-#' @param X Site-level variables for the target population of sites. Row names should be names of sites.
+#' @param X Site-level variables for the target population of sites. Row names should be names of sites. X cannot contain missing data.
 #' @param N_s Number of study sites to be selected.
 #' @param stratify (Optional. Default = \code{NULL}) Output from function \code{stratify_sps()}. This argument helps users incorporate practical and logistical constraints. See examples on \url{http://naokiegami.com/spsR/articles/stratify_sps.html}
 #' @param site_include (Optional. Default = \code{NULL}) Names of sites users want to always include (or have already selected).
@@ -192,11 +192,11 @@ sps <- function(X, N_s,
   # obj <- Minimize( sum_squares(Z)/(L*(N-s)))
 
   # Check Infeasibility
-  # check_inf <- Problem(Minimize(sum_entries(S)), constraints)
-  # res_inf <- solve(check_inf)
-  # if(res_inf$status != "optimal"){
-  #   stop(" Constraints are infeasible. Please check whether conditions in`stratify` are feasible. ")
-  # }
+  check_inf <- Problem(Minimize(0), constraints)
+  res_inf <- solve(check_inf)
+  if(res_inf$status != "optimal"){
+    stop(" Constraints are infeasible. Please check whether conditions in `stratify` are feasible. ")
+  }
 
   cat("Selecting Study Sites...")
   if(lambda[3] == 0){
