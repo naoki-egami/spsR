@@ -34,10 +34,10 @@ Categorical variables (`character` or `factor`) are converted into dummies for e
 data(sps_country_data)
 ```
 
-As an example, we will impute two variables, Polity score (`e_p_polity`) and GDP (`NY.GDP.MKTP.CD`), which have some missing values. 
+As an example, we will impute two variables, Polity score (`e_p_polity`), GDP (`NY.GDP.MKTP.CD`), and social group exclusion index (`v2xpe_exlsocgr`), which have some missing values. 
 
 ```{r}
-apply(sps_country_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.na(x)))
+apply(sps_country_data[, c('e_p_polity', 'NY.GDP.MKTP.CD', 'v2xpe_exlsocgr')], 2, function(x) sum(is.na(x)))
 ```
 
 We impute the two variables using `amelia`. By specifying `id_site` and `id_time`, function `impute_var` can respect the time-series cross-sectional data structure. When we only specify `id_site`, the underlying imputation method assumes the cross-sectional data. 
@@ -47,11 +47,13 @@ imputed_data <- impute_var(data = sps_country_data,
                            id_unit = 'country', 
                            id_time = 'year', 
                            var_impute = c('e_p_polity', 'NY.GDP.MKTP.CD'),
+                           var_ord = 'e_p_polity',
+                           var_lgstc = 'v2xpe_exlsocgr',
                            method = "amelia")
 ```
 
 ```{r}
-apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.na(x)))
+apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD', 'v2xpe_exlsocgr')], 2, function(x) sum(is.na(x)))
 ```
 
 **Arguments**
@@ -60,15 +62,19 @@ apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.n
 * `id_site`: A unique identifier for sites. A column name in `data`. 
 * `id_time`: A unique identifier for time index. A column name in `data`. If unspecified (`NULL`; default), it assumes `data` is cross-sectional.
 * `var_impute`: A vector with one or more variable names for which imputation is performed. If unspecified (`NULL`), it imputes all variables in `data` except for the `id_site` and `id_time` variables.
+* `var_ord`: A vector with one or more variable names that is ordinal for which imputation is performed. Binary variable names can be included in eithwe `var_ord` or `var_nom`. 
+* `var_nom`: A vector with one or more variable names that is nominal for which imputation is performed. 
+* `var_lgstc`: A vector with one or more variable names that is proportional ranging between 0 and 1 for which imputation is performed. 
 * `var_predictor`: A vector with one or more variable names that we use as predictors to impute variables in `var_impute`. If unspecified (`NULL`), the function uses all variables in `data` except for variables in `var_impute`.
-* `method`: Imputation method. Choose `amelia` or `miceranger`. Default is `amelia`. 
+* `method`: Imputation method. Choose `amelia`, `mice` or `miceranger`. Default is `amelia`. 
 * `n_impute`: The number of imputed data sets to produce (equivalent of argument `m` in `amelia()` and `miceRanger()`). Default is 5.
-* `...`: Arguments passed onto `Amelia::amelia()` or `miceRanger::miceRanger()`.
+* `...`: Arguments passed onto `Amelia::amelia()` or `mice::mice()` or `miceRanger::miceRanger()`.
 
 **Imputation Methods**
 
 1. [Amelia](https://gking.harvard.edu/amelia). Please read Honaker, King, and Blackwell (2011) for more details.
-2. [MICERanger](https://github.com/FarrellDay/miceRanger). Please read Wilson (2020) for more details.
+2. [MICE](https://amices.org/mice/). Please read Van Buuren and Groothuis-Oudshoorn (2011) for more details.
+3. [MICERanger](https://github.com/FarrellDay/miceRanger). Please read Wilson (2020) for more details.
 
 
 #### **Practical Suggestions**
@@ -82,5 +88,7 @@ Missing data imputation works better when users supply more variables and observ
 Honaker, J., King, G., & Blackwell, M. (2011). Amelia II: A program for missing data. Journal of statistical software, 45, 1-47.
 
 King, G., Honaker, J., Joseph, A., & Scheve, K. (2001). Analyzing incomplete political science data: An alternative algorithm for multiple imputation. American political science review, 95(1), 49-69.
+
+Van Buuren, S., & Groothuis-Oudshoorn, K. (2011). mice: Multivariate imputation by chained equations in R. Journal of statistical software, 45, 1-67.
 
 Wilson, S. (2020). miceRanger: Multiple imputation by chained equations with random forests. R package version, 1(5).
