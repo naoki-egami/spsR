@@ -13,7 +13,7 @@ always_allow_html: yes
 **On this page, we describe how to use function `impute_var()` in R package `spsRdata` to impute missing values in a data set.**
 
 <br>
-**Note**: We offer function `impute_var`, which is simply a wrapper for two popular missing-data-imputation methods, `amelia` and `miceRanger`. Our goal is to facilitate data collection and data cleaning such that users can use functions in R package `spsR` easily. Please read papers and user guides of a missing-data-imputation method you choose ([Amelia](https://gking.harvard.edu/amelia) and [MICERanger](https://github.com/FarrellDay/miceRanger)).
+**Note**: We offer function `impute_var`, which is simply a wrapper for two popular missing-data-imputation methods, `amelia` and `miceRanger`. Our goal is to facilitate data collection and data cleaning such that users can use functions in R package `spsR` easily. Please read papers and user guides of a missing-data-imputation method you choose ([Amelia](https://gking.harvard.edu/amelia), [MICE](https://amices.org/mice/), and [MICERanger](https://github.com/FarrellDay/miceRanger)).
 </p>
 
 <br>
