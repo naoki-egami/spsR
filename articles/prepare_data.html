@@ -145,9 +145,15 @@ set</strong> </span><a class="anchor" aria-label="anchor" href="#default"></a>
 </h4>
 <p class="lh-lg">
 </p>
+<p>Please first install R package <code>spsRdata</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsRdata/">spsRdata</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>width<span class="op">=</span><span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsRdata/">spsRdata</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"naoki-egami/spsRdata"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Then, call both R packages <code>spsR</code> and
+<code>spsRdata</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsR/">spsR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsRdata/">spsRdata</a></span><span class="op">)</span></span></code></pre></div>
 <p>In R package <code>spsRdata</code>, we provide a country-level data
 set (<code>sps_country_data</code>) comprised of 22 variables for 179
 countries between 2010 and 2022. It contains a wide range of variables
@@ -173,7 +179,7 @@ Statistics</a></li>
 of Groningen’s World Languages</a></li>
 </ul>
 <p><code>sps_country_data</code> includes the following variables.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sps_country_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sps_country_data</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   country iso3 year                    region       subregion AG.LND.TOTL.K2 e_p_polity v2x_libdem v2x_polyarchy v2x_elecreg v2x_corr v2x_divparctrl v2x_gender v2x_rule v2x_ex_military SL.UEM.TOTL.ZS NY.GDP.MKTP.CD    lang SP.POP.TOTL SE.PRM.CUAT.ZS v2x_civlib v2xpe_exlsocgr</span></span>
@@ -637,7 +643,7 @@ V-Dem
 </table>
 <p>Users can check the codebook using
 <code>data(sps_country_codebook)</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sps_country_codebook</span><span class="op">)</span></span>
 <span><span class="va">sps_country_codebook</span><span class="op">[</span><span class="va">sps_country_codebook</span><span class="op">$</span><span class="va">Variable</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> </span>
 <span>                       <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"country"</span>, <span class="st">"year"</span>, <span class="st">"NY.GDP.MKTP.CD"</span>, <span class="st">"SP.POP.TOTL"</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div>
@@ -675,7 +681,7 @@ illustrate how to collect these variables step by step.</p>
 2015 (the year in which Naumann et al (2018)’s experiments were
 conducted). If users are running experiments now, they can, of course,
 choose site-level variables measured in most recent years.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">country_use</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Austria"</span>, <span class="st">"Belgium"</span>, <span class="st">"Czechia"</span>, <span class="st">"Denmark"</span>, <span class="st">"Finland"</span>, </span>
 <span>                 <span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"Ireland"</span>,<span class="st">"Netherlands"</span>, <span class="st">"Norway"</span>, </span>
 <span>                 <span class="st">"Slovenia"</span>, <span class="st">"Spain"</span>, <span class="st">"Sweden"</span>, <span class="st">"Switzerland"</span>, <span class="st">"United Kingdom"</span><span class="op">)</span></span>
@@ -687,7 +693,7 @@ choose site-level variables measured in most recent years.</p>
 sub-regions (<code>subregion</code>), GDP (<code>NY.GDP.MKTP.CD</code>)
 and unemployment rate (<code>SL.UNEM.TOTL.ZS</code>). So we subset the
 data set to include only those variables we’re interested in.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sps_country_data2</span> <span class="op">&lt;-</span> <span class="va">sps_country_data1</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"country"</span>, <span class="st">"iso3"</span>, </span>
 <span>                                           <span class="st">"subregion"</span>, <span class="st">"year"</span>, </span>
 <span>                                           <span class="st">"NY.GDP.MKTP.CD"</span>, <span class="st">"SL.UEM.TOTL.ZS"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
@@ -703,7 +709,7 @@ Variables from V-Dem or World Bank Data Sets</strong></span><a class="anchor" ar
 <p>Users can also search for other country-level variables in V-Dem and
 World Bank using keywords via the function <code>search_sps_data</code>.
 Here, we look for data on size of migrant population:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">search_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/search_sps_data.html" class="external-link">search_sps_data</a></span><span class="op">(</span>keyword <span class="op">=</span> <span class="st">"international migrant"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">search_result</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
@@ -716,7 +722,7 @@ Here, we look for data on size of migrant population:</p>
 data set using <code>merge_sps_data</code>. In our example, we’re
 interested in adding <code>SM.POP.TOTL.ZS</code> that captures the
 proportion of migrant population.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sps_country_data3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/merge_sps_data.html" class="external-link">merge_sps_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data2</span>, </span>
 <span>                                    vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SM.POP.TOTL.ZS"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Arguments</strong></p>
@@ -730,7 +736,7 @@ should be merged onto <code>data</code>. We merge variables from V-Dem
 or World Bank data sets (use <code><a href="https://rdrr.io/pkg/spsRdata/man/search_sps_data.html" class="external-link">search_sps_data()</a></code> to search
 for names of new variables).</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sps_country_data3</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   iso3 year     country       subregion NY.GDP.MKTP.CD SL.UEM.TOTL.ZS SM.POP.TOTL.ZS</span></span>
 <span><span class="co">## 1  SWE 2015      Sweden Northern Europe   5.051038e+11           7.43       16.76756</span></span>
@@ -750,7 +756,7 @@ variables—the proportion of female, the mean age, the mean education,
 and general support for immigration—come from European Social Survey
 data. As an illustration, we included this external data as
 <code>ess_data</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ess_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ess_data</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
@@ -763,12 +769,12 @@ data. As an illustration, we included this external data as
 <p>First, it is strongly recommended to standardize country names using
 ISO3 code. Users can do this easily with R package
 <code>countrycode</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/countrycode/" class="external-link">countrycode</a></span><span class="op">)</span></span>
 <span><span class="va">ess_data</span><span class="op">$</span><span class="va">iso3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://vincentarelbundock.github.io/countrycode/reference/countrycode.html" class="external-link">countrycode</a></span><span class="op">(</span>sourcevar <span class="op">=</span> <span class="va">ess_data</span><span class="op">$</span><span class="va">country</span>, </span>
 <span>                             origin <span class="op">=</span> <span class="st">"country.name"</span>, destination <span class="op">=</span> <span class="st">"iso3c"</span><span class="op">)</span></span></code></pre></div>
 <!-- Then, users can use the same function ``merge_sps_data`` to merge their own external data set as well. -->
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sps_country_data4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">sps_country_data3</span>, </span>
 <span>                           <span class="va">ess_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'iso3'</span>, <span class="st">'female'</span>, <span class="st">'age'</span>, <span class="st">'education'</span>, <span class="st">'support_imm'</span><span class="op">)</span><span class="op">]</span>, </span>
 <span>                           by <span class="op">=</span> <span class="st">'iso3'</span>,</span>
@@ -802,8 +808,8 @@ missing values. The function <code>desc_stat</code> returns simple
 descriptive statistics and number of missing entries in each year in the
 data set. Character and factor variables are automatically binarized to
 obtain descriptive statistics:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/check_missing.html" class="external-link">check_missing</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data4</span><span class="op">[</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'iso3'</span>, <span class="st">'country'</span><span class="op">)</span><span class="op">]</span>,</span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/check_missing.html" class="external-link">check_missing</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data4</span><span class="op">[</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'iso3'</span>, <span class="st">'country'</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>                      id_time <span class="op">=</span> <span class="st">'year'</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## -------------------------</span></span>
@@ -859,32 +865,46 @@ Missing Data</a>.</p>
 <p class="lh-lg">
 </p>
 <p>Finally, we clean data for function <code><a href="../reference/sps.html">sps()</a></code>. First, we
-need to have informative row names for the data.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sps_country_data4</span><span class="op">$</span><span class="va">country</span></span></code></pre></div>
-<p>Second, for categorical variables, we binarize them.</p>
+need to have informative row names and column names for the data.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">X_region</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">subregion</span> <span class="op">-</span> <span class="fl">1</span>, </span>
-<span>                         data <span class="op">=</span> <span class="va">sps_country_data4</span><span class="op">[</span>, <span class="st">"subregion"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># row names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sps_country_data4</span><span class="op">$</span><span class="va">country</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X_region</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Eastern Europe"</span>, <span class="st">"Northern Europe"</span>, </span>
-<span>                        <span class="st">"Southern Europe"</span>, <span class="st">"Western Europe"</span><span class="op">)</span></span></code></pre></div>
-<p>Third, we keep all relevant variables and rename them.</p>
+<span><span class="co"># column names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">)</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">11</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GDP'</span>, <span class="st">'Unemployment'</span>, <span class="st">'Immigration'</span>, </span>
+<span>    <span class="st">'Female'</span>, <span class="st">'Age'</span>, <span class="st">'Education'</span>, <span class="st">'Immig_Support'</span><span class="op">)</span></span></code></pre></div>
+<p>Second, we can use <code>clean_for_sps</code> to prepare data for
+function <code><a href="../reference/sps.html">sps()</a></code>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">X_Imm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">sps_country_data4</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NY.GDP.MKTP.CD"</span>, <span class="st">"SL.UEM.TOTL.ZS"</span>, </span>
-<span>                                     <span class="st">"SM.POP.TOTL.ZS"</span>, <span class="st">"female"</span>, <span class="st">"age"</span>, </span>
-<span>                                     <span class="st">"education"</span>, <span class="st">"support_imm"</span><span class="op">)</span><span class="op">]</span>, </span>
-<span>               <span class="va">X_region</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">column_for_sps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subregion"</span>, </span>
+<span>                    <span class="st">"GDP"</span>, <span class="st">"Unemployment"</span>, <span class="st">"Immigration"</span>, </span>
+<span>                    <span class="st">"Female"</span>, <span class="st">"Age"</span>, <span class="st">"Education"</span>, <span class="st">"Immig_Support"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X_Imm</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GDP'</span>, <span class="st">'Unemployment'</span>, <span class="st">'Immigration'</span>, <span class="st">'Female'</span>, <span class="st">'Age'</span>, </span>
-<span>                     <span class="st">'Education'</span>, <span class="st">'Immig_Support'</span>, </span>
-<span>                     <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X_region</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">X_Imm</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                      GDP Unemployment Immigration    Female      Age Education Immig_Support Eastern Europe Northern Europe Southern Europe Western Europe</span></span>
-<span><span class="co">## Sweden      5.051038e+11         7.43    16.76756 0.4980864 49.84956  2.843407      4.009691              0               1               0              0</span></span>
-<span><span class="co">## Switzerland 6.941182e+11         4.80    29.38669 0.4833333 48.04039  2.523684      3.444831              0               0               0              1</span></span>
-<span><span class="co">## France      2.439189e+12        10.35    12.08848 0.5182999 49.81786  2.571598      3.030655              0               0               0              1</span></span></code></pre>
+<span><span class="va">X_Imm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clean_for_sps.html">clean_for_sps</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">sps_country_data4</span><span class="op">[</span>, <span class="va">column_for_sps</span><span class="op">]</span>, scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## ## subregion is a non-numeric variable, and is binarized.</span></span>
+<span><span class="co">## ## Standardizing numeric variables to make each variable mean zero and standard deviation one.</span></span></code></pre>
+<p>This function automatically (1) binarizes all non-numeric variables
+and (2) standardizes numeric variables (means zero and standard
+deviations one) when argument <code>scale = TRUE</code>. Please only
+include variables to diversify. For example, users should not include
+site names to <code>X</code>.</p>
 <p>This <code>X_Imm</code> is ready for function <code><a href="../reference/sps.html">sps()</a></code>.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">X_Imm</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                    GDP Unemployment Immigration     Female        Age  Education Immig_Support subregion_Eastern Europe subregion_Northern Europe subregion_Southern Europe subregion_Western Europe</span></span>
+<span><span class="co">## Sweden      -0.4127015   -0.1221302   0.5768431 -0.4083383  0.2240878  1.0770300     1.8877250                        0                         1                         0                        0</span></span>
+<span><span class="co">## Switzerland -0.2356451   -0.7199015   2.7689923 -0.9268037 -0.7338824 -0.6687373     0.5298085                        0                         0                         0                        1</span></span>
+<span><span class="co">## France       1.3990235    0.5415550  -0.2359897  0.3020230  0.2073008 -0.4071176    -0.4658665                        0                         0                         0                        1</span></span></code></pre>
+<!-- Third, we keep all relevant variables and rename them.  -->
+<!-- ```{r} -->
+<!-- X_Imm <- cbind(sps_country_data4[, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS",  -->
+<!--                                      "SM.POP.TOTL.ZS", "female", "age",  -->
+<!--                                      "education", "support_imm")],  -->
+<!--                X_region) -->
+<!-- colnames(X_Imm)[1:7] <- c('GDP', 'Unemployment', 'Immigration',  -->
+<!--                           'Female', 'Age', 'Education', 'Immig_Support') -->
+<!-- ``` -->
 <!-- ```{r} -->
 <!-- round(desc$corr[1:3, 1:3], 3) -->
 <!-- ``` -->

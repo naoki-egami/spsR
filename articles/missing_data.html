@@ -86,10 +86,11 @@
 missing values in a data set.</strong></p>
 <br><strong>Note</strong>: We offer function <code>impute_var</code>,
 which is simply a wrapper for two popular missing-data-imputation
-methods, <code>amelia</code> and <code>miceRanger</code>. Our goal is to
-facilitate data collection and data cleaning such that users can use
-functions in R package <code>spsR</code> easily. Please read papers and
-user guides of a missing-data-imputation method you choose (<a href="https://gking.harvard.edu/amelia" class="external-link">Amelia</a>, <a href="https://amices.org/mice/" class="external-link">MICE</a>, and <a href="https://github.com/FarrellDay/miceRanger" class="external-link">MICERanger</a>).
+methods, <code>amelia</code>, <code>mice</code>, and
+<code>miceRanger</code>. Our goal is to facilitate data collection and
+data cleaning such that users can use functions in R package
+<code>spsR</code> easily. Please read papers and user guides of a
+missing-data-imputation method you choose (<a href="https://gking.harvard.edu/amelia" class="external-link">Amelia</a>, <a href="https://amices.org/mice/" class="external-link">MICE</a>, and <a href="https://github.com/FarrellDay/miceRanger" class="external-link">MICERanger</a>).
 
 <p><br></p>
 <div class="section level3">
@@ -99,7 +100,12 @@ with <code>impute_var</code></strong></span><a class="anchor" aria-label="anchor
 </h3>
 <p class="lh-lg">
 </p>
+<p>Please first install R package <code>spsRdata</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsRdata/">spsRdata</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"naoki-egami/spsRdata"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Then, call R package <code>spsRdata</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://naokiegami.com/spsRdata/">spsRdata</a></span><span class="op">)</span></span></code></pre></div>
 <p><code>impute_var</code> in R package <code>spsRdata</code> imputes
 missing values in both continuous and categorical variables.</p>
@@ -110,33 +116,31 @@ cross-sectional. Here, we demonstrate the utility of
 <code>impute_var</code> using the country-level data set
 <code>sps_country_data</code>, but <code>impute_var</code> can handle
 any type of data set.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sps_country_data</span><span class="op">)</span></span></code></pre></div>
 <p>As an example, we will impute two variables, Polity score
-(<code>e_p_polity</code>), GDP (<code>NY.GDP.MKTP.CD</code>), and social
-group exclusion index (<code>v2xpe_exlsocgr</code>), which have some
-missing values.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">sps_country_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span>, <span class="st">'v2xpe_exlsocgr'</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     e_p_polity NY.GDP.MKTP.CD v2xpe_exlsocgr </span></span>
-<span><span class="co">##            822            107              3</span></span></code></pre>
+(<code>e_p_polity</code>) and GDP (<code>NY.GDP.MKTP.CD</code>), which
+have some missing values.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">sps_country_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     e_p_polity NY.GDP.MKTP.CD </span></span>
+<span><span class="co">##            822            107</span></span></code></pre>
 <p>We impute the two variables using <code>amelia</code>. By specifying
 <code>id_site</code> and <code>id_time</code>, function
 <code>impute_var</code> can respect the time-series cross-sectional data
 structure. When we only specify <code>id_site</code>, the underlying
 imputation method assumes the cross-sectional data.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">imputed_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spsRdata/man/impute_var.html" class="external-link">impute_var</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sps_country_data</span>, </span>
 <span>                           id_unit <span class="op">=</span> <span class="st">'country'</span>, </span>
 <span>                           id_time <span class="op">=</span> <span class="st">'year'</span>, </span>
 <span>                           var_impute <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span><span class="op">)</span>,</span>
 <span>                           var_ord <span class="op">=</span> <span class="st">'e_p_polity'</span>,</span>
-<span>                           var_lgstc <span class="op">=</span> <span class="st">'v2xpe_exlsocgr'</span>,</span>
 <span>                           method <span class="op">=</span> <span class="st">"amelia"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">imputed_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span>, <span class="st">'v2xpe_exlsocgr'</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     e_p_polity NY.GDP.MKTP.CD v2xpe_exlsocgr </span></span>
-<span><span class="co">##              0              0              0</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">imputed_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'e_p_polity'</span>, <span class="st">'NY.GDP.MKTP.CD'</span><span class="op">)</span><span class="op">]</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     e_p_polity NY.GDP.MKTP.CD </span></span>
+<span><span class="co">##              0              0</span></span></code></pre>
 <p><strong>Arguments</strong></p>
 <ul>
 <li>
@@ -155,16 +159,18 @@ for which imputation is performed. If unspecified (<code>NULL</code>),
 it imputes all variables in <code>data</code> except for the
 <code>id_site</code> and <code>id_time</code> variables.</li>
 <li>
-<code>var_ord</code>: A vector with one or more variable names that
-is ordinal for which imputation is performed. Binary variable names can
-be included in eithwe <code>var_ord</code> or <code>var_nom</code>.</li>
+<code>var_ord</code>: (Optional) A vector of names of
+<em>ordinal</em> variables in <code>var_impute</code>. Binary variables
+can be included in either <code>var_ord</code> or
+<code>var_nom</code>.</li>
 <li>
-<code>var_nom</code>: A vector with one or more variable names that
-is nominal for which imputation is performed.</li>
+<code>var_nom</code>: (Optional) A vector of names of
+<em>nominal</em> variables (non-ordinal categorical variables) in
+<code>var_impute</code>.</li>
 <li>
-<code>var_lgstc</code>: A vector with one or more variable names
-that is proportional ranging between 0 and 1 for which imputation is
-performed.</li>
+<code>var_lgstc</code>: (Optional) A vector of names of
+<em>proportional</em> variables (ranges between 0 and 1) in
+<code>var_impute</code>.</li>
 <li>
 <code>var_predictor</code>: A vector with one or more variable names
 that we use as predictors to impute variables in
