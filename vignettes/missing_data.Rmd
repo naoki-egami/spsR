@@ -13,7 +13,7 @@ always_allow_html: yes
 **On this page, we describe how to use function `impute_var()` in R package `spsRdata` to impute missing values in a data set.**
 
 <br>
-**Note**: We offer function `impute_var`, which is simply a wrapper for two popular missing-data-imputation methods, `amelia` and `miceRanger`. Our goal is to facilitate data collection and data cleaning such that users can use functions in R package `spsR` easily. Please read papers and user guides of a missing-data-imputation method you choose ([Amelia](https://gking.harvard.edu/amelia), [MICE](https://amices.org/mice/), and [MICERanger](https://github.com/FarrellDay/miceRanger)).
+**Note**: We offer function `impute_var`, which is simply a wrapper for two popular missing-data-imputation methods, `amelia`, `mice`, and `miceRanger`. Our goal is to facilitate data collection and data cleaning such that users can use functions in R package `spsR` easily. Please read papers and user guides of a missing-data-imputation method you choose ([Amelia](https://gking.harvard.edu/amelia), [MICE](https://amices.org/mice/), and [MICERanger](https://github.com/FarrellDay/miceRanger)).
 </p>
 
 <br>
@@ -22,6 +22,13 @@ always_allow_html: yes
 <p class="lh-lg">
 </p>
 
+Please first install R package `spsRdata`.
+```{r eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+library(devtools)
+if(!require(spsRdata)) install_github("naoki-egami/spsRdata", dependencies = TRUE)
+```
+
+Then, call R package `spsRdata`. 
 ```{r eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 library(spsRdata)
 ```
@@ -34,10 +41,10 @@ Categorical variables (`character` or `factor`) are converted into dummies for e
 data(sps_country_data)
 ```
 
-As an example, we will impute two variables, Polity score (`e_p_polity`), GDP (`NY.GDP.MKTP.CD`), and social group exclusion index (`v2xpe_exlsocgr`), which have some missing values. 
+As an example, we will impute two variables, Polity score (`e_p_polity`) and GDP (`NY.GDP.MKTP.CD`), which have some missing values. 
 
 ```{r}
-apply(sps_country_data[, c('e_p_polity', 'NY.GDP.MKTP.CD', 'v2xpe_exlsocgr')], 2, function(x) sum(is.na(x)))
+apply(sps_country_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.na(x)))
 ```
 
 We impute the two variables using `amelia`. By specifying `id_site` and `id_time`, function `impute_var` can respect the time-series cross-sectional data structure. When we only specify `id_site`, the underlying imputation method assumes the cross-sectional data. 
@@ -48,12 +55,11 @@ imputed_data <- impute_var(data = sps_country_data,
                            id_time = 'year', 
                            var_impute = c('e_p_polity', 'NY.GDP.MKTP.CD'),
                            var_ord = 'e_p_polity',
-                           var_lgstc = 'v2xpe_exlsocgr',
                            method = "amelia")
 ```
 
 ```{r}
-apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD', 'v2xpe_exlsocgr')], 2, function(x) sum(is.na(x)))
+apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.na(x)))
 ```
 
 **Arguments**
@@ -62,9 +68,9 @@ apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD', 'v2xpe_exlsocgr')], 2, fu
 * `id_site`: A unique identifier for sites. A column name in `data`. 
 * `id_time`: A unique identifier for time index. A column name in `data`. If unspecified (`NULL`; default), it assumes `data` is cross-sectional.
 * `var_impute`: A vector with one or more variable names for which imputation is performed. If unspecified (`NULL`), it imputes all variables in `data` except for the `id_site` and `id_time` variables.
-* `var_ord`: A vector with one or more variable names that is ordinal for which imputation is performed. Binary variable names can be included in eithwe `var_ord` or `var_nom`. 
-* `var_nom`: A vector with one or more variable names that is nominal for which imputation is performed. 
-* `var_lgstc`: A vector with one or more variable names that is proportional ranging between 0 and 1 for which imputation is performed. 
+* `var_ord`: (Optional) A vector of names of *ordinal* variables in `var_impute`. Binary variables can be included in either `var_ord` or `var_nom`. 
+* `var_nom`: (Optional) A vector of names of *nominal* variables (non-ordinal categorical variables) in `var_impute`.
+* `var_lgstc`: (Optional) A vector of names of *proportional* variables (ranges between 0 and 1) in `var_impute`.
 * `var_predictor`: A vector with one or more variable names that we use as predictors to impute variables in `var_impute`. If unspecified (`NULL`), the function uses all variables in `data` except for variables in `var_impute`.
 * `method`: Imputation method. Choose `amelia`, `mice` or `miceranger`. Default is `amelia`. 
 * `n_impute`: The number of imputed data sets to produce (equivalent of argument `m` in `amelia()` and `miceRanger()`). Default is 5.

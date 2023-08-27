@@ -17,22 +17,28 @@ stratify_sps <- function(X, num_site = NULL, condition = NULL){
   ## X
   ## X contains NA
   if(any(is.na(X))){
-    stop(" X contains missing data. Please supply X without missing values. Consider using `impute_var()` in R package `spsRdata`. ")
+    stop(" `X` contains missing data. Please supply X without missing values. Consider using `impute_var()` in R package `spsRdata`. ")
   }
 
   ## factor or character
   if(all(sapply(X, class) == "numeric") == FALSE){
-    stop(" X contains `factor` or `character` variables. Before using sps(), please convert them into numeric or binary variables. ")
+    stop(" `X` contains `factor` or `character` variables. Before using sps(), please convert them into numeric or binary variables. ")
   }
 
   ## num_site
+  if(is.list(num_site) == FALSE){
+    stop(" `num_site` should be a list of two elements. ")
+  }
   if((num_site[[1]] %in% c("at least", "at most")) == FALSE){
-     stop(" The first element of `num_site` should be either `at least` or `at most` ")
+    stop(" The first element of `num_site` should be either `at least` or `at most` ")
   }
   if(is.numeric(num_site[[2]]) == FALSE){
     stop(" The second element of `num_site` should be class `numeric` ")
   }
   ## condition
+  if(is.list(condition) == FALSE){
+    stop(" `condition` should be a list of three elements. ")
+  }
   if((condition[[1]] %in% colnames(X)) == FALSE){
     stop(" The first element of `condition` should be one of `colnames(X)` ")
   }

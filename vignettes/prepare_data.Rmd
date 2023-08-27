@@ -47,13 +47,29 @@ Users can start with the default data set `sps_country_data` that contains a wid
 
 *Note*: We emphasize that R package `sps` and the corresponding SPS algorithm can be applied to any type of study site (e.g., states, districts, villages, or schools). As *multi-country* studies are most popular in political science, R package `spsRdata` focuses on country-level data collection for now, but we are planning to add more functionalities to facilitate data collection at different levels (e.g., states and cities) in the US as well. 
 
+
+
 ### <span style="color:#3366CC">**2. \ Default Country-Level Data set** </span> {#default}
 <p class="lh-lg">
 </p>
+
+Please first install R package `spsRdata`.
 ```{r eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+library(devtools)
+if(!require(spsRdata)) install_github("naoki-egami/spsRdata", dependencies = TRUE)
+```
+
+Then, call both R packages `spsR` and `spsRdata`.
+```{r eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+library(spsR)
 library(spsRdata)
+```
+
+
+```{r, echo = F, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 options(width=1000)
 ```
+
 
 In R package `spsRdata`, we provide a country-level data set (`sps_country_data`) comprised of 22 variables for 179 countries between 2010 and 2022. It contains a wide range of variables commonly used in the social sciences: they represent political, economic, and social characteristics of countries. These variables are collected from the following sources. 
 
@@ -220,7 +236,7 @@ sps_country_data4 <- merge(sps_country_data3,
 Users can run simple descriptive analyses to examine distribution and missing values. The function ``desc_stat`` returns simple descriptive statistics and number of missing entries in each year in the data set. Character and factor variables are automatically binarized to obtain descriptive statistics:
 
 ```{r}
-check_missing(data = sps_country_data4[, !names(sps_country_data4) %in% c('iso3', 'country')],
+check_missing(data = sps_country_data4[, !colnames(sps_country_data4) %in% c('iso3', 'country')],
                       id_time = 'year')
 ```
 A list object `desc` returns descriptive summary of each variable in the data set, whereas `miss` returns total counts of missing values (i.e., number of missing countries) in each year in the data set. If the years in which a user is interested in using contains a lot of missing values, we suggest imputing missing values using the `impute_var` function in R package `spsR`. Please see [Handle Missing Data](http://naokiegami.com/spsR/articles/missing_data.html).
@@ -228,37 +244,48 @@ A list object `desc` returns descriptive summary of each variable in the data se
 #### <span style="color:#3366CC">**3.5 \ Clean Data for `sps()`**</span> {#clean}
 <p class="lh-lg">
 </p>
-Finally, we clean data for function `sps()`. First, we need to have informative row names for the data. 
+Finally, we clean data for function `sps()`. First, we need to have informative row names and column names for the data. 
 
 ```{r}
+# row names
 row.names(sps_country_data4) <- sps_country_data4$country
+
+# column names
+colnames(sps_country_data4)[5:11] <- 
+  c('GDP', 'Unemployment', 'Immigration', 
+    'Female', 'Age', 'Education', 'Immig_Support')
 ```
 
-Second, for categorical variables, we binarize them. 
+
+Second, we can use `clean_for_sps` to prepare data for function `sps()`. 
 
 ```{r}
-X_region <- model.matrix(~ subregion - 1, 
-                         data = sps_country_data4[, "subregion", drop = FALSE])
+column_for_sps <- c("subregion", 
+                    "GDP", "Unemployment", "Immigration", 
+                    "Female", "Age", "Education", "Immig_Support")
 
-colnames(X_region) <- c("Eastern Europe", "Northern Europe", 
-                        "Southern Europe", "Western Europe")
+X_Imm <- clean_for_sps(X = sps_country_data4[, column_for_sps], scale = TRUE)
 ```
 
-Third, we keep all relevant variables and rename them. 
+This function automatically (1) binarizes all non-numeric variables and (2) standardizes numeric variables (means zero and standard deviations one) when argument `scale = TRUE`. Please only include variables to diversify. For example, users should not include site names to `X`.
+
+This `X_Imm` is ready for function `sps()`.
 
 ```{r}
-X_Imm <- cbind(sps_country_data4[, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS", 
-                                     "SM.POP.TOTL.ZS", "female", "age", 
-                                     "education", "support_imm")], 
-               X_region)
-
-colnames(X_Imm) <- c('GDP', 'Unemployment', 'Immigration', 'Female', 'Age', 
-                     'Education', 'Immig_Support', 
-                     colnames(X_region))
 head(X_Imm, n = 3)
 ```
 
-This `X_Imm` is ready for function `sps()`.
+
+<!-- Third, we keep all relevant variables and rename them.  -->
+
+<!-- ```{r} -->
+<!-- X_Imm <- cbind(sps_country_data4[, c("NY.GDP.MKTP.CD", "SL.UEM.TOTL.ZS",  -->
+<!--                                      "SM.POP.TOTL.ZS", "female", "age",  -->
+<!--                                      "education", "support_imm")],  -->
+<!--                X_region) -->
+<!-- colnames(X_Imm)[1:7] <- c('GDP', 'Unemployment', 'Immigration',  -->
+<!--                           'Female', 'Age', 'Education', 'Immig_Support') -->
+<!-- ``` -->
 
 <!-- ```{r} -->
 <!-- round(desc$corr[1:3, 1:3], 3) -->

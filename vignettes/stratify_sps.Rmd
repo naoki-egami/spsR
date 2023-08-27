@@ -108,7 +108,7 @@ out_st$selected_sites
 
 In practice, it is often recommended to add simple stratification to every variable to make sure that we can cover low and high values in each dimension. For example, after standardizing each variable, we can make sure to select at least 1 site above 0.5 standard deviation and at least 1 site below −0.5 standard deviation.
 
-```{r}
+```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE, results = FALSE}
 st_large <- st_small <- list()
 for(v in 1:7){
 st_large[[v]] <- stratify_sps(X = X_Imm, 
