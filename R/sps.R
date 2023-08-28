@@ -91,6 +91,16 @@ sps <- function(X, N_s,
       C  <- stratify$C
       c0 <- stratify$c0
     }else{
+      if(is.list(stratify) == FALSE){
+        stop(" If there is more than one stratification, `stratify` should be a list where each element is an output from `stratify_sps()`. ")
+      }else{
+        for(z in 1:length(stratify)){
+          if(("stratify_sps" %in% class(stratify[[z]])) == FALSE){
+            stop(" If there is more than one stratification, `stratify` should be a list where each element is an output from `stratify_sps()`. ")
+          }
+        }
+      }
+
       C_l <- list()
       c0 <- c()
       for(z in 1:length(stratify)){

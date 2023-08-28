@@ -65,7 +65,19 @@ stratify_sps <- function(X, num_site = NULL, condition = NULL){
   value <- condition[[3]]
   C_use <- stratify_base(X = X, columns = col_use, type = type_use, value = value)
 
-  cat(paste0("There are ", sum(C_use), " sites that satisfy the specified `condition` and sps() will select ", num_site[[1]], " ", num_site[[2]], " sites from those.\n"))
+  if(num_site[[2]] %in% c(0, 1)){
+    num_site_after <- "site"
+  }else{
+    num_site_after <- "sites"
+  }
+  if(sum(C_use) %in% c(0, 1)){
+    sum_site_after <- "site satisfies"
+  }else{
+    sum_site_after <- "sites satisfy"
+  }
+
+  cat(paste0(sum(C_use), " ", sum_site_after, " the specified `condition` and sps() will select ",
+             num_site[[1]], " ", num_site[[2]], " ", num_site_after, " from them.\n"))
 
   if(sum(C_use) == 0){
     warnings(paste0("There is no site that satisfies the specified `condition`"))
