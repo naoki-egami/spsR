@@ -150,7 +150,7 @@ percentile (<code>quantile(X_Imm[, "GDP"], prob = c(0.8))</code>).</p>
 <span>  <span class="fu"><a href="../reference/stratify_sps.html">stratify_sps</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X_Imm</span>, </span>
 <span>               num_site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"at least"</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>               condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"GDP"</span>, <span class="st">"larger than or equal to"</span>, <span class="va">q_80</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## There are 3 sites that satisfy the specified `condition` and sps() will select at least 1 sites from those.</span></span></code></pre>
+<pre><code><span><span class="co">## 3 sites satisfy the specified `condition` and sps() will select at least 1 site from them.</span></span></code></pre>
 <p>Similarly, researchers can ensure to select <code>at least</code>
 <code>1</code> site that have <code>GDP</code> between the 40th and 60th
 percentile
@@ -162,7 +162,7 @@ percentile
 <span>  <span class="fu"><a href="../reference/stratify_sps.html">stratify_sps</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X_Imm</span>, </span>
 <span>               num_site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"at least"</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>               condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"GDP"</span>, <span class="st">"between"</span>, <span class="va">q_40_60</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## There are 3 sites that satisfy the specified `condition` and sps() will select at least 1 sites from those.</span></span></code></pre>
+<pre><code><span><span class="co">## 3 sites satisfy the specified `condition` and sps() will select at least 1 site from them.</span></span></code></pre>
 <p>Users can also ensure to select <code>at least</code> <code>1</code>
 site that have <code>GDP</code> smaller than or equal to the 20
 percentile (<code>quantile(X_Imm[, "GDP"], prob = c(0.2))</code>).</p>
@@ -173,7 +173,7 @@ percentile (<code>quantile(X_Imm[, "GDP"], prob = c(0.2))</code>).</p>
 <span>  <span class="fu"><a href="../reference/stratify_sps.html">stratify_sps</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X_Imm</span>, </span>
 <span>               num_site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"at least"</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>               condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"GDP"</span>, <span class="st">"smaller than or equal to"</span>, <span class="va">q_20</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## There are 3 sites that satisfy the specified `condition` and sps() will select at least 1 sites from those.</span></span></code></pre>
+<pre><code><span><span class="co">## 3 sites satisfy the specified `condition` and sps() will select at least 1 site from them.</span></span></code></pre>
 <p><strong>Arguments</strong></p>
 <ul>
 <li><p><code>num_site</code>: A list of two elements, e.g.,
@@ -255,7 +255,7 @@ country from each of 4 sub-regions of Europe.</p>
 <span>  <span class="fu"><a href="../reference/stratify_sps.html">stratify_sps</a></span><span class="op">(</span>X<span class="op">=</span><span class="va">X_Imm</span>, </span>
 <span>               num_site<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"at least"</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>               condition<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Northern Europe"</span>, <span class="st">"larger than or equal to"</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## There are 6 sites that satisfy the specified `condition` and sps() will select at least 1 sites from those.</span></span></code></pre>
+<pre><code><span><span class="co">## 6 sites satisfy the specified `condition` and sps() will select at least 1 site from them.</span></span></code></pre>
 <p>Similarly, the following codes ensure that we select
 <code>at least</code> <code>1</code> site from countries that have
 <code>Eastern Europe = 1</code>, <code>Western Europe = 1</code> and
@@ -265,19 +265,19 @@ country from each of 4 sub-regions of Europe.</p>
 <span>  <span class="fu"><a href="../reference/stratify_sps.html">stratify_sps</a></span><span class="op">(</span>X<span class="op">=</span><span class="va">X_Imm</span>, </span>
 <span>               num_site<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"at least"</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>               condition<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Eastern Europe"</span>, <span class="st">"larger than or equal to"</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## There are 1 sites that satisfy the specified `condition` and sps() will select at least 1 sites from those.</span></span></code></pre>
+<pre><code><span><span class="co">## 1 site satisfies the specified `condition` and sps() will select at least 1 site from them.</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">st_WE</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="../reference/stratify_sps.html">stratify_sps</a></span><span class="op">(</span>X<span class="op">=</span><span class="va">X_Imm</span>, </span>
 <span>               num_site<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"at least"</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>               condition<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Western Europe"</span>, <span class="st">"larger than or equal to"</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## There are 6 sites that satisfy the specified `condition` and sps() will select at least 1 sites from those.</span></span></code></pre>
+<pre><code><span><span class="co">## 6 sites satisfy the specified `condition` and sps() will select at least 1 site from them.</span></span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">st_SE</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="../reference/stratify_sps.html">stratify_sps</a></span><span class="op">(</span>X<span class="op">=</span><span class="va">X_Imm</span>, </span>
 <span>               num_site<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"at least"</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>               condition<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Southern Europe"</span>, <span class="st">"larger than or equal to"</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## There are 2 sites that satisfy the specified `condition` and sps() will select at least 1 sites from those.</span></span></code></pre>
+<pre><code><span><span class="co">## 2 sites satisfy the specified `condition` and sps() will select at least 1 site from them.</span></span></code></pre>
 <p>Finally, users combine them into one <code>list</code> and supply it
 to function <code><a href="../reference/sps.html">sps()</a></code>.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
