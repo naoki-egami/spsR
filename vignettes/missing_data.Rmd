@@ -76,6 +76,17 @@ apply(imputed_data[, c('e_p_polity', 'NY.GDP.MKTP.CD')], 2, function(x) sum(is.n
 * `n_impute`: The number of imputed data sets to produce (equivalent of argument `m` in `amelia()` and `miceRanger()`). Default is 5.
 * `...`: Arguments passed onto `Amelia::amelia()` or `mice::mice()` or `miceRanger::miceRanger()`.
 
+<\br>
+Note that, in providing a collection of imputation methods, our function may not be as transparent in its imputing process compared to directly using a particular imputation package of choice. For a more advanced imputation method, we encourage users to implement the imputation by directly calling the preferred imputation package function. 
+
+```{r, eval = TRUE, echo = TRUE, tidy=FALSE, warning=FALSE, error=FALSE, message=FALSE, results = FALSE}
+library(Amelia)
+imputed_amelia <- amelia(x = sps_country_data, 
+                         cs = 'country', 
+                         ts = 'year', 
+                         idvars = c('iso3', 'region', 'subregion', 'lang'))
+```
+
 **Imputation Methods**
 
 1. [Amelia](https://gking.harvard.edu/amelia). Please read Honaker, King, and Blackwell (2011) for more details.
