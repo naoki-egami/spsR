@@ -183,13 +183,25 @@ function uses all variables in <code>data</code> except for variables in
 <code>amelia</code>.</li>
 <li>
 <code>n_impute</code>: The number of imputed data sets to produce
-(equivalent of argument <code>m</code> in <code>amelia()</code> and
+(equivalent of argument <code>m</code> in <code><a href="https://rdrr.io/pkg/Amelia/man/amelia.html" class="external-link">amelia()</a></code> and
 <code>miceRanger()</code>). Default is 5.</li>
 <li>
 <code>...</code>: Arguments passed onto
 <code><a href="https://rdrr.io/pkg/Amelia/man/amelia.html" class="external-link">Amelia::amelia()</a></code> or <code><a href="https://amices.org/mice/reference/mice.html" class="external-link">mice::mice()</a></code> or
 <code><a href="https://rdrr.io/pkg/miceRanger/man/miceRanger.html" class="external-link">miceRanger::miceRanger()</a></code>.</li>
 </ul>
+<p>&lt;&gt; Note that, in providing a collection of imputation methods,
+our function may not be as transparent in its imputing process compared
+to directly using a particular imputation package of choice. For a more
+advanced imputation method, we encourage users to implement the
+imputation by directly calling the preferred imputation package
+function.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gking.harvard.edu/amelia" class="external-link">Amelia</a></span><span class="op">)</span></span>
+<span><span class="va">imputed_amelia</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html" class="external-link">amelia</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">sps_country_data</span>, </span>
+<span>                         cs <span class="op">=</span> <span class="st">'country'</span>, </span>
+<span>                         ts <span class="op">=</span> <span class="st">'year'</span>, </span>
+<span>                         idvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'iso3'</span>, <span class="st">'region'</span>, <span class="st">'subregion'</span>, <span class="st">'lang'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Imputation Methods</strong></p>
 <ol style="list-style-type: decimal">
 <li>
