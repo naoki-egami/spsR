@@ -30,9 +30,10 @@ sps_cv <- function(out = NULL, estimates_selected = NULL, K = 2, max_iter = 100,
   # reordering
   estimates_selected <- estimates_selected[match(rownames(X_selected), rownames(estimates_selected)), ]
 
-
   estimate <- estimates_selected[, 1]
   se <- estimates_selected[, 2]
+
+
 
   s <- nrow(X_selected)
   ind <- seq(1:s)

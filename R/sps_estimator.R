@@ -81,6 +81,7 @@ sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, selec
   # first estimate weights
   out_W <- sps_weights(X = X_use, site = ss_use, site_name = NULL)
   W <- out_W$W
+  RMSE_X  <- out_W$RMSE
   #}
 
   # Estimate between-site variance
@@ -104,7 +105,8 @@ sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, selec
   out_overall <- c(estimate_overall, se_overall); names(out_overall) <- c("Estimate", "Std. Error")
 
   out <- list("average_site_ATE" = out_overall, "site_specific_ATE" = out_each,
-              "bet_se" = sqrt(bet_var), "estimates_selected" = estimates_selected)
+              "bet_se" = sqrt(bet_var), "estimates_selected" = estimates_selected,
+              "RMSE_X" = RMSE_X)
 
   class(out) <- c(class(out), "sps_estimator")
 
