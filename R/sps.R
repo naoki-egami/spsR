@@ -6,7 +6,7 @@
 #' @param site_exclude (Optional. Default = \code{NULL}) Names of sites users want to always exclude.
 #' @param lambda Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0)}. Users who want to fine-tune the tuning parameters, please see the methodological details in Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).
 #' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
-#' @param max_iter Numeric. The number of iterations used in the optimization. Default = \code{3}.
+#' @param max_iter Numeric. The number of iterations used in the optimization. Default = \code{10}.
 #' @import CVXR
 #' @import ggplot2
 #' @import GGally
@@ -33,7 +33,7 @@ sps <- function(X, N_s,
                 site_exclude = NULL,
                 lambda = c(1, 1, 0),
                 seed = 1234,
-                max_iter = 3){
+                max_iter = 10){
 
   # ###############
   # Housekeeping
