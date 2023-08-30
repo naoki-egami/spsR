@@ -6,6 +6,7 @@
 #' @param site_exclude (Optional. Default = \code{NULL}) Names of sites users want to always exclude.
 #' @param lambda Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0)}. Users who want to fine-tune the tuning parameters, please see the methodological details in Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).
 #' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
+#' @param max_iter Numeric. The number of iterations used in the optimization. Default = \code{3}.
 #' @import CVXR
 #' @import ggplot2
 #' @import GGally
@@ -31,7 +32,8 @@ sps <- function(X, N_s,
                 site_include = NULL,
                 site_exclude = NULL,
                 lambda = c(1, 1, 0),
-                seed = 1234){
+                seed = 1234,
+                max_iter = 3){
 
   # ###############
   # Housekeeping
@@ -43,7 +45,7 @@ sps <- function(X, N_s,
   }
 
   ## factor or character
-  if(all(sapply(X, class) == "numeric") == FALSE){
+  if(any(sapply(X, class) %in% c("factor", "character")) == TRUE){
     stop(" X contains `factor` or `character` variables. Before using sps(), please convert them into numeric or binary variables. ")
   }
 
@@ -205,8 +207,18 @@ sps <- function(X, N_s,
   check_inf <- Problem(Minimize(0), constraints)
   res_inf <- solve(check_inf)
   if(res_inf$status != "optimal"){
-    stop(" Constraints are infeasible. Please check whether conditions in `stratify` are feasible. ")
+    if(is.null(stratify) == FALSE){
+      stop(" Constraints are infeasible. Please check whether conditions in `stratify` are feasible. ")
+    }
   }
+
+  # Problem is big!
+  if(choose(N, N_s) > 1000000){
+    choose_p <- paste0("choose(", N, ", ", N_s, ") = ", choose(N, N_s))
+    cat("Note 1: The optimization problem is big. There are more than 1 million unique combinations of sites (roughly ", choose_p, "combinations). Thus, it will take some computational time to solve the problem. \n")
+    cat("Note 2: If users want to reduce the computational time, they can divide the population of sites into sub-populations and run sps() within each sub-populations. For example, if users want to select 9 sites out of 50 sites, they can divide 50 sites into three sub-populations and select 3 sites from each sub-population of sites by running sps() separately. \n\n")
+  }
+
 
   cat("Selecting Study Sites...")
   if(lambda[3] == 0){
@@ -217,7 +229,46 @@ sps <- function(X, N_s,
   p <- Problem(obj, constraints)
 
   set.seed(seed)
-  res <- solve(p)
+  res <- solve(p, solver = "ECOS_BB")
+
+  ## Checking Results
+  try_again <- FALSE
+  try_num <- 0
+  if(res$status == "infeasible" | res$status == "infeasible_inaccurate"){
+    if(is.null(stratify) == TRUE){
+      try_again <- TRUE
+    }else{
+      message("\n Constraints are infeasible. Please check whether conditions in `stratify` are feasible. \n")
+    }
+  }
+  if(try_again == TRUE){
+    try_num   <- 1
+    feastol_use <- 1e-08
+    reltol_use  <- 1e-08
+    abstol_use  <- 1e-08
+    while(try_again == TRUE & try_num <= max_iter){
+      set.seed(seed + try_num)
+      feastol_use <- feastol_use*10
+      reltol_use  <- reltol_use*10
+      abstol_use <- abstol_use*10
+      res <- solve(p,
+                   solver = "ECOS_BB",
+                   feastol = feastol_use,
+                   reltol  = reltol_use,
+                   abstol  = abstol_use)
+
+      if(res$status == "infeasible" | res$status == "infeasible_inaccurate"){
+        if(is.null(stratify) == TRUE){
+          try_again <- TRUE
+        }
+      }else{
+        try_again <- FALSE
+      }
+      try_num <- try_num + 1
+    }
+  }
+
+  ## Collecting Results
   ss0 <- res$getValue(S)
   Z_out <- res$getValue(Z)
   W_out <- res$getValue(W)
@@ -237,12 +288,15 @@ sps <- function(X, N_s,
                        "X" = X_orig,
                        "Q" = Q_out,
                        "N_s" = N_s,
-                       "N" = N)
+                       "N" = N,
+                       "try_num" = try_num)
 
   if(any(is.na(selected_sites))){
     message("\n The optimization fails. \n")
     if(res$status == "infeasible" | res$status == "infeasible_inaccurate"){
-      message("\n Constraints are infeasible. Please check whether conditions in`stratify` are feasible. \n")
+      if(is.null(stratify) == FALSE){
+        message("\n Constraints are infeasible. Please check whether conditions in `stratify` are feasible. \n")
+      }
     }else if(res$status == "unbounded" | res$status == "unbounded_inaccurate"){
       message("\n The objective function is unbounded. Some problems in X. \n")
     }else if(res$status == "solver_error"){

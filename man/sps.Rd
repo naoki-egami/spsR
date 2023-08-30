@@ -11,7 +11,8 @@ sps(
   site_include = NULL,
   site_exclude = NULL,
   lambda = c(1, 1, 0),
-  seed = 1234
+  seed = 1234,
+  max_iter = 3
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ sps(
 \item{lambda}{Values of the tuning parameters. If users want to change how to balance three parts of the objective function, they can change \code{lambda}. Default values are \code{c(1, 1, 0)}. Users who want to fine-tune the tuning parameters, please see the methodological details in Egami and Lee (2023+) (https://naokiegami.com/paper/sps.pdf).}
 
 \item{seed}{Numeric. \code{seed} used internally. Default = \code{1234}.}
+
+\item{max_iter}{Numeric. The number of iterations used in the optimization. Default = \code{3}.}
 }
 \value{
 \code{sps} returns an object of \code{sps} class.

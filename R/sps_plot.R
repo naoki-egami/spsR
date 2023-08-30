@@ -18,6 +18,7 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
 
     if(is.null(columns) == TRUE){
       columns <- colnames(X)
+      X_use <- X
     }else{
       X_use <- X[, columns]
     }

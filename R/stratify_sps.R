@@ -21,7 +21,7 @@ stratify_sps <- function(X, num_site = NULL, condition = NULL){
   }
 
   ## factor or character
-  if(all(sapply(X, class) == "numeric") == FALSE){
+  if(any(sapply(X, class) %in% c("factor", "character")) == TRUE){
     stop(" `X` contains `factor` or `character` variables. Before using sps(), please convert them into numeric or binary variables. ")
   }
 

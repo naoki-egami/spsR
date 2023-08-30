@@ -48,6 +48,10 @@ between_var_sps <- function(estimate, se, X_selected, site_name = NULL){
 
   # Estimate between-site variance
   num  <- sum(e_res^2) - (sum(within_var))
+
+  if(num < 0){ # Conservative estimator
+    num <- sum(e_res^2)/3
+  }
   deno <- sum(1 + sum(W_sq))
   bet_var <- max(0, num/deno)
 
