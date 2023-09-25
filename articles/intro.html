@@ -444,17 +444,7 @@ ATEs in selected sites to estimate the average-site ATE.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sps_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sps_estimator.html">sps_estimator</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">out</span>, </span>
 <span>                         estimates_selected <span class="op">=</span> <span class="va">exp_estimate_Imm_selected</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">sps_est2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sps_estimator.html">sps_estimator</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">internal</span><span class="op">$</span><span class="va">X</span>, estimates_selected <span class="op">=</span> <span class="va">exp_estimate_Imm_selected</span>, </span>
-<span>                          selected_sites <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">selected_sites</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sps_est</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##   Estimate Std. Error  CI Lower  CI Upper p value    </span></span>
-<span><span class="co">##  0.2888706 0.01957847 0.2504975 0.3272437       0 ***</span></span>
-<span><span class="co">## ---</span></span>
-<span><span class="co">## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sps_est2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##   Estimate Std. Error  CI Lower  CI Upper p value    </span></span>
 <span><span class="co">##  0.2888706 0.01957847 0.2504975 0.3272437       0 ***</span></span>
@@ -474,7 +464,7 @@ of the selected sites and <code>rownames(estimates_selected)</code>
 should be names of the selected sites.</li>
 </ul>
 <p>We can check the results using <code>summary</code> function.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sps_est</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##   Estimate Std. Error  CI Lower  CI Upper p value    </span></span>
@@ -483,7 +473,7 @@ should be names of the selected sites.</li>
 <span><span class="co">## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
 <p>We can also visualize both site-specific ATEs and the average-site
 ATE together using <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sps_est</span><span class="op">)</span></span></code></pre></div>
 <p><img src="intro_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <p>Finally, users can use site-level cross-validation to assess the
@@ -492,12 +482,22 @@ choose half of the selected sites as if they were unobserved
 non-selected sites and predict the average ATE of those non-selected
 sites based on the remaining selected sites. The null hypothesis is that
 the predicted ATEs are the same as the observed ATEs.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sps_cv_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sps_cv.html">sps_cv</a></span><span class="op">(</span>out <span class="op">=</span> <span class="va">out</span>, estimates_selected <span class="op">=</span> <span class="va">exp_estimate_Imm_selected</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sps_cv_out</span><span class="op">$</span><span class="va">p_value</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.94</span></span></code></pre>
 <p>In this example, an estimated p-value is 0.94, and we do not find
 evidence for the bias due to unobserved moderators.</p>
+</div>
+<div class="section level3">
+<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
+<p>Egami, N., and Lee, D. (2023+). Designing Multi-Context Studies for
+External Validity: Site Selection via Synthetic Purposive Sampling.</p>
+<p>Naumann, E., F. Stoetzer, L., and Pietrantuono, G. (2018). Attitudes
+towards Highly Skilled and Low-Skilled Immigration in Europe: A Survey
+Experiment in 15 European countries. European Journal of Political
+Research 57, 4, 1009–1030.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
