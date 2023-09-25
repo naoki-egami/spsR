@@ -12,7 +12,7 @@ sps(
   site_exclude = NULL,
   lambda = c(1, 1, 0),
   seed = 1234,
-  max_iter = 3
+  max_iter = 10
 )
 }
 \arguments{
@@ -30,7 +30,7 @@ sps(
 
 \item{seed}{Numeric. \code{seed} used internally. Default = \code{1234}.}
 
-\item{max_iter}{Numeric. The number of iterations used in the optimization. Default = \code{3}.}
+\item{max_iter}{Numeric. The number of iterations used in the optimization. Default = \code{10}.}
 }
 \value{
 \code{sps} returns an object of \code{sps} class.

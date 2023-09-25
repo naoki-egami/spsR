@@ -1,5 +1,5 @@
 #' Plot function for \code{sps}
-#' @param out Output from function \code{sps()}
+#' @param out Output from function \code{sps()}. When \code{before_selection = TRUE}, set this argument to be \code{NULL}.
 #' @param title Title of the plot
 #' @param columns (Optional. Default = \code{NULL}) Names of columns users want to visualize. When \code{NULL}, the function plots every column.
 #' @param before_selection Logical (\code{TRUE} or \code{FALSE}. Default = \code{FALSE}). When \code{FALSE}, the function will compare selected and non-selected sites. When \code{TRUE}, the function simply visualizes the distribution of site-level variables in the target population of sites.

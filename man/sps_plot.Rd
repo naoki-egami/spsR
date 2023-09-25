@@ -7,7 +7,7 @@
 sps_plot(out, title = NULL, columns = NULL, before_selection = FALSE, X = NULL)
 }
 \arguments{
-\item{out}{Output from function \code{sps()}}
+\item{out}{Output from function \code{sps()}. When \code{before_selection = TRUE}, set this argument to be \code{NULL}.}
 
 \item{title}{Title of the plot}
 

@@ -52,7 +52,7 @@ sps <- function(X, N_s,
   ## sd of each variable is so differnet
   X_sd <- apply(X, 2, sd)
   if(max(X_sd)/min(X_sd) >= 100){
-    warning(" Some variables in X have standard deviation more than 100 times larger than other variables. This might cause estimation problem. Please consider using `scale()` to make standard deviations of variables comparable. ")
+    warning(" \n Some variables in X have standard deviation more than 100 times larger than other variables. This might cause estimation problem. Please consider using `scale()` to make standard deviations of variables comparable. ")
   }
 
   ## Transform to matrix
@@ -69,7 +69,7 @@ sps <- function(X, N_s,
 
   ## row names
   if(any(is.null(rownames(X)))){
-    warning(" rownames(X) is NULL. We use 1, 2, ... to represent names of sites. ")
+    warning(" \n rownames(X) is NULL. We use 1, 2, ... to represent names of sites. ")
     rownames(X) <- seq(from = 1, to = nrow(X))
   }
 
@@ -302,6 +302,12 @@ sps <- function(X, N_s,
     }else if(res$status == "solver_error"){
       message("\n Errors in the underlying package `CVXR`. \n")
     }
+  }
+
+  # compute W
+  if(any(is.na(selected_sites)) == FALSE){
+    out_W <- sps_weights(X = X, site = ss_out, site_name = rownames(X))
+    W_out <- out_W$W
   }
 
   out <- list("selected_sites" = selected_sites,

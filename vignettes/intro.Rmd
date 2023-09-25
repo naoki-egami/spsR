@@ -250,11 +250,7 @@ For external validity analysis, we then aggregate these site-specific ATEs in se
 ```{r}
 sps_est <- sps_estimator(out = out, 
                          estimates_selected = exp_estimate_Imm_selected)
-
-sps_est2 <- sps_estimator(X = out$internal$X, estimates_selected = exp_estimate_Imm_selected, 
-                          selected_sites = sort(unique(out$selected_sites)))
 summary(sps_est)
-summary(sps_est2)
 ```
 
 **Arguments** 
@@ -281,3 +277,10 @@ round(sps_cv_out$p_value, 2)
 ```
 
 In this example, an estimated p-value is `r round(sps_cv_out$p_value, 2)`, and we do not find evidence for the bias due to unobserved moderators. 
+
+
+### References
+
+Egami, N., and Lee, D. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling.
+
+Naumann, E., F. Stoetzer, L., and Pietrantuono, G. (2018). Attitudes towards Highly Skilled and Low-Skilled Immigration in Europe: A Survey Experiment in 15 European countries. European Journal of Political Research 57, 4, 1009–1030.
