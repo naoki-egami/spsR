@@ -8,7 +8,6 @@
 #' @param seed Numeric. \code{seed} used internally. Default = \code{1234}.
 #' @param max_iter Numeric. The number of iterations used in the optimization. Default = \code{10}.
 #' @param solver Solver we use in the internal CVXR optimization. Default = \code{ECOS_BB}. See the CVXR website for information on other solvers.
-#' @param num_iter Numeric. The number of iterations used in the underlying optimization.
 #' @import CVXR
 #' @import ggplot2
 #' @import GGally
@@ -29,15 +28,14 @@
 #' @export
 #'
 
-sps <- function(X, N_s,
-                stratify = NULL,
-                site_include = NULL,
-                site_exclude = NULL,
-                lambda = c(1, 1, 0),
-                seed = 1234,
-                max_iter = 10,
-                solver = "ECOS_BB",
-                num_iter = NULL){
+sps_approx3 <- function(X, N_s,
+                        stratify = NULL,
+                        site_include = NULL,
+                        site_exclude = NULL,
+                        lambda = c(1, 1, 0),
+                        seed = 1234,
+                        max_iter = 10,
+                        solver = "GLPK"){
 
   # ###############
   # Housekeeping
@@ -145,34 +143,36 @@ sps <- function(X, N_s,
   L <- ncol(X)
 
   S <- Variable(N, integer = TRUE)
-  W <- Variable(N, N)
-  Q <- Variable(N, N)
-  Z <- Variable(N, L)
+  # W <- Variable(N, N)
+  # Q <- Variable(N, N)
+  # Z <- Variable(N, L)
+  H <- Variable(N, N, integer = TRUE)
 
   # constraints
-  co_1 <- W >= 0
-  co_2 <- Q >= 0
+  # co_1 <- W >= 0
+  # co_2 <- Q >= 0
   co_3 <- S >= 0
   co_4 <- S <= 1
   co_5 <- sum(S) == N_s # the number of selected sites
-  co_6 <- sum_entries(Q, axis = 2) == (1 - S)
-  co_7 <- list()
-  for(j in 1:N){
-    co_7[[j]] <- Q[j,] <= S[j]
-  }
-  co_8 <- Q <= W
-  co_9 <- list()
-  for(j in 1:N){
-    co_9[[j]] <- Q[j,] >= W[j,] - (1 - S[j])
-  }
-  co_10 <- list()
-  for(k in 1:N){
-    co_10[[k]] <- W[,k] <= (1 - S[k])
-  }
-  co_11 <- list()
-  for(l in 1:L){
-    co_11[[l]] <- Z[,l] == (1-S)*X[,l] - t(Q) %*% X[,l]
-  }
+  # co_6 <- sum_entries(Q, axis = 2) == (1 - S)
+  # co_6 <- sum_entries(W, axis = 2) == (1 - S)
+  # co_7 <- list()
+  # for(j in 1:N){
+  #   co_7[[j]] <- Q[j,] <= S[j]
+  # }
+  # co_8 <- Q <= W
+  # co_9 <- list()
+  # for(j in 1:N){
+  #   co_9[[j]] <- Q[j,] >= W[j,] - (1 - S[j])
+  # }
+  # co_10 <- list()
+  # for(k in 1:N){
+  #   co_10[[k]] <- W[,k] <= (1 - S[k])
+  # }
+  # co_11 <- list()
+  # for(l in 1:L){
+  #   co_11[[l]] <- Z[,l] == (1-S)*X[,l] - t(Q) %*% X[,l]
+  # }
   if(all(is.null(site_include_ind)) == FALSE){
     co_12 <- S[site_include_ind] == 1
   }else{
@@ -187,8 +187,12 @@ sps <- function(X, N_s,
   # Note: W_{jk} = 0 when k is not selected.
   # Note: W_{jk} can be arbitrary when j is not selected
 
-  constraints <- c(list(co_1, co_2, co_3, co_4, co_5, co_6, co_8),
-                   co_7, co_9, co_10, co_11, co_12, co_13)
+  constraints <- c(list(co_3, co_4, co_5), co_12, co_13)
+
+  # co_2,
+  # co_6,
+  # co_8),
+  # co_7, co_9, co_10, # co_11,
 
   # Stratification
   if(is.null(C) == FALSE){
@@ -196,11 +200,42 @@ sps <- function(X, N_s,
     constraints <- c(constraints, co_14)
   }
 
+  ## New Constraints
+  # W_{jk} = 0 when S_j = 0
+  # co_15 <- list()
+  # for(j in 1:N){
+  #   co_15[[j]] <- W[j,] <= S[j]
+  # }
+
+  ## H_{ij}
+  co_16 <- co_17 <- co_18 <- co_19 <- list()
+  for(i in 1:N){
+    co_16[[i]] <- H[i, ] <= S[i]
+  }
+  for(j in 1:N){
+    co_17[[j]] <- H[,j] <= S[j]
+  }
+  for(i in 1:N){
+    co_18[[i]] <- list()
+    for(j in 1:N){
+      co_18[[i]][[j]] <- H[i,j] >= S[i] + S[j] - 1
+    }
+  }
+ co_19 <- H >= 0
+
+  constraints <- c(constraints, co_16, co_17, unlist(co_18), list(co_19))
+
   # interpolation bias (Distance from each non-selected sites)
   Xs <- matrix(NA, nrow = N, ncol = N)
   for(j in 1:N){
     for(k in 1:N){
       Xs[j,k] <- mean((X[j, ] - X[k,])^2)
+    }
+  }
+  X_multi <- matrix(NA, nrow = N, ncol = N)
+  for(j in 1:N){
+    for(k in 1:N){
+      X_multi[j,k] <-  sum(X[j, ]*X[k, ])
     }
   }
 
@@ -218,22 +253,32 @@ sps <- function(X, N_s,
   cat("Checking whether constraints specified in `stratify` are feasible...\n")
   if(is.null(stratify) == FALSE){
     check_inf <- Problem(Minimize(0), constraints = constraints)
-    res_inf   <- solve(check_inf,  solver = solver, num_iter = num_iter)
+    res_inf   <- solve(check_inf,  solver = solver)
     if(res_inf$status != "optimal"){
       stop(" Constraints are infeasible. Please check whether conditions in `stratify` are feasible. ")
     }
   }
 
+  # New Objective Function
+  X_j_2_mean  <- apply(X^2, 1, sum)
+  X_multi_sum <- apply(X_multi, 2, sum)/N_s
+  H_multi <- X_multi * ((2/N_s) + N/(N_s^2))
+  Xs_sum <- apply(Xs, 1, sum)
+
+  Main_1 <- sum_entries((1-S) * X_j_2_mean) - 2*sum_entries(S * X_multi_sum) + sum_entries(H*H_multi)
+  Main_2 <- sum_entries(S*Xs_sum) - sum_entries(H*Xs)
+  Main_3 <- sum_squares(W)
+
   cat("Selecting Study Sites...\n")
   if(lambda[3] == 0){
-    obj <- Minimize( lambda[1]*sum_squares(Z)/(L*(N-N_s)) + lambda[2]*(sum_entries(Q*Xs)/(N-N_s)))
+    obj <- Minimize( lambda[1]*Main_1/(L*(N-N_s)) + lambda[2]*(Main_2/(N-N_s)))
   }else{
-    obj <- Minimize( lambda[1]*sum_squares(Z)/(L*(N-N_s)) + lambda[2]*(sum_entries(Q*Xs)/(N-N_s)) + lambda[3]*sum_squares(Q)/(N-N_s) )
+    obj <- Minimize( lambda[1]*Main_1/(L*(N-N_s)) + lambda[2]*(Main_2/(N-N_s)) + lambda[3]*Main_3/(N-N_s) )
   }
   p <- Problem(obj, constraints = constraints)
 
   set.seed(seed)
-  res <- solve(p, solver = solver, num_iter = num_iter)
+  res <- solve(p, solver = solver, warm_start = FALSE)
 
   ## Checking Results
   try_again <- FALSE
@@ -259,8 +304,7 @@ sps <- function(X, N_s,
                    solver  = solver,
                    feastol = feastol_use,
                    reltol  = reltol_use,
-                   abstol  = abstol_use,
-                   num_iter = num_iter)
+                   abstol  = abstol_use)
 
       if(res$status == "infeasible" | res$status == "infeasible_inaccurate"){
         if(is.null(stratify) == TRUE){
@@ -275,11 +319,11 @@ sps <- function(X, N_s,
 
   ## Collecting Results
   ss0 <- res$getValue(S)
-  Z_out <- res$getValue(Z)
+  Z_out <- NA
   W_out <- res$getValue(W)
-  Q_out <- res$getValue(Q)
+  Q_out <- NA
 
-  obj_1 <- sum(Z_out^2)/(L*(N-N_s))
+  obj_1  <- sum(Z_out^2)/(L*(N-N_s))
   obj_2  <- sum(Q_out*Xs)/(N-N_s)
   obj_3  <- sum(Q_out^2)/(N-N_s)
   ss_out   <- round(ss0)

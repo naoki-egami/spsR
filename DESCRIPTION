@@ -1,7 +1,7 @@
 Package: spsR
 Type: Package
 Title: Synthetic Purposive Sampling 
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Naoki", "Egami", email = "naoki.egami5@gmail.com", role = c("cre", "aut")),
     person("Diana", "Da In Lee", email = "dl2860@columbia.edu", role = "aut"))
