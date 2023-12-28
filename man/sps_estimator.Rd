@@ -7,6 +7,7 @@
 sps_estimator(
   out = NULL,
   estimates_selected = NULL,
+  subgroup = NULL,
   X = NULL,
   selected_sites = NULL
 )
@@ -15,6 +16,8 @@ sps_estimator(
 \item{out}{Output from function \code{sps()}}
 
 \item{estimates_selected}{data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be names of the selected sites.}
+
+\item{subgroup}{(Optional. Default = \code{NULL}). A vector that defines subgroups to estimate the subgroup average-site ATE. The length and order of \code{subgroup} should be equal to the rows in \code{X} used to get output \code{out} with function \code{sps()}.}
 
 \item{X}{(Optional. Use this only when sites are not selected based on \code{sps()}. Default = \code{NULL}) Site-level variables for the target population of sites. Row names should be names of sites.}
 

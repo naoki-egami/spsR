@@ -1,6 +1,7 @@
 #' Synthetic Purposive Sampling Estimator for the Average-Site ATE
 #' @param out Output from function \code{sps()}
 #' @param estimates_selected data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and \code{rownames(estimates_selected)} should be names of the selected sites.
+#' @param subgroup (Optional. Default = \code{NULL}). A vector that defines subgroups to estimate the subgroup average-site ATE. The length and order of \code{subgroup} should be equal to the rows in \code{X} used to get output \code{out} with function \code{sps()}.
 #' @param X (Optional. Use this only when sites are not selected based on \code{sps()}. Default = \code{NULL}) Site-level variables for the target population of sites. Row names should be names of sites.
 #' @param selected_sites (Optional. Use this only when sites are not selected based on \code{sps()}. Default = \code{NULL}) Names of sites users selected. This should be a subset of rownames(X).
 #' @return \code{sps_estimator} returns an object of \code{sps_estimator} class.
@@ -12,7 +13,7 @@
 #' @references Egami and Lee. (2023+). Designing Multi-Context Studies for External Validity: Site Selection via Synthetic Purposive Sampling. Available at \url{https://naokiegami.com/paper/sps.pdf}.
 #' @export
 
-sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, selected_sites = NULL){
+sps_estimator <- function(out = NULL, estimates_selected = NULL, subgroup = NULL, X = NULL, selected_sites = NULL){
 
   ## Housekeeping
   ### We order names in the order of X
@@ -79,7 +80,7 @@ sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, selec
 
   # if(is.null(W) == TRUE){
   # first estimate weights
-  out_W <- sps_weights(X = X_use, site = ss_use, site_name = NULL)
+  out_W <- sps_weights(X = X_use, site = ss_use, site_name = rownames(X_use))
   W <- out_W$W
   RMSE_X  <- out_W$RMSE
   #}
@@ -104,9 +105,43 @@ sps_estimator <- function(out = NULL, estimates_selected = NULL, X = NULL, selec
   se_overall <- sqrt(sum(std_w^2 *(se^2 + bet_var)))
   out_overall <- c(estimate_overall, se_overall); names(out_overall) <- c("Estimate", "Std. Error")
 
+
+  # ###############
+  # Subgroup
+  # ###############
+  if(is.null(subgroup) == FALSE){
+    if(length(subgroup) != nrow(X_use)){
+        stop("The length and order of `subgroup` should be equal to the rows of `X` used to create `out` from `sps()`. ")
+    }
+    subgroup_non_selected <- subgroup[ss_use == 0]
+    subgroup_selected <- subgroup[ss_use == 1]
+    uniq_sub <- sort(unique(subgroup))
+    out_sub <- matrix(NA, nrow = length(uniq_sub), ncol = 2)
+    for(sub in 1:length(uniq_sub)){
+      uniq_sub_use <- uniq_sub[sub]
+      if(any(subgroup_non_selected == uniq_sub_use)){
+        W_sub_use <- W[, subgroup_non_selected == uniq_sub_use]
+        W_k_use <- apply(W_sub_use, 1, sum)
+      }else{
+        W_k_use <- rep(0, nrow(W))
+      }
+      std_w_g0 <- as.numeric(subgroup_selected == uniq_sub_use) + W_k_use
+      std_w_g  <- std_w_g0/sum(std_w_g0)
+      estimate_g <- sum(std_w_g * estimate)
+      se_g <- sqrt(sum(std_w_g^2 *(se^2 + bet_var)))
+      out_sub[sub, 1:2] <- c(estimate_g, se_g)
+    }
+    colnames(out_sub) <- c("Estimate", "Std. Error")
+    rownames(out_sub) <- paste0("subgroup = ", uniq_sub)
+  }else{
+    out_sub <- NULL
+  }
+
   out <- list("average_site_ATE" = out_overall, "site_specific_ATE" = out_each,
+              "subgroup_average_site_ATE" = out_sub,
               "bet_se" = sqrt(bet_var), "estimates_selected" = estimates_selected,
-              "RMSE_X" = RMSE_X)
+              "RMSE_X" = RMSE_X,
+              "subgroup" = subgroup)
 
   class(out) <- c(class(out), "sps_estimator")
 
