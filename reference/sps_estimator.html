@@ -59,6 +59,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sps_estimator</span><span class="op">(</span></span>
 <span>  out <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  estimates_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  subgroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  selected_sites <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -72,6 +73,10 @@
 
 <dt>estimates_selected</dt>
 <dd><p>data.frame with two columns: the first column represents estimates of the site-specific ATEs for the selected sites and the second column represents its corresponding standard error. The number of rows is equal to the number of the selected sites and <code>rownames(estimates_selected)</code> should be names of the selected sites.</p></dd>
+
+
+<dt>subgroup</dt>
+<dd><p>(Optional. Default = <code>NULL</code>). A vector that defines subgroups to estimate the subgroup average-site ATE. The length and order of <code>subgroup</code> should be equal to the rows in <code>X</code> used to get output <code>out</code> with function <code><a href="sps.html">sps()</a></code>.</p></dd>
 
 
 <dt>X</dt>

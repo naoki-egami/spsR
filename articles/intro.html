@@ -449,6 +449,7 @@ ATEs in selected sites to estimate the average-site ATE.</p>
 <span>                         estimates_selected <span class="op">=</span> <span class="va">exp_estimate_Imm_selected</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sps_est</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Average-Site ATE:</span></span>
 <span><span class="co">##   Estimate Std. Error  CI Lower  CI Upper p value    </span></span>
 <span><span class="co">##  0.2888706 0.01957847 0.2504975 0.3272437       0 ***</span></span>
 <span><span class="co">## ---</span></span>
@@ -470,6 +471,7 @@ should be names of the selected sites.</li>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sps_est</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Average-Site ATE:</span></span>
 <span><span class="co">##   Estimate Std. Error  CI Lower  CI Upper p value    </span></span>
 <span><span class="co">##  0.2888706 0.01957847 0.2504975 0.3272437       0 ***</span></span>
 <span><span class="co">## ---</span></span>
@@ -478,7 +480,7 @@ should be names of the selected sites.</li>
 ATE together using <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sps_est</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-20-1.png" width="700"><img src="intro_files/figure-html/unnamed-chunk-20-2.png" width="700"></p>
 <p>Finally, users can use site-level cross-validation to assess the
 influence of unobserved moderators. In particular, users can randomly
 choose half of the selected sites as if they were unobserved
