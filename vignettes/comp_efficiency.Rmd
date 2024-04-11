@@ -1,0 +1,28 @@
+---
+title: "Improve Computational Efficiency"
+output: 
+  md_document:
+    variant: markdown_github
+always_allow_html: yes
+resource_files:
+  - data/Gurobi_Guide.pdf
+---
+
+<br>
+
+<p class="lh-lg">
+
+**On this page, we provide instructions on how to register and install Gurobi Optimizer, a software that solves optimization problems in `sps()` much faster.**
+
+<br>
+
+### <span style="color:#3366CC">**Gurobi Optimizer**</span>
+<p class="lh-lg">
+</p>
+
+[Gurobi Optimzer](https://www.gurobi.com/) is a powerful software that builds and solves mathematical optimization problems much faster than other solvers available under `sps()`. Although it is a commercial solver, Gurobi provides free access to academic researchers. This video guides through how to set up Gurobi on a computer and use it under `sps()`. An installation guide can also be downloaded `r xfun::embed_file('../data/Gurobi_Guide.pdf', text = 'here')`.
+
+<br>
+
+<p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/gRxIfHXZmHU?si=FBaHGAXWQ5q3LGCX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></p>
+
