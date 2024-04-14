@@ -20,7 +20,7 @@ resource_files:
 <p class="lh-lg">
 </p>
 
-[Gurobi Optimzer](https://www.gurobi.com/) is a powerful software that builds and solves mathematical optimization problems much faster than other solvers available under `sps()`. Although it is a commercial solver, Gurobi provides free access to academic researchers. This video guides through how to set up Gurobi on a computer and use it under `sps()`. An installation guide can also be downloaded `r xfun::embed_file('../data/Gurobi_Guide.pdf', text = 'here')`.
+[Gurobi Optimzer](https://www.gurobi.com/) is a powerful software that builds and solves mathematical optimization problems much faster than other solvers available under `sps()`. Although it is a commercial solver, Gurobi provides free licensed access to academic researchers. This video guides through how to set up Gurobi on a computer and use it under `sps()`. An installation guide can also be downloaded `r xfun::embed_file('../data/Gurobi_Guide.pdf', text = 'here')`.
 
 <br>
 
