@@ -22,7 +22,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">spsR</a>
 
@@ -327,6 +327,18 @@ However, in many social science settings, random sampling has been
 infeasible (see the literature review in <a href="https://naokiegami.com/paper/sps.pdf" class="external-link">Egami and Lee (2023+)</a>).
 The proposed SPS is complementary to random sampling and is most useful
 when random sampling is infeasible.</p>
+</details><details><summary><tag class="h5">2.4  Why does <code>sps()</code> takes too long to
+run?? </tag></summary><p>When <code><a href="../reference/sps.html">sps()</a></code> is run on large data set, it may take a long
+time to solve the optimization problem. For example, selecting four out
+of 50 possible sites requires generating weights for 3,921,225 unique
+combinations of sites. To reduce the computational time, users may use
+<a href="https://www.gurobi.com/" class="external-link">Gurobi Optimizer</a>, which solves
+optimization problems much faster, by asserting “GUROBI” under the
+<code>solver</code> argument in <code><a href="../reference/sps.html">sps()</a></code>. However, the use of
+Gurobi Optimizer requires a license registration and a software
+installation. For an instruction on how to register and download Gurobi
+Optimizer, please see <a href="https://naokiegami.com/spsR/articles/comp_efficiency.html" class="external-link">Improve
+Computational Efficiency</a>.</p>
 </details><p><br></p>
 </div>
 <div class="section level3">
@@ -446,7 +458,7 @@ than ever before.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer>
