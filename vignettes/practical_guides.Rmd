@@ -152,7 +152,13 @@ If random sampling is feasible and the number of sites to be sampled is relative
 
 <details><summary><tag class = "h5">2.4 \ Why does `sps()` takes too long to run?? </tag></summary>
 
-When `sps()` is run on large data set, it may take a long time to solve the optimization problem. For example, selecting four out of 50 possible sites requires generating weights for 3,921,225 unique combinations of sites. To reduce the computational time, users may use [Gurobi Optimizer](https://www.gurobi.com/), which solves optimization problems much faster, by asserting "GUROBI" under the `solver` argument in `sps()`. However, the use of Gurobi Optimizer requires a license registration and a software installation. For an instruction on how to register and download Gurobi Optimizer, please see [Improve Computational Efficiency](https://naokiegami.com/spsR/articles/comp_efficiency.html).
+When `sps()` is run on large data set, it may take a long time to solve the optimization problem. For example, selecting four out of 50 possible sites requires generating weights for 3,921,225 unique combinations of sites. To reduce the computational time, users may use [Gurobi Optimizer](https://www.gurobi.com/), which solves optimization problems much faster, by asserting `GUROBI` under the `solver` argument in `sps()`. 
+
+```{r, eval = FALSE}
+out <- sps(X = X_Imm, N_s = 6, solver = "GUROBI")
+```
+
+The use of Gurobi Optimizer requires a license registration and a software installation. For an instruction on how to register and download Gurobi Optimizer, please see [Improve Computational Efficiency](https://naokiegami.com/spsR/articles/comp_efficiency.html).
  
 </details>
 

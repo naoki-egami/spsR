@@ -28,3 +28,6 @@ navbar:
       href: articles/missing_data.html
     - text: 3. Stratified SPS
       href: articles/stratify_sps.html
+    - text: 4.Improve Computational Efficiency
+      href: articles/comp_efficiency.html
+
