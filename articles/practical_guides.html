@@ -330,12 +330,11 @@ The proposed SPS is complementary to random sampling and is most useful
 when random sampling is infeasible.</p>
 </details><details><summary><tag class="h5">2.4  Why does <code>sps()</code> takes too long to
 run?? </tag></summary><p>When <code><a href="../reference/sps.html">sps()</a></code> is run on large data set, it may take a long
-time to solve the optimization problem. For example, selecting four out
-of 50 possible sites requires generating weights for 3,921,225 unique
-combinations of sites. To reduce the computational time, users may use
-<a href="https://www.gurobi.com/" class="external-link">Gurobi Optimizer</a>, which solves
-optimization problems much faster, by asserting <code>GUROBI</code>
-under the <code>solver</code> argument in <code><a href="../reference/sps.html">sps()</a></code>.</p>
+time to solve the optimization problem. To reduce the computational
+time, users may use <a href="https://www.gurobi.com/" class="external-link">Gurobi
+Optimizer</a>, which solves optimization problems much faster, by
+asserting <code>GUROBI</code> under the <code>solver</code> argument in
+<code><a href="../reference/sps.html">sps()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sps.html">sps</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X_Imm</span>, N_s <span class="op">=</span> <span class="fl">6</span>, solver <span class="op">=</span> <span class="st">"GUROBI"</span><span class="op">)</span></span></code></pre></div>
 <p>The use of Gurobi Optimizer requires a license registration and a
