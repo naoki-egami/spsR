@@ -73,3 +73,8 @@ Then, load `devtools` and use the function `install_github()` to install
 library(devtools)
 install_github("naoki-egami/spsR", dependencies = TRUE)
 ```
+
+### <span style="color:#3366CC">**Acknowledgement**</span>
+
+This research is supported by the National Science Foundation
+(SES–2318659).
