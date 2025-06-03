@@ -27,11 +27,11 @@ plot.sps_estimator <- function(x, ...){
     pdata$site  <- factor(pdata$site, levels = pdata[order(pdata$est, decreasing = FALSE), 'site'])
 
     g <- ggplot(data = pdata,
-                aes(x = pdata$site,
-                    y = pdata$est,
-                    ymin = pdata$est - qnorm(1 - 0.05/2) * pdata$se,
-                    ymax = pdata$est + qnorm(1 - 0.05/2) * pdata$se,
-                    color = pdata$group)) +
+                aes(x = site,
+                    y = est,
+                    ymin = est - qnorm(1 - 0.05/2) * se,
+                    ymax = est + qnorm(1 - 0.05/2) * se,
+                    color = group)) +
       geom_point(size = 4) +
       geom_errorbar(aes(width = 0.1), linewidth = 1.2) +
       #geom_hline(yintercept = 0, linetype = 'dotted', color = 'black') +
@@ -42,7 +42,7 @@ plot.sps_estimator <- function(x, ...){
       theme(legend.position = 'none',
             panel.grid = element_blank())
 
-    suppressWarnings(print(g))
+    suppressWarnings(g)
   }else{
     estimates_selected <- x$estimates_selected
 
@@ -60,11 +60,11 @@ plot.sps_estimator <- function(x, ...){
     pdata$site  <- factor(pdata$site, levels = order_site)
 
     g <- ggplot(data = pdata,
-                aes(x = pdata$site,
-                    y = pdata$est,
-                    ymin = pdata$est - qnorm(1 - 0.05/2) * pdata$se,
-                    ymax = pdata$est + qnorm(1 - 0.05/2) * pdata$se,
-                    color = pdata$group)) +
+                aes(x = site,
+                    y = est,
+                    ymin = est - qnorm(1 - 0.05/2) * se,
+                    ymax = est + qnorm(1 - 0.05/2) * se,
+                    color = group)) +
       geom_point(size = 4) +
       geom_errorbar(aes(width = 0.1), linewidth = 1.2) +
       #geom_hline(yintercept = 0, linetype = 'dotted', color = 'black') +
@@ -75,5 +75,5 @@ plot.sps_estimator <- function(x, ...){
       theme(legend.position = 'none',
             panel.grid = element_blank())
   }
-  suppressWarnings(print(g))
+  suppressWarnings(g)
 }

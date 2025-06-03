@@ -52,7 +52,7 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
     colname_use[colname_use == "summary_var"] <- "Summary"
 
     p <- ggpairs(Xp, aes(color = Xp$summary_var, shape = Xp$summary_var),
-                 columnLabels = NULL,   # NAOKI: Big Change
+                 columnLabels = colname_use,
                  upper = "blank",
                  progress = FALSE,
                  lower = list(combo = wrap("facethist", binwidth = 0.2),
@@ -71,8 +71,8 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
     for(i in 1:p$nrow) {
       for(j in 1:p$ncol){
         p[i,j] <- p[i,j] +
-          scale_fill_manual(values = c(adjustcolor("black", 1),
-                                       adjustcolor("red", 1))) +
+          scale_fill_manual(values = c(adjustcolor("black", 0.3),
+                                       adjustcolor("red", 0.3))) +
           scale_color_manual(values = c("black", "red"))
       }
     }
@@ -92,10 +92,10 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
     #                                           panel.grid.minor   = element_blank())
 
     ## NEW PART
-    d_t <- data.frame(x = 0.5, y = 0.5, colname = paste0("N = ",N,"\nSelect = ", N_s))
-    p[ncol(Xp), ncol(Xp)] <- ggplot(data = d_t, aes(x, y, label = colname)) +
+    d_t <- data.frame(x = 0.5, y = 0.5)
+    p[ncol(Xp), ncol(Xp)] <- ggplot(data = d_t, aes(d_t$x, d_t$y, label = paste0("N = ",N,"\nSelected = ", N_s))) +
       geom_tile(fill = 'white') +
-      ggfittext::geom_fit_text(reflow = F) +
+      ggfittext::geom_fit_text(reflow = F, grow = T) +
       theme(axis.text.x  = element_blank(),
             axis.ticks.x = element_blank(),
             panel.grid.major   = element_blank(),
@@ -107,7 +107,6 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
       p[ncol(Xp),i] <- p[ncol(Xp),i] + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
     }
 
-
     # DIANA: Adding grid lines to all panels except for the last one
     for (i in 1:ncol(Xp)) {
       for (j in 1:(ncol(Xp)-1)) {
@@ -118,7 +117,7 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
       }
     }
 
-    ## Naoki Big Change: Adding Variable Name
+    ## Naoki: Adding Variable Name
     ncl <- ncol(Xp) - 1
     d_t_l <- list()
     for(i in 1:ncl){
@@ -135,14 +134,83 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
       # ,panel.background = element_rect(fill = 'white')
     }
 
-    # NAOKI: Removing Y-axis text in panels in the first row
-    for (i in 1:ncol(Xp)) {
-      p[1,i] <- p[1,i] + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-    }
+
     suppressWarnings(print(p))
   }
+  return(p)
 }
 
+# sps_plot_custom <- function(X, selected, columns = NULL, title = NULL, size = 2){
+#
+#   N <- nrow(X)
+#   Xp <- as.data.frame(X)
+#
+#   if(is.null(columns) == TRUE){
+#     columns <- colnames(Xp)
+#   }else{
+#     Xp <- Xp[, columns]
+#   }
+#
+#   col_use <- rep("Not", N)
+#   col_use[selected == 1] <- "Selected"
+#
+#   Xp$Summary <- col_use
+#   # levels(Xp$selection)
+#   N_s <- sum(out$ss)
+#   N_r <- N - N_s
+#
+#   p <- ggpairs(Xp, aes(color = Summary),
+#                upper = "blank",
+#                progress = FALSE,
+#                lower = list(combo = wrap("facethist", binwidth = 0.2),
+#                             continuous = wrap(ggally_points, size = 2))) +
+#     # theme_bw() +
+#     # DIANA: theme_bw() prevents panel-specific axis change, so all elements of theme_bw() are manually inserted below.
+#     theme(panel.background = element_rect(fill = "white", colour = NA),
+#           panel.border = element_rect(fill = NA, colour = "grey20"),
+#           strip.background = element_rect(fill = "grey85", colour = "grey20"),
+#           legend.key = element_rect(fill = "white", colour = NA)) +
+#     ggtitle(label = paste0(title))
+#   # Change color manually.
+#   # Loop through each plot changing relevant scales
+#   for(i in 1:p$nrow) {
+#     for(j in 1:p$ncol){
+#       p[i,j] <- p[i,j] +
+#         scale_fill_manual(values = c(adjustcolor("black", 0.3),
+#                                      adjustcolor("red", 0.3))) +
+#         scale_color_manual(values = c("black", "red"))
+#     }
+#   }
+#
+#   add_text <- ggally_text(
+#     label = paste0("N = ",N,"\nSelected = ", N_s),
+#     color = "black",
+#     hjust = "left",
+#     xP = 0.1,
+#     fontface = "bold",
+#     size = size)
+#
+#   # DIANA: Removing X-axis text and grid lines in the last panel (Summary X Summary)
+#   p[ncol(Xp), ncol(Xp)] <- add_text + theme(axis.text.x  = element_blank(),
+#                                             axis.ticks.x = element_blank(),
+#                                             panel.grid.major   = element_blank(),
+#                                             panel.grid.minor   = element_blank())
+#
+#   # DIANA: Removing Y-axis text in panels in the last row
+#   for (i in 1:ncol(Xp)) {
+#     p[ncol(Xp),i] <- p[ncol(Xp),i] + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
+#   }
+#
+#   # DIANA: Adding grid lines to all panels except for the last one
+#   for (i in 1:ncol(Xp)) {
+#     for (j in 1:(ncol(Xp)-1)) {
+#       p[i, j] <- p[i, j] + theme(panel.grid = element_line(colour = "grey92"),
+#                                  panel.grid.minor = element_line(linewidth = rel(0.5)))
+#     }
+#   }
+#
+#   p
+# }
 
 sps_plot_base <- function(X, title = NULL){
 
@@ -186,5 +254,6 @@ sps_plot_base <- function(X, title = NULL){
             panel.grid.minor   = element_blank(),
             panel.background = element_rect(fill = 'white'))
   }
-  suppressWarnings(print(p))
+
+  p
 }

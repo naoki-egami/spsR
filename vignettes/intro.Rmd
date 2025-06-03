@@ -78,11 +78,11 @@ X_Imm[, var_cont] <- scale(X_Imm[, var_cont])
 round(head(X_Imm), 3)
 ```
 
-Users can use `sps_plot()` to visualize the distribution of site-level variables before site selection. We select the first several variables that are continuous. 
+<!-- Users can use `sps_plot()` to visualize the distribution of site-level variables before site selection. We select the first several variables that are continuous.  -->
 
-```{r, fig.dim = c(7, 7), fig.align = 'center'}
-sps_plot(X = X_Imm, before_selection = TRUE, columns = var_cont)
-```
+<!-- ```{r, fig.dim = c(7, 7), fig.align = 'center'} -->
+<!-- sps_plot(X = X_Imm, before_selection = TRUE, columns = var_cont) -->
+<!-- ``` -->
 <br>
 
 ### <span style="color:#3366CC">**3. \ `sps`: Site Selection**</span> {#sps}

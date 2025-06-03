@@ -93,7 +93,7 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
 
     ## NEW PART
     d_t <- data.frame(x = 0.5, y = 0.5, colname = paste0("N = ",N,"\nSelect = ", N_s))
-    p[ncol(Xp), ncol(Xp)] <- ggplot(data = d_t, aes(x, y, label = colname)) +
+    p[ncol(Xp), ncol(Xp)] <- ggplot(data = d_t, aes(d_t$x, d_t$y, label = colname)) +
       geom_tile(fill = 'white') +
       ggfittext::geom_fit_text(reflow = F) +
       theme(axis.text.x  = element_blank(),
@@ -141,50 +141,5 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
     }
     suppressWarnings(print(p))
   }
-}
-
-
-sps_plot_base <- function(X, title = NULL){
-
-  Xp <- as.data.frame(X)
-  L <- ncol(Xp)
-  Xp$selection <- "1"
-
-  p <- ggpairs(Xp[, 1:L], aes(color = Xp$selection),
-               upper = "blank",
-               progress = FALSE,
-               lower = list(combo = wrap("facethist", binwidth = 0.2))) +
-    scale_shape_manual(values=c(16, 17)) +
-    # DIANA: theme_bw() prevents panel-specific axis change, so all elements of theme_bw() are manually inserted below.
-    theme(panel.background = element_rect(fill = "white", colour = NA),
-          panel.border = element_rect(fill = NA, colour = "grey20"),
-          strip.background = element_rect(fill = "grey85", colour = "grey20"),
-          legend.key = element_rect(fill = "white", colour = NA)) +
-    ggtitle(label = paste0(title))
-
-  # theme_bw() +
-  # ggtitle(label = paste0(title))
-
-  # Change color manually.
-  # Loop through each plot changing relevant scales
-  for(i in 1:p$nrow) {
-    for(j in 1:p$ncol){
-      p[i,j] <- p[i,j] +
-        scale_fill_manual(values = c(adjustcolor("black", 0.3))) +
-        scale_color_manual(values = c("black"))
-    }
-  }
-
-  for(el in 1:p$nrow){
-    d_t <- data.frame(x = 0.5, y = 0.5)
-    p[el, el] <- ggplot(data = d_t, aes(d_t$x, d_t$y, label = colnames(Xp)[el])) +
-      geom_tile(fill = 'white') +
-      ggfittext::geom_fit_text(reflow = F, grow = T) +
-      theme(axis.text.x  = element_blank(),
-            axis.ticks.x = element_blank(),
-            panel.grid.major   = element_blank(),
-            panel.grid.minor   = element_blank(),
-            panel.background = element_rect(fill = 'white'))
-  }
-  suppressWarnings(print(p))
+  return(p)
 }
