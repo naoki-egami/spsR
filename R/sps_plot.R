@@ -237,5 +237,6 @@ sps_plot_base <- function(X, title = NULL){
             panel.grid.major   = element_blank(),
             panel.grid.minor   = element_blank())
   }
-  suppressWarnings(print(p))
+  # suppressWarnings(print(p))
+  return(p)
 }
