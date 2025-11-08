@@ -74,10 +74,12 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
                                      version == 'Target Pop' ~ scale_y_continuous(limits = c(0,22)))) +
         xlab('') + ylab(NULL) + theme_bw() +
         theme(legend.position = 'none',
-              panel.grid = element_blank()) +
+              panel.grid = element_blank(),
+              axis.text = element_text(color = 'black'),
+              axis.title = element_text(color = 'black')) +
         ggtitle(label = paste0(title))
 
-      suppressWarnings(print(p))
+      suppressWarnings(return(p))
 
     }else{
 
@@ -101,6 +103,8 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
         theme(panel.background = element_rect(fill = "white", colour = NA),
               panel.border = element_rect(fill = NA, colour = "grey20"),
               strip.background = element_rect(fill = "grey85", colour = "grey20"),
+              axis.text = element_text(color = 'black'),
+              axis.title = element_text(color = 'black'),
               legend.key = element_rect(fill = "white", colour = NA)) +
         ggtitle(label = paste0(title))
 
@@ -133,11 +137,13 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
       d_t <- data.frame(x = 0.5, y = 0.5, colname = paste0("N = ",N,"\nSelect = ", N_s))
       p[ncol(Xp), ncol(Xp)] <- ggplot(data = d_t, aes(x, y, label = colname)) +
         geom_tile(fill = 'white') +
-        ggfittext::geom_fit_text(reflow = F) +
+        # ggfittext::geom_fit_text(reflow = T, min.size = 6) +
+        geom_text(size = 3) +
         theme(axis.text.x  = element_blank(),
               axis.ticks.x = element_blank(),
               panel.grid   = element_blank(),
-              panel.background = element_rect(fill = 'white'))
+              panel.background = element_rect(fill = 'white'),
+              axis.title = element_text(color = 'black'))
 
       # DIANA: Removing Y-axis text in panels in the last row
       for (i in 1:ncol(Xp)) {
@@ -163,10 +169,12 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
         d_t_l[[i]] <- data.frame(x = 0.5, y = 0.5, colname = colnames(Xp)[i])
         p[i, i] <- ggplot(data = d_t_l[[i]], aes(x, y, label= colname)) +
           # geom_text(x = 0.5, y = 0.5, label= colname) +
-          ggfittext::geom_fit_text(reflow = FALSE) +
+          # ggfittext::geom_fit_text(reflow = T, min.size = 6) +
+          geom_text(size = 3) +
           theme(axis.text.x  = element_blank(),
                 axis.ticks.x = element_blank(),
-                panel.grid   = element_blank())
+                panel.grid   = element_blank(),
+                axis.title = element_text(color = 'black'))
         # geom_text(x = 0.5, y = 0.5, label= colnames(Xp)[i]) +
         # geom_tile(fill = 'white') +
         # ,panel.background = element_rect(fill = 'white')
@@ -176,7 +184,7 @@ sps_plot <- function(out, title = NULL, columns = NULL, before_selection = FALSE
       for (i in 1:ncol(Xp)) {
         p[1,i] <- p[1,i] + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
       }
-      suppressWarnings(print(p))
+      suppressWarnings(return(p))
     }
   }
 }
@@ -198,6 +206,8 @@ sps_plot_base <- function(X, title = NULL){
     theme(panel.background = element_rect(fill = "white", colour = NA),
           panel.border = element_rect(fill = NA, colour = "grey20"),
           strip.background = element_rect(fill = "grey85", colour = "grey20"),
+          axis.text = element_text(color = 'black'),
+          axis.title = element_text(color = 'black'),
           legend.key = element_rect(fill = "white", colour = NA)) +
     ggtitle(label = paste0(title))
 
@@ -218,10 +228,12 @@ sps_plot_base <- function(X, title = NULL){
     d_t <- data.frame(x = 0.5, y = 0.5)
     p[el, el] <- ggplot(data = d_t, aes(d_t$x, d_t$y, label = colnames(Xp)[el])) +
       geom_tile(fill = 'white') +
-      ggfittext::geom_fit_text(reflow = F, grow = T) +
+      # ggfittext::geom_fit_text(reflow = T, min.size = 6) +
+      geom_text(size = 3) +
       theme(axis.text.x  = element_blank(),
             axis.ticks.x = element_blank(),
             panel.grid   = element_blank(),
+            axis.title = element_text(color = 'black'),
             panel.background = element_rect(fill = 'white'))
   }
 
@@ -231,9 +243,11 @@ sps_plot_base <- function(X, title = NULL){
   for(i in 1:ncl){
     d_t_l[[i]] <- data.frame(x = 0.5, y = 0.5, colname = colnames(Xp)[i])
     p[i, i] <- ggplot(data = d_t_l[[i]], aes(x, y, label= colname)) +
-      ggfittext::geom_fit_text(reflow = FALSE) +
+      # ggfittext::geom_fit_text(reflow = T, min.size = 6) +
+      geom_text(size = 3) +
       theme(axis.text.x  = element_blank(),
             axis.ticks.x = element_blank(),
+            axis.title = element_text(color = 'black'),
             panel.grid.major   = element_blank(),
             panel.grid.minor   = element_blank())
   }
