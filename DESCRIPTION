@@ -20,7 +20,8 @@ Imports:
     dplyr,
     spsRdata,
     ggfittext
-Remotes: 
-    naoki-egami/spsRdata
+Remotes:
+    naoki-egami/spsRdata,
+    url::https://cran.r-project.org/src/contrib/Archive/CVXR/CVXR_1.0-14.tar.gz
 RoxygenNote: 7.3.2
 URL: http://naokiegami.com/spsR/

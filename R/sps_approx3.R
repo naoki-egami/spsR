@@ -146,7 +146,7 @@ sps_approx3 <- function(X, N_s,
   # W <- Variable(N, N)
   # Q <- Variable(N, N)
   # Z <- Variable(N, L)
-  H <- Variable(N, N, integer = TRUE)
+  H <- Variable(c(N, N), integer = TRUE)
 
   # constraints
   # co_1 <- W >= 0

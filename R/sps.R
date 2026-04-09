@@ -145,9 +145,9 @@ sps <- function(X, N_s,
   L <- ncol(X)
 
   S <- Variable(N, integer = TRUE)
-  W <- Variable(N, N)
-  Q <- Variable(N, N)
-  Z <- Variable(N, L)
+  W <- Variable(c(N, N))
+  Q <- Variable(c(N, N))
+  Z <- Variable(c(N, L))
 
   # constraints
   co_1 <- W >= 0
